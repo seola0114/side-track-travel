@@ -694,7 +694,7 @@ function renderSide(){
     }
     html+=`</div>`;
   }else{
-    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="side-collapse" onclick="toggleSideCol()" title="패널 접기">›</button><button class="side-close-m" onclick="closeSidePanel()">×</button></div>`;
+    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div>`;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length&&!S.artifact){
