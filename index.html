@@ -789,6 +789,9 @@ function setView(v){
   const mL=document.getElementById('mLinear'),rb=document.getElementById('returnBtn');
   if(mL)mL.textContent=(v==='product')?'기본 채팅':'일반 채팅 (대조)';
   if(rb)rb.textContent=(v==='product')?'📍 일정표 다시 보기':'📍 일정표 다시 보기 — 한참 위로 스크롤';
+  const col=document.getElementById('sideCol'),btn=document.getElementById('sideToggle');
+  if(v==='product'){col.classList.add('collapsed');btn.textContent='↳ 사이드 열기';}
+  else{col.classList.remove('collapsed');btn.textContent='↳ 사이드';}
   renderSide();
 }
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
