@@ -42,7 +42,10 @@
 
   .stage{display:flex;flex:1;min-height:0}
   .main-col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}
-  .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden;transition:width .25s cubic-bezier(.2,.8,.2,1),border .25s}
+  .side-col.collapsed{width:0;border-left:none;overflow:hidden}
+  .side-toggle{font-family:var(--sans);font-size:12px;font-weight:600;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;transition:.15s;margin-left:4px}
+  .side-toggle:hover{color:var(--ink)}
   #sideContent{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
   @media(max-width:860px){.side-col{position:absolute;right:0;top:0;bottom:0;width:88%;max-width:388px;box-shadow:-18px 0 50px rgba(27,25,22,.18);z-index:30;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}.side-col.open{transform:translateX(0)}}
 
@@ -309,6 +312,7 @@
         <div class="metric" id="mtReturn"><b>0</b><small>복귀 비용(스크롤)</small></div>
       </div>
       <button class="reset" onclick="resetAll()">↺ 처음부터</button>
+      <button class="side-toggle" id="sideToggle" onclick="toggleSideCol()">↳ 사이드</button>
     </div>
   </header>
 
@@ -535,7 +539,7 @@ function renderSide(){
       html+=`<button class="bring${sd.busy?'':' ready'}" ${sd.busy?'disabled':''} onclick="bringToMain()">📌 ${sd.reviewIdx!=null?'결론 다시 반영':'메인으로 가져오기'}</button>`;
     html+=`</div>`;
   }else{
-    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span></div>`;
+    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="x" onclick="toggleSideCol()">×</button></div>`;
     if(!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정 답변에서 궁금한 한 부분을 <b>드래그 선택</b>하고 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서만 처리합니다.</p></div>`;
     else html+=`<div class="side-body"><p style="font-size:12px;color:var(--faint);margin-bottom:6px">접힌 사이드 트랙 — 메인 일정은 깨끗하게 유지됩니다.</p></div>`;
   }
@@ -577,6 +581,7 @@ function renderGuide(){
 }
 function renderSuggest(){
   const w=document.getElementById('suggest');
+  if(S._usedChipStep===S.step){w.innerHTML='';return;}
   const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;
   const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];
   const chips=map[key]||[];
@@ -635,7 +640,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;S._usedChipStep=S.step;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
@@ -791,10 +796,18 @@ function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 document.getElementById('mainIn').addEventListener('input',e=>autoGrow(e.target));
+document.getElementById('mainIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();onMainSend();}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&document.activeElement&&document.activeElement.id==='sideIn'){e.preventDefault();onSideSend();}});
+(function(){const t=document.getElementById('thread');let last=t.scrollTop,counted=false,timer;t.addEventListener('scroll',()=>{if(t.scrollTop<last&&!counted){counted=true;S.returnCost++;renderHud();renderReturnBtn();}last=t.scrollTop;clearTimeout(timer);timer=setTimeout(()=>{counted=false;},300);});})();
 
 /* ===== INIT ===== */
 function toggleSidebar(){document.body.classList.toggle('sbhide');}
+function toggleSideCol(){
+  const col=document.getElementById('sideCol');
+  col.classList.toggle('collapsed');
+  const btn=document.getElementById('sideToggle');
+  btn.textContent=col.classList.contains('collapsed')?'↳ 사이드 열기':'↳ 사이드';
+}
 S=freshState();greet();renderAll();setView('guide');
 </script>
 </body>
