@@ -293,7 +293,7 @@
   <header class="bar">
     <button class="sb-toggle" title="사이드바 토글" onclick="toggleSidebar()">☰</button>
     <span class="conv-title">도쿄 여행 일정</span>
-    <span class="proto-pill">프로토타입 · 도쿄 여행</span>
+    <span class="proto-pill" style="display:none">프로토타입 · 도쿄 여행</span>
     <div class="vtoggle">
       <button id="vGuide" class="on" onclick="setView('guide')">🎓 가이드</button>
       <button id="vProduct" onclick="setView('product')">✦ 프로덕트</button>
@@ -635,7 +635,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
