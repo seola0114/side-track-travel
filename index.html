@@ -895,7 +895,7 @@ function setView(v){
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
 
 /* ===== LOGGING ===== */
-const LOG_URL=''; // Google Apps Script 웹앱 URL
+const LOG_URL='https://script.google.com/macros/s/AKfycbzAChdtblY3lQ-Gz5HpjiLwLlPu3KmVmZEbO0JCkHzjxueA1p1nf9ARuN269ky3GMY/exec';
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
   const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
