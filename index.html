@@ -291,6 +291,12 @@
   .art-body{padding:12px 14px;overflow-y:auto;font-size:12.5px;line-height:1.65;cursor:text}
   .art-body::-webkit-scrollbar{width:7px}.art-body::-webkit-scrollbar-thumb{background:#d5cfc2;border-radius:9px;border:2px solid var(--surface)}
   .artifact.min .art-body{display:none}
+  .art-hist{font-family:var(--mono);font-size:10px;color:var(--pin);background:var(--pin-soft);border:1px solid #ecd8bb;padding:2px 8px;border-radius:10px;cursor:pointer;margin-left:auto;transition:.14s;white-space:nowrap}
+  .art-hist:hover{background:#eed9b8;color:#7a4c12}
+  .hist-popup{position:absolute;top:42px;right:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px rgba(27,25,22,.15);z-index:25;min-width:180px;max-width:260px;padding:8px 6px;display:none;animation:pop .14s ease both}
+  .hist-popup.show{display:block}
+  .hist-popup .hp-title{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:2px 8px 6px}
+  .art-head{position:relative}
   .side-tray{display:flex;gap:5px;padding:9px 12px 2px;flex-wrap:wrap;flex:none}
   .stab{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:5px 6px 5px 9px;font-size:11.5px;color:var(--muted);cursor:pointer;max-width:150px;transition:.14s}
   .stab.on{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
@@ -569,7 +575,8 @@ function renderSide(){
   /* ── 일정표 패널 (상단 고정) ── */
   if(S.artifact){
     const a=S.artifact;
-    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head" onclick="toggleArtifact()"><span class="art-ic">📋</span><span class="art-ttl">${escapeHtml(a.title)}</span><span class="art-ver">${a.ver}</span><span class="art-min">⌄</span></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    const hcnt=S.folded.length;
+    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📂 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
   const sd=activeSideObj();
@@ -602,7 +609,7 @@ function renderSide(){
     html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span></div>`;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
-  if(S.folded.length){
+  if(S.folded.length&&!S.artifact){
     html+=`<div class="folded"><div class="folded-toggle" onclick="this.parentElement.querySelector('.folded-chips').classList.toggle('show')"><span class="ft-ic">📋</span> 히스토리 <span class="ft-cnt">${S.folded.length}</span></div>`;
     html+=`<div class="folded-chips">`+S.folded.map(f=>`<div class="fchip" onclick="openHistory(${f.id})"><span class="fdot ${f.kind}"></span><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('')+`</div></div>`;
   }
@@ -699,6 +706,16 @@ function renderQuote(){
 }
 function clearQuote(){S.quote=null;renderQuote();}
 function toggleArtifact(){S.artifactMin=!S.artifactMin;renderSide();}
+function toggleHistoryPopup(){
+  const existing=document.querySelector('.hist-popup');
+  if(existing){existing.remove();return;}
+  const head=document.querySelector('.art-head');if(!head)return;
+  let html=`<div class="hist-popup show"><div class="hp-title">히스토리</div>`;
+  html+=S.folded.map(f=>`<div class="fchip" style="max-width:100%;margin:3px 2px" onclick="document.querySelector('.hist-popup').remove();openHistory(${f.id})"><span class="fdot ${f.kind}"></span><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('');
+  html+=`</div>`;
+  head.insertAdjacentHTML('beforeend',html);
+  setTimeout(()=>document.addEventListener('click',function cl(e){if(!e.target.closest('.hist-popup')&&!e.target.closest('.art-hist')){const p=document.querySelector('.hist-popup');if(p)p.remove();document.removeEventListener('click',cl);}},{once:false}),0);
+}
 function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide();renderHud();renderGuide();renderSuggest();renderQuote();}
 
 /* ===== MAIN COMPOSER ===== */
