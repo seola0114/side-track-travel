@@ -47,8 +47,18 @@
 
   .stage{display:flex;flex:1;min-height:0;position:relative}
   .main-col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}
-  .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden}
+  .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden;transition:width .22s cubic-bezier(.2,.8,.2,1),border .22s}
+  .side-col.collapsed{width:0;border-left:none;overflow:hidden}
   #sideContent{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+  .side-expand{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:15;background:var(--surface);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px;padding:8px 4px;cursor:pointer;color:var(--muted);font-size:13px;box-shadow:-3px 0 10px rgba(27,25,22,.06);transition:.14s;display:none}
+  .side-expand:hover{color:var(--ink);background:#f3f0ea}
+  .side-col.collapsed~.side-expand,.side-expand.show{display:block}
+  .side-collapse{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:2px 5px;border-radius:5px;flex:none;margin-left:4px}
+  .side-collapse:hover{color:var(--ink);background:#eae6dc}
+  .art-resize{height:6px;cursor:ns-resize;background:transparent;border-top:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;transition:background .12s}
+  .art-resize:hover,.art-resize.dragging{background:#eae6dc}
+  .art-resize::after{content:'';width:30px;height:3px;border-radius:2px;background:var(--faint);opacity:.4}
+  .art-resize:hover::after,.art-resize.dragging::after{opacity:.7}
   @media(max-width:860px){.side-col{position:absolute;right:0;top:0;bottom:0;width:88%;max-width:388px;box-shadow:-18px 0 50px rgba(27,25,22,.18);z-index:30;transform:translateX(100%);transition:transform .28s cubic-bezier(.2,.8,.2,1)}.side-col.open{transform:translateX(0)}}
 
   .col-head{padding:12px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex:none;background:var(--paper)}
@@ -413,6 +423,7 @@
       </div>
     </section>
     <div class="history-drawer" id="historyDrawer"></div>
+    <button class="side-expand" id="sideExpand" onclick="toggleSideCol()" title="사이드 패널 열기">‹</button>
     <aside class="side-col" id="sideCol"><div id="sideContent"></div></aside>
   </div>
 </div>
@@ -599,7 +610,8 @@ function renderSide(){
   if(S.artifact){
     const a=S.artifact;
     const hcnt=S.folded.length;
-    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📂 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    html+=`<div class="artifact${S.artifactMin?' min':''}" id="artifactEl"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📂 ${hcnt}</span>`:''}<button class="side-collapse" onclick="toggleSideCol()" title="패널 접기">›</button><span class="art-min" onclick="toggleArtifact()">⌄</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    if(!S.artifactMin) html+=`<div class="art-resize" id="artResize"></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
   const sd=activeSideObj();
@@ -629,7 +641,7 @@ function renderSide(){
     }
     html+=`</div>`;
   }else{
-    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div>`;
+    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="side-collapse" onclick="toggleSideCol()" title="패널 접기">›</button><button class="side-close-m" onclick="closeSidePanel()">×</button></div>`;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length&&!S.artifact){
@@ -730,6 +742,32 @@ function renderQuote(){
 function clearQuote(){S.quote=null;renderQuote();}
 function toggleArtifact(){S.artifactMin=!S.artifactMin;renderSide();}
 function closeSidePanel(){document.getElementById('sideCol').classList.remove('open');}
+function toggleSideCol(){
+  const col=document.getElementById('sideCol'),btn=document.getElementById('sideExpand');
+  col.classList.toggle('collapsed');
+  btn.classList.toggle('show',col.classList.contains('collapsed'));
+}
+/* 아티팩트 높이 드래그 리사이즈 */
+document.addEventListener('mousedown',function(e){
+  if(!e.target.closest('.art-resize'))return;
+  const art=document.getElementById('artifactEl');if(!art)return;
+  const col=document.getElementById('sideContent');
+  const startY=e.clientY,startH=art.offsetHeight;
+  e.target.classList.add('dragging');
+  document.body.style.cursor='ns-resize';document.body.style.userSelect='none';
+  function onMove(ev){
+    const h=Math.max(80,Math.min(startH+(ev.clientY-startY),col.offsetHeight*0.75));
+    art.style.maxHeight=h+'px';
+  }
+  function onUp(){
+    document.removeEventListener('mousemove',onMove);
+    document.removeEventListener('mouseup',onUp);
+    document.body.style.cursor='';document.body.style.userSelect='';
+    const r=document.querySelector('.art-resize');if(r)r.classList.remove('dragging');
+  }
+  document.addEventListener('mousemove',onMove);
+  document.addEventListener('mouseup',onUp);
+});
 function toggleHistoryPopup(){
   const existing=document.querySelector('.hist-popup');
   if(existing){existing.remove();return;}
