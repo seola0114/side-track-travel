@@ -385,19 +385,18 @@
     </div>
     <div class="toggle">
       <button id="mSide" class="on" onclick="setMode('side')">사이드 트랙</button>
-      <button id="mLinear" onclick="setMode('linear')">일반 채팅 (대조)</button>
+      <button id="mLinear" onclick="setMode('linear')">기본 채팅</button>
     </div>
+    <button class="reset" onclick="resetAll()">↺ 처음부터</button>
     <div class="hud">
       <div class="metrics" id="metrics">
         <div class="metric" id="mtCtx"><b>0</b><small>메인 맥락(메시지)</small></div>
         <div class="metric" id="mtSide"><b>0</b><small>사이드에서 해소</small></div>
         <div class="metric" id="mtReturn"><b>0</b><small>복귀 비용(스크롤)</small></div>
       </div>
-      <button class="reset" onclick="resetAll()">↺ 처음부터</button>
     </div>
     <div class="bar-right">
       <button class="bar-btn" id="sideToggleBtn" onclick="toggleSideCol()">↳ 사이드 패널</button>
-      <button class="bar-btn" onclick="resetAll()">↺ 처음부터</button>
     </div>
   </header>
 
