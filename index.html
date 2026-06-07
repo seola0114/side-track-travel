@@ -40,7 +40,7 @@
   .reset{font-family:var(--sans);font-size:12px;color:var(--muted);background:none;border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;transition:.15s}
   .reset:hover{color:var(--ink)}
 
-  .stage{display:flex;flex:1;min-height:0}
+  .stage{display:flex;flex:1;min-height:0;position:relative}
   .main-col{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;position:relative}
   .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden}
   #sideContent{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
@@ -123,11 +123,33 @@
   .sinrow textarea{flex:1;border:none;outline:none;resize:none;font-family:var(--sans);font-size:13px;background:none;max-height:90px;padding:5px 0;line-height:1.5}
   .sinrow .send{width:30px;height:30px;font-size:14px;background:var(--accent)}.sinrow .send:hover{background:var(--accent-deep)}
   .ssuggest{margin-top:8px;display:flex;flex-wrap:wrap;gap:6px}
-  .folded{padding:0 14px 11px}
-  .fcard{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:10px;padding:8px 11px;margin-top:7px;animation:rise .3s ease both}
-  .fcard .fdot{width:7px;height:7px;border-radius:2px;background:var(--accent);flex:none}
-  .fcard .ftxt{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .fcard .pinned{margin-left:auto;font-family:var(--mono);font-size:9px;color:var(--pin);background:var(--pin-soft);border:1px solid #ecd8bb;padding:2px 7px;border-radius:12px;flex:none}
+  .folded{padding:6px 14px 10px;border-top:1px solid var(--line);flex:none}
+  .folded-toggle{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted);cursor:pointer;padding:2px 0}
+  .folded-toggle:hover{color:var(--ink)}
+  .folded-toggle .ft-ic{font-size:12px}
+  .folded-toggle .ft-cnt{font-family:var(--mono);font-size:9.5px;color:var(--pin);background:var(--pin-soft);border:1px solid #ecd8bb;padding:1px 7px;border-radius:10px}
+  .folded-chips{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
+  .fchip{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 9px;font-size:10.5px;color:var(--muted);cursor:pointer;transition:.14s;max-width:160px}
+  .fchip:hover{border-color:var(--accent-line);color:var(--ink);background:var(--accent-soft)}
+  .fchip .fdot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none}
+  .fchip .fdot.note{background:var(--faint);border-radius:1px}
+  .fchip .flbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fchip .fbadge{font-family:var(--mono);font-size:8px;color:var(--pin);flex:none}
+  /* 히스토리 드로어 — 사이드 패널 왼쪽으로 슬라이드 */
+  .history-drawer{position:absolute;right:388px;top:0;bottom:0;width:340px;background:var(--surface);border-left:1px solid var(--line);box-shadow:-10px 0 30px rgba(27,25,22,.1);z-index:20;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .25s cubic-bezier(.2,.8,.2,1);pointer-events:none;opacity:0}
+  .history-drawer.open{transform:translateX(0);pointer-events:auto;opacity:1}
+  .hd-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--line);flex:none}
+  .hd-head .hd-ttl{font-weight:700;font-size:13px;flex:1}
+  .hd-head .hd-badge{font-family:var(--mono);font-size:9px;color:var(--pin);background:var(--pin-soft);border:1px solid #ecd8bb;padding:2px 7px;border-radius:11px}
+  .hd-head .hd-reopen{font-family:var(--sans);font-size:11px;color:var(--accent);background:none;border:1px solid var(--accent-line);border-radius:7px;padding:4px 9px;cursor:pointer}
+  .hd-head .hd-reopen:hover{background:var(--accent-soft)}
+  .hd-head .x{background:none;border:none;font-size:18px;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:6px}
+  .hd-head .x:hover{background:#eae6dc;color:var(--ink)}
+  .hd-body{flex:1;overflow-y:auto;padding:14px;min-height:0}
+  .hd-body::-webkit-scrollbar{width:7px}.hd-body::-webkit-scrollbar-thumb{background:#d5cfc2;border-radius:9px;border:2px solid var(--surface)}
+  .hd-body .seed{margin-bottom:10px}
+  .hd-body .smsg{margin-bottom:10px}
+  @media(max-width:860px){.history-drawer{right:0;width:100%;max-width:340px;box-shadow:-12px 0 40px rgba(27,25,22,.18)}}
 
   .typing{display:inline-flex;gap:4px;padding:4px 2px}
   .typing i{width:6px;height:6px;border-radius:50%;background:var(--faint);animation:tb 1.1s infinite}
@@ -318,8 +340,8 @@
     <span class="conv-title">도쿄 여행 일정</span>
     <span class="proto-pill">프로토타입 · 도쿄 여행</span>
     <div class="vtoggle">
-      <button id="vGuide" class="on" onclick="setView('guide')">🎓 가이드</button>
-      <button id="vProduct" onclick="setView('product')">✦ 프로덕트</button>
+      <button id="vGuide" onclick="setView('guide')">🎓 가이드 모드</button>
+      <button id="vProduct" class="on" onclick="setView('product')">✦ 프로덕트 모드</button>
     </div>
     <div class="toggle">
       <button id="mSide" class="on" onclick="setMode('side')">사이드 트랙</button>
@@ -361,6 +383,7 @@
         </div>
       </div>
     </section>
+    <div class="history-drawer" id="historyDrawer"></div>
     <aside class="side-col" id="sideCol"><div id="sideContent"></div></aside>
   </div>
 </div>
@@ -577,7 +600,10 @@ function renderSide(){
     html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span></div>`;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
-  if(S.folded.length){html+=`<div class="folded">`+S.folded.map(f=>`<div class="fcard" title="눌러서 다시 보기" onclick="reopenFolded(${f.id})"><span class="fdot ${f.kind}"></span><span class="ftxt">${escapeHtml(f.title)}</span><span class="freopen">↩ 다시 보기</span><span class="pinned ${f.kind}">${f.kind==='note'?'메모':'핀 완료'}</span></div>`).join('')+`</div>`;}
+  if(S.folded.length){
+    html+=`<div class="folded"><div class="folded-toggle" onclick="this.parentElement.querySelector('.folded-chips').classList.toggle('show')"><span class="ft-ic">📋</span> 히스토리 <span class="ft-cnt">${S.folded.length}</span></div>`;
+    html+=`<div class="folded-chips">`+S.folded.map(f=>`<div class="fchip" onclick="openHistory(${f.id})"><span class="fdot ${f.kind}"></span><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('')+`</div></div>`;
+  }
   c.innerHTML=html;const sb=document.getElementById('sideBody');if(sb)sb.scrollTop=sb.scrollHeight;
 }
 const _lastM={};
@@ -790,6 +816,21 @@ function reopenFolded(id){
   S.activeSide=sid;
   document.getElementById('sideCol').classList.add('open');renderAll();
 }
+/* ===== HISTORY DRAWER ===== */
+function openHistory(id){
+  const f=S.folded.find(x=>x.id===id);if(!f||!f.msgs)return;
+  const d=document.getElementById('historyDrawer');
+  let html=`<div class="hd-head"><span class="hd-ttl">${escapeHtml(f.title)}</span><span class="hd-badge">${f.kind==='note'?'메모':'핀 완료'}</span><button class="hd-reopen" onclick="closeHistory();reopenFolded(${f.id})">↩ 다시 열기</button><button class="x" onclick="closeHistory()">×</button></div>`;
+  html+=`<div class="hd-body"><div class="seed"><small>선택한 부분</small>"${escapeHtml(f.seed||'')}"</div>`;
+  f.msgs.forEach(m=>{
+    if(m.role==='user') html+=`<div class="smsg user"><div class="sb">${escapeHtml(m.text)}</div></div>`;
+    else if(m.role==='assistant') html+=`<div class="smsg assistant"><div class="sb">${mdfmt(m.text)}</div></div>`;
+  });
+  html+=`</div>`;
+  d.innerHTML=html;d.classList.add('open');
+}
+function closeHistory(){document.getElementById('historyDrawer').classList.remove('open');}
+
 /* ===== MAIN SEND (side + linear branch) ===== */
 function onMainSend(){
   if(S.mode==='linear'&&S.step>=2&&S.step<=6){
@@ -855,7 +896,7 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&documen
 
 /* ===== INIT ===== */
 function toggleSidebar(){document.body.classList.toggle('sbhide');}
-S=freshState();greet();renderAll();setView('guide');
+S=freshState();greet();renderAll();setView('product');
 </script>
 </body>
 </html>
