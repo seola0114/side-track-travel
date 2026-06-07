@@ -782,7 +782,7 @@ function renderPinRail(){
   if(S.mode!=='side'||!validPins.length){r.style.display='none';r.innerHTML='';return;}
   r.style.display='flex';
   r.innerHTML=`<span class="rlbl">확정한 결정 · 고정</span>`+
-    validPins.map(p=>`<span class="pinchip${p.landing?' landing':''}"><span class="pcd"></span>${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
+    validPins.map(p=>`<span class="pinchip${p.landing?' landing':''}">${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
   validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;renderPinRail();},400);});
 }
 function renderReturnBtn(){
