@@ -294,6 +294,7 @@
     .side-col.open{width:100%;max-width:100%}
     .history-drawer{right:0;width:100%}
     #selmenu{max-width:90vw}
+    .side-close-m{display:block}
   }
   /* v2: 일정표 영속 패널 + 사이드 트레이 + 열린질문 경계 */
   .artifact{flex:none;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);max-height:38%;overflow:hidden}
@@ -312,6 +313,8 @@
   .hist-popup.show{display:block}
   .hist-popup .hp-title{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:2px 8px 6px}
   .art-head{position:relative}
+  .side-close-m{display:none;margin-left:auto;background:none;border:none;font-size:18px;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:6px;flex:none}
+  .side-close-m:hover{background:#eae6dc;color:var(--ink)}
   .side-tray{display:flex;gap:5px;padding:9px 12px 2px;flex-wrap:wrap;flex:none}
   .stab{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:5px 6px 5px 9px;font-size:11.5px;color:var(--muted);cursor:pointer;max-width:150px;transition:.14s}
   .stab.on{border-color:var(--accent);color:var(--ink);background:var(--accent-soft)}
@@ -591,7 +594,7 @@ function renderSide(){
   if(S.artifact){
     const a=S.artifact;
     const hcnt=S.folded.length;
-    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📂 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📂 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
   const sd=activeSideObj();
@@ -621,7 +624,7 @@ function renderSide(){
     }
     html+=`</div>`;
   }else{
-    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span></div>`;
+    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div>`;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length&&!S.artifact){
@@ -721,6 +724,7 @@ function renderQuote(){
 }
 function clearQuote(){S.quote=null;renderQuote();}
 function toggleArtifact(){S.artifactMin=!S.artifactMin;renderSide();}
+function closeSidePanel(){document.getElementById('sideCol').classList.remove('open');}
 function toggleHistoryPopup(){
   const existing=document.querySelector('.hist-popup');
   if(existing){existing.remove();return;}
