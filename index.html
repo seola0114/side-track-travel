@@ -820,7 +820,7 @@ function finishSide(id){
 }
 function closeSideById(ev,id){if(ev&&ev.stopPropagation)ev.stopPropagation();finishSide(id);renderAll();}
 function closeSide(){const a=activeSideObj();if(a)finishSide(a.id);renderAll();}
-function sideSuggest(t){const sd=activeSideObj();if(!sd||sd.busy)return;const i=document.getElementById('sideIn');if(i){i.value=t;onSideSend();}}
+function sideSuggest(t){const sd=activeSideObj();if(!sd||sd.busy)return;sd.suggests=sd.suggests.filter(x=>x!==t);const i=document.getElementById('sideIn');if(i){i.value=t;onSideSend();}}
 function onSideSend(){
   const sd=activeSideObj();if(!sd||sd.busy)return;
   const i=document.getElementById('sideIn');const text=i.value.trim();if(!text)return;
