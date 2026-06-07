@@ -856,7 +856,7 @@ function onMainSend(){
   }else{baseMainSend();}
 }
 document.getElementById('mainSend').onclick=onMainSend;
-document.getElementById('mainIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();onMainSend();}});
+document.getElementById('mainIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();onMainSend();}});
 
 /* ===== MODE + RESET ===== */
 /* 모드별 상태를 따로 보관해, 전환해도 각자의 진행 상태가 유지됨 */
@@ -909,7 +909,7 @@ if(!document.getElementById('_logframe')){const f=document.createElement('iframe
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
 document.getElementById('mainIn').addEventListener('input',e=>autoGrow(e.target));
-document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&document.activeElement&&document.activeElement.id==='sideIn'){e.preventDefault();onSideSend();}});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&document.activeElement&&document.activeElement.id==='sideIn'){e.preventDefault();onSideSend();}});
 
 /* ===== INIT ===== */
 function toggleSidebar(){document.body.classList.toggle('sbhide');}
