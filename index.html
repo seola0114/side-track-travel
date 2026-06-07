@@ -332,7 +332,7 @@
   }
   /* v2: 일정표 영속 패널 + 사이드 트레이 + 열린질문 경계 */
   .artifact{flex:1;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);min-height:0;overflow:hidden}
-  .art-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:linear-gradient(135deg,var(--accent-soft) 0%,#fdf6f0 50%,var(--surface) 100%);flex:none}
+  .art-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:var(--surface);flex:none}
   .art-head .art-ic{font-size:16px}
   .art-head .art-ttl{font-weight:700;font-size:14.5px;color:var(--ink)}
   .art-head .art-ver{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--accent-deep);background:var(--accent-soft);border:1px solid var(--accent-line);padding:3px 8px;border-radius:11px}
@@ -418,7 +418,7 @@
   <header class="bar">
     <div class="vtoggle">
       <button id="vProduct" class="on" onclick="setView('product')">✦ 프로덕트 모드</button>
-      <button id="vGuide" onclick="setView('guide')">🎓 가이드 모드</button>
+      <button id="vGuide" onclick="setView('guide')">가이드 모드</button>
     </div>
     <div class="toggle">
       <button id="mSide" class="on" onclick="setMode('side')">TO BE</button>
@@ -433,7 +433,7 @@
       </div>
     </div>
     <div class="bar-right">
-      <button class="guide-switch" onclick="setView('guide')">🎓 가이드</button>
+      <button class="guide-switch" onclick="setView('guide')">가이드</button>
       <button class="bar-btn" id="sideToggleBtn" onclick="toggleSideCol()" title="사이드 패널"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
       <button class="bar-btn ghost-btn" title="시크릿 사용"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a3 3 0 0 0-3 3v2H5a3 3 0 0 0-3 3c0 3 1.5 6 4 8 1.5 1.2 3.5 2 6 2s4.5-.8 6-2c2.5-2 4-5 4-8a3 3 0 0 0-3-3h-1V5a3 3 0 0 0-3-3H9z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M12 19v-3"/></svg></button>
     </div>
@@ -463,16 +463,16 @@
             </div>
           </div>
           <div class="land-actions">
-            <button class="land-chip" onclick="landStart('작성하기')">✏️ 작성하기</button>
-            <button class="land-chip" onclick="landStart('학습하기')">🎓 학습하기</button>
-            <button class="land-chip" onclick="landStart('Drive에서')">📁 Drive에서</button>
-            <button class="land-chip" onclick="landStart('Calendar에서')">📅 Calendar에서</button>
-            <button class="land-chip" onclick="landStart('Gmail에서')">📧 Gmail에서</button>
+            <button class="land-chip" onclick="landStart('작성하기')">작성하기</button>
+            <button class="land-chip" onclick="landStart('학습하기')">학습하기</button>
+            <button class="land-chip" onclick="landStart('Drive에서')">Drive에서</button>
+            <button class="land-chip" onclick="landStart('Calendar에서')">Calendar에서</button>
+            <button class="land-chip" onclick="landStart('Gmail에서')">Gmail에서</button>
           </div>
         </div>
       </div>
       <div class="pinrail" id="pinrail" style="display:none"></div>
-      <button class="returnbtn" id="returnBtn" onclick="returnToItinerary()">📍 일정표 다시 보기 — 한참 위로 스크롤</button>
+      <button class="returnbtn" id="returnBtn" onclick="returnToItinerary()">일정표 다시 보기 — 한참 위로 스크롤</button>
       <div class="thread" id="thread"></div>
       <div class="composer">
         <div class="suggest" id="suggest"></div>
@@ -520,10 +520,10 @@
 /* ===== SCRIPTED RESPONSES (single scenario: 도쿄 여행) ===== */
 const SCRIPT = {
   main1: `11월 도쿄 3박 4일, 둘이서 도는 일정 초안을 짰어요. 11월 도쿄는 단풍이 절정에 드는 시기라 낮 최고기온이 15~18도로 선선하고, 아침저녁은 꽤 쌀쌀해요. 얇은 패딩이나 트렌치코트에 머플러 정도 챙기면 딱 좋습니다. 동선은 "하루에 한두 지역을 깊게" 원칙으로, 무리하지 않게 짰어요.\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 오후: 나리타 공항 도착 → 신주쿠 이동, 호텔 체크인\n- 저녁: 가부키초·오모이데요코초(추억의 골목)에서 꼬치구이에 맥주 한잔\n- 밤: 도쿄도청 전망대(무료)에서 야경 — 줄이 길면 과감히 패스\n- 첫날은 시차·이동 피로 회복용으로 동선을 짧게 잡았어요\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 오전: 시부야 스크램블 교차로, 시부야 스카이 전망대(사전 예약 권장)\n- 점심: 하라주쿠 다케시타 거리에서 크레페·길거리 음식\n- 오후: 메이지신궁 단풍 산책 → 오모테산도 편집숍·카페 거리\n- 저녁: 시부야 요코초에서 이자카야 분위기\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 오전: 센소지·나카미세 거리, 기모노 대여 인증샷\n- 점심: 아사쿠사 텐동 또는 갓 구운 멜론빵\n- 오후: 우에노 공원·국립박물관, 아메요코 시장 군것질\n- 저녁: 옛 정취가 남은 야나카 긴자 골목 산책\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 오전: 도요스 시장 오마카세(예약 필수) 또는 회전초밥\n- 오후: 팀랩 플래닛(시간 지정 예약 필수), 오다이바 자유의 여신상·레인보우브리지 뷰\n- 저녁: 돈키호테·드럭스토어에서 기념품 쇼핑 후 공항 이동, 출국\n\n이동이 꽤 많은 일정이라 출발 전에 교통편(예: **JR패스**를 살지 말지)이랑 현지 **eSIM** 통신을 미리 정해두면 동선이 훨씬 매끄러워져요. 예약이 필요한 시부야 스카이·팀랩 플래닛·도요스 오마카세는 날짜가 정해지면 바로 잡는 걸 권합니다. 어느 부분부터 좁혀볼까요?`,
-  main6: `사이드에서 정한 교통·통신 결정을 반영해서 일정을 확정했어요. 예약 타이밍과 이동 동선, 결제 수단까지 한 번에 정리했습니다.\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 나리타 → 신주쿠: 스카이라이너 + 야마노테선, 스이카 한 번 태그로 환승까지 해결\n- 저녁: 오모이데요코초 꼬치구이 → 도쿄도청 전망대 야경\n- 비행기에서 내리자마자 eSIM이 자동 연결돼 바로 구글맵으로 호텔 찾아가기\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 시부야 스카이(오전 예약) → 다케시타 거리 → 메이지신궁 단풍 → 오모테산도\n- 저녁: 시부야 요코초 이자카야\n- 모든 이동은 스이카 태그, 둘이 각자 eSIM이라 잠깐 떨어져도 길 안 잃음\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 센소지·나카미세 → 우에노 공원·국립박물관 → 아메요코 → 야나카 긴자\n- 도보 구간이 길어 편한 신발 필수, 중간에 카페 한 번 쉬어가기\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 도요스 시장 오마카세(예약) → 팀랩 플래닛(시간 지정) → 오다이바 레인보우브리지 뷰\n- 오다이바행 유리카모메 노선도 스이카로 그대로 탑승 가능\n- 마지막: 신주쿠 돈키호테·드럭스토어 쇼핑 → 스카이라이너로 나리타\n\n**📌 교통** — JR패스 ✕ (시내 위주라 본전 안 나옴). 도착하면 바로 **스이카** 발급·충전해서 지하철·버스·유리카모메까지 전부 태그. 둘이 각자 한 장씩.\n**📌 통신** — 출발 전 **eSIM** 각자 구매. 공항 내리면 켜자마자 데이터 연결, 포켓와이파이 공유는 안 함.\n\n여기서 핵심은 — 위 두 결정(스이카·eSIM)을 제가 다시 묻지 않았다는 거예요. 사이드 트랙에서 정리한 한 줄 결론이 그대로 최종 일정에 합류했고, 한참 위로 올라간 Day별 일정표도 그대로 살아있죠. 옆으로 새는 질문들이 이 일정표를 밀어내지 않았습니다.`,
+  main6: `사이드에서 정한 교통·통신 결정을 반영해서 일정을 확정했어요. 예약 타이밍과 이동 동선, 결제 수단까지 한 번에 정리했습니다.\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 나리타 → 신주쿠: 스카이라이너 + 야마노테선, 스이카 한 번 태그로 환승까지 해결\n- 저녁: 오모이데요코초 꼬치구이 → 도쿄도청 전망대 야경\n- 비행기에서 내리자마자 eSIM이 자동 연결돼 바로 구글맵으로 호텔 찾아가기\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 시부야 스카이(오전 예약) → 다케시타 거리 → 메이지신궁 단풍 → 오모테산도\n- 저녁: 시부야 요코초 이자카야\n- 모든 이동은 스이카 태그, 둘이 각자 eSIM이라 잠깐 떨어져도 길 안 잃음\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 센소지·나카미세 → 우에노 공원·국립박물관 → 아메요코 → 야나카 긴자\n- 도보 구간이 길어 편한 신발 필수, 중간에 카페 한 번 쉬어가기\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 도요스 시장 오마카세(예약) → 팀랩 플래닛(시간 지정) → 오다이바 레인보우브리지 뷰\n- 오다이바행 유리카모메 노선도 스이카로 그대로 탑승 가능\n- 마지막: 신주쿠 돈키호테·드럭스토어 쇼핑 → 스카이라이너로 나리타\n\n**교통** — JR패스 ✕ (시내 위주라 본전 안 나옴). 도착하면 바로 **스이카** 발급·충전해서 지하철·버스·유리카모메까지 전부 태그. 둘이 각자 한 장씩.\n**통신** — 출발 전 **eSIM** 각자 구매. 공항 내리면 켜자마자 데이터 연결, 포켓와이파이 공유는 안 함.\n\n여기서 핵심은 — 위 두 결정(스이카·eSIM)을 제가 다시 묻지 않았다는 거예요. 사이드 트랙에서 정리한 한 줄 결론이 그대로 최종 일정에 합류했고, 한참 위로 올라간 Day별 일정표도 그대로 살아있죠. 옆으로 새는 질문들이 이 일정표를 밀어내지 않았습니다.`,
   artifact1:`**11월 도쿄 · 3박 4일 · 2인**\n날씨: 낮 15~18도 선선, 아침저녁 쌀쌀 — 얇은 패딩/트렌치 + 머플러\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 오후: 나리타 공항 → 신주쿠, 호텔 체크인\n- 저녁: 가부키초·오모이데요코초 꼬치구이에 맥주\n- 밤: 도쿄도청 전망대(무료) 야경 — 줄 길면 패스\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 오전: 시부야 스크램블, 시부야 스카이(예약 권장)\n- 점심: 하라주쿠 다케시타 거리 크레페\n- 오후: 메이지신궁 단풍 → 오모테산도\n- 저녁: 시부야 요코초 이자카야\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 오전: 센소지·나카미세, 기모노 인증샷\n- 점심: 아사쿠사 텐동 / 갓 구운 멜론빵\n- 오후: 우에노 공원·국립박물관, 아메요코 군것질\n- 저녁: 야나카 긴자 골목 산책\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 오전: 도요스 시장 오마카세(예약) / 회전초밥\n- 오후: 팀랩 플래닛(시간지정 예약), 오다이바 레인보우브리지\n- 저녁: 돈키호테 기념품 → 공항, 출국`,
   note1:`11월 도쿄 3박 4일 초안을 위 **일정표 패널**에 정리해 뒀어요. "하루에 한두 지역을 깊게" 원칙으로, 첫날은 시차·이동 피로 회복용으로 짧게 잡았습니다. 대화가 길어져도 저 일정표는 위에 그대로 고정돼 있어요.\n\n이동이 꽤 많은 일정이라, 출발 전에 교통편(예: **JR패스**를 살지 말지)이랑 현지 **eSIM** 통신을 미리 정해두면 동선이 훨씬 매끄러워져요. 어느 부분부터 좁혀볼까요?`,
-  artifact6:`**11월 도쿄 · 3박 4일 · 2인 · 확정본**\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 나리타 → 신주쿠: ==스카이라이너 + 야마노테선, 스이카 태그==\n- 저녁: 오모이데요코초 → 도쿄도청 야경\n- ==도착 즉시 eSIM 자동 연결 → 바로 구글맵==\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 시부야 스카이(오전 예약) → 다케시타 → 메이지신궁 → 오모테산도\n- 저녁: 시부야 요코초 이자카야\n- ==이동은 스이카, 각자 eSIM이라 떨어져도 길 안 잃음==\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 센소지·나카미세 → 우에노 공원·박물관 → 아메요코 → 야나카 긴자\n- 도보 구간 길어 편한 신발, 중간 카페 휴식\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 도요스 오마카세(예약) → 팀랩 플래닛(시간지정) → 오다이바\n- ==유리카모메도 스이카로 탑승== → 신주쿠 쇼핑 → 스카이라이너로 나리타\n\n**📌 확정 결정**\n- ==교통: JR패스 ✕, 스이카 ○ (시내 위주, 각자 1장)==\n- ==통신: 각자 eSIM (포켓와이파이 공유 ✕)==`,
+  artifact6:`**11월 도쿄 · 3박 4일 · 2인 · 확정본**\n\n**Day 1 — 신주쿠 도착 & 적응**\n- 나리타 → 신주쿠: ==스카이라이너 + 야마노테선, 스이카 태그==\n- 저녁: 오모이데요코초 → 도쿄도청 야경\n- ==도착 즉시 eSIM 자동 연결 → 바로 구글맵==\n\n**Day 2 — 시부야 · 하라주쿠 · 오모테산도**\n- 시부야 스카이(오전 예약) → 다케시타 → 메이지신궁 → 오모테산도\n- 저녁: 시부야 요코초 이자카야\n- ==이동은 스이카, 각자 eSIM이라 떨어져도 길 안 잃음==\n\n**Day 3 — 아사쿠사 · 우에노 · 야나카**\n- 센소지·나카미세 → 우에노 공원·박물관 → 아메요코 → 야나카 긴자\n- 도보 구간 길어 편한 신발, 중간 카페 휴식\n\n**Day 4 — 도요스 · 오다이바 & 출국**\n- 도요스 오마카세(예약) → 팀랩 플래닛(시간지정) → 오다이바\n- ==유리카모메도 스이카로 탑승== → 신주쿠 쇼핑 → 스카이라이너로 나리타\n\n**확정 결정**\n- ==교통: JR패스 ✕, 스이카 ○ (시내 위주, 각자 1장)==\n- ==통신: 각자 eSIM (포켓와이파이 공유 ✕)==`,
   note6:`사이드에서 정한 **교통·통신 결정을 위 일정표에 반영**해 확정했어요. 핵심은 — 그 두 결정을 제가 다시 묻지 않았고, 사이드에서 정리한 한 줄 결론이 그대로 일정표에 합류했다는 거예요. 옆으로 새는 질문이 몇 개가 오가도, 이 일정표는 위에 고정된 채 점점 정확해졌습니다.`,
   // 선택한 텍스트(seed)에 아래 키가 포함되면 해당 토픽 답변을 사용. 각 토픽은 [정의, 우리 일정 적용] 2턴.
   side: {
@@ -689,7 +689,7 @@ function renderSide(){
   if(S.artifact){
     const a=S.artifact;
     const hcnt=S.folded.length;
-    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head"><span class="art-ic" onclick="toggleArtifact()">📋</span><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">📁 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head"><span class="art-ttl" onclick="toggleArtifact()">${escapeHtml(a.title)}</span><span class="art-ver" onclick="toggleArtifact()">${a.ver}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">히스토리 ${hcnt}</span>`:''}<span class="art-min" onclick="toggleArtifact()">⌄</span><button class="side-close-m" onclick="closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
     if(!S.artifactMin) html+=`<div class="art-resize" id="artResize"></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
@@ -715,8 +715,8 @@ function renderSide(){
       html+=`<div class="sinrow"><textarea id="sideIn" rows="1" placeholder="${open?'여기서 자유롭게 더 묻기…':'이 질문에만 묻기…'}"></textarea><button class="send" onclick="onSideSend()">↑</button></div>`;
     }
     if(sd.msgs.some(m=>m.role==='assistant')){
-      if(open) html+=`<div class="open-note">탐색형 질문이라 일정에 핀할 <b>결론이 없어요</b>. 사이드 트랙은 결정형 곁가지용 — 이건 메모로 남겨둘 수 있어요.</div><button class="bring note${sd.busy?'':' ready'}" ${sd.busy?'disabled':''} onclick="saveAsNote()">🔖 ${isReview?'메모 갱신':'메모로 보관'}</button>`;
-      else html+=`<button class="bring${sd.busy?'':' ready'}" ${sd.busy?'disabled':''} onclick="bringToMain()">📌 ${isReview?'결론 다시 반영':'메인으로 가져오기'}</button>`;
+      if(open) html+=`<div class="open-note">탐색형 질문이라 일정에 핀할 <b>결론이 없어요</b>. 사이드 트랙은 결정형 곁가지용 — 이건 메모로 남겨둘 수 있어요.</div><button class="bring note${sd.busy?'':' ready'}" ${sd.busy?'disabled':''} onclick="saveAsNote()">${isReview?'메모 갱신':'메모로 보관'}</button>`;
+      else html+=`<button class="bring${sd.busy?'':' ready'}" ${sd.busy?'disabled':''} onclick="bringToMain()">${isReview?'결론 다시 반영':'메인으로 가져오기'}</button>`;
     }
     html+=`</div>`;
   }else{
@@ -724,7 +724,7 @@ function renderSide(){
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length&&!S.artifact){
-    html+=`<div class="folded"><div class="folded-toggle" onclick="this.parentElement.querySelector('.folded-chips').classList.toggle('show')"><span class="ft-ic">📋</span> 히스토리 <span class="ft-cnt">${S.folded.length}</span></div>`;
+    html+=`<div class="folded"><div class="folded-toggle" onclick="this.parentElement.querySelector('.folded-chips').classList.toggle('show')">히스토리 <span class="ft-cnt">${S.folded.length}</span></div>`;
     html+=`<div class="folded-chips">`+S.folded.map(f=>`<div class="fchip" onclick="openHistory(${f.id})"><span class="fdot ${f.kind}"></span><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('')+`</div></div>`;
   }
   c.innerHTML=html;const sb=document.getElementById('sideBody');if(sb)sb.scrollTop=sb.scrollHeight;
@@ -775,7 +775,7 @@ function renderPinRail(){
   const validPins=S.pins.filter(p=>p.txt);
   if(S.mode!=='side'||!validPins.length){r.style.display='none';r.innerHTML='';return;}
   r.style.display='flex';
-  r.innerHTML=`<span class="rlbl">📌 확정한 결정 · 고정</span>`+
+  r.innerHTML=`<span class="rlbl">확정한 결정 · 고정</span>`+
     validPins.map(p=>`<span class="pinchip${p.landing?' landing':''}"><span class="pcd"></span>${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
   validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;renderPinRail();},400);});
 }
@@ -804,7 +804,7 @@ function flyToRail(start,line){
   if(!rail||rail.style.display==='none')return;
   const end=rail.getBoundingClientRect();
   const fly=document.createElement('div');
-  fly.className='flychip';fly.textContent='📌 '+line;
+  fly.className='flychip';fly.textContent=''+line;
   fly.style.left=start.left+'px';fly.style.top=start.top+'px';
   document.body.appendChild(fly);
   requestAnimationFrame(()=>{
@@ -1052,7 +1052,7 @@ function setView(v){
   document.body.classList.toggle('product',v==='product');
   const mL=document.getElementById('mLinear'),rb=document.getElementById('returnBtn');
   if(mL)mL.textContent=(v==='product')?'AS IS':'AS IS (대조)';
-  if(rb)rb.textContent=(v==='product')?'📍 일정표 다시 보기':'📍 일정표 다시 보기 — 한참 위로 스크롤';
+  if(rb)rb.textContent=(v==='product')?'일정표 다시 보기':'일정표 다시 보기 — 한참 위로 스크롤';
   renderSide();
 }
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
@@ -1079,14 +1079,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isCo
 let LANDED=false;
 function getTimeGreeting(){
   const h=new Date().getHours();
-  if(h<6)return '🌙 새벽이에요';if(h<12)return '☀️ 좋은 아침이에요';if(h<18)return '✳️ 오후예요';return '🌆 좋은 저녁이에요';
+  if(h<6)return '새벽이에요';if(h<12)return '좋은 아침이에요';if(h<18)return '오후예요';return '좋은 저녁이에요';
 }
 function renderLanding(){
   const mc=document.querySelector('.main-col');
   const lg=document.getElementById('landGreeting');
   if(!LANDED){
     mc.classList.remove('chatting');
-    if(lg)lg.innerHTML=`<span class="land-spark">${getTimeGreeting().split(' ')[0]}</span> ${getTimeGreeting().split(' ').slice(1).join(' ')}, seola님`;
+    if(lg)lg.textContent=getTimeGreeting()+', seola님';
   }else{
     mc.classList.add('chatting');
   }
