@@ -562,7 +562,7 @@ const SCENARIO = {
   ],
   origin:'<b>누구나 겪는 상황</b> — 일정 짜다가 "JR패스 사야 하나?"가 끼어들면, 답을 듣는 사이 일정표가 스크롤 위로 사라지죠. <span class="btw">사이드 트랙</span>은 그 질문을 옆 칸에서 처리하고 결론만 가져옵니다.',
   chips:{
-    side:{1:['11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘. 신주쿠·시부야·아사쿠사 위주로'],5:['eSIM도 사이드에서 정해볼까?'],6:['사이드에서 정한 교통·통신 결정 반영해서 최종 일정 줘']},
+    side:{1:['11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘. 신주쿠·시부야·아사쿠사 위주로'],6:['사이드에서 정한 교통·통신 결정 반영해서 최종 일정 줘']},
     linear:{1:['11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘. 신주쿠·시부야·아사쿠사 위주로'],2:['그런데 JR패스가 뭐야?'],3:['그럼 우리 일정엔 JR패스가 이득이야?'],4:['eSIM은 또 뭐야?'],5:['우린 eSIM이 나아, 포켓와이파이가 나아?'],6:['지금까지 정한 거 다 반영해서 최종 일정 줘']}
   },
   sideTitle:()=>'옆으로 새는 질문 확인',
@@ -756,11 +756,12 @@ function renderSuggest(){
 }
 function renderPinRail(){
   const r=document.getElementById('pinrail');
-  if(S.mode!=='side'||!S.pins.length){r.style.display='none';r.innerHTML='';return;}
+  const validPins=S.pins.filter(p=>p.txt);
+  if(S.mode!=='side'||!validPins.length){r.style.display='none';r.innerHTML='';return;}
   r.style.display='flex';
   r.innerHTML=`<span class="rlbl">📌 확정한 결정 · 고정</span>`+
-    S.pins.map(p=>`<span class="pinchip${p.landing?' landing':''}"><span class="pcd"></span>${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
-  S.pins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;},460);});
+    validPins.map(p=>`<span class="pinchip${p.landing?' landing':''}"><span class="pcd"></span>${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
+  validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;},460);});
 }
 function renderReturnBtn(){
   document.getElementById('returnBtn').classList.toggle('show',S.mode==='linear'&&S.apiLen>=6);
@@ -846,7 +847,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;if(!LANDED){LANDED=true;renderLanding();}if(!S._usedKeys)S._usedKeys=new Set();const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];if(key!=null)S._usedKeys.add(key);document.getElementById('suggest').innerHTML='';if(t.includes('eSIM도 사이드')){openSide('eSIM');return;}const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;if(!LANDED){LANDED=true;renderLanding();}if(!S._usedKeys)S._usedKeys=new Set();const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];if(key!=null)S._usedKeys.add(key);document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
