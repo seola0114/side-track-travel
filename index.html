@@ -781,7 +781,7 @@ function renderPinRail(){
   validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;renderPinRail();},400);});
 }
 function renderReturnBtn(){
-  document.getElementById('returnBtn').classList.toggle('show',S.mode==='linear'&&S.apiLen>=6);
+  document.getElementById('returnBtn').classList.toggle('show',false);
 }
 function hintSeeds(html){
   if(S.mode!=='side'||S.step>=6)return html;
