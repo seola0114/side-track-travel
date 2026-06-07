@@ -895,7 +895,7 @@ function setView(v){
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
 
 /* ===== LOGGING ===== */
-const LOG_URL='https://script.google.com/macros/s/AKfycbxc2QEyxO1bkR6R_fdIdwnB_g7J0vi9lQ775lvq6YbmVP20rXx54dRASU85L5oO4cY/exec';
+const LOG_URL='https://script.google.com/macros/s/AKfycbw3ZRoIP73i0-ODZB1cLFXVbeOiIph4K8bYbmvndqZUMuHuuPXkQAZ8TsbRE7qNhWw/exec';
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
   const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
