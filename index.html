@@ -1066,7 +1066,7 @@ function renderLanding(){
 }
 function startChat(text){
   LANDED=true;greet();renderLanding();renderAll();
-  if(text){const i=document.getElementById('mainIn');i.value=text;onMainSend();}
+  if(text){if(!S._usedKeys)S._usedKeys=new Set();S._usedKeys.add(1);const i=document.getElementById('mainIn');i.value=text;onMainSend();}
 }
 function landStart(label){startChat('');}
 document.getElementById('landIn').addEventListener('input',e=>autoGrow(e.target));
