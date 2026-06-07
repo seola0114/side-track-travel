@@ -13,9 +13,10 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#FAF9F5;--ink:#23211E;--muted:#6E6B64;--faint:#A8A49B;--line:#ECE9E1;
+    --paper:#FAF9F5;--ink:#23211E;--line:#ECE9E1;
     --surface:#FFFFFF;--accent:#C96442;--accent-deep:#A24A2E;--accent-soft:#F6E9E3;--accent-line:#E9D2C6;
     --pin:#B0792E;--pin-soft:#F6EEDD;--warn:#B23B2E;
+    --muted:#56534D;--faint:#8A867E;
     --mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Pretendard',-apple-system,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -23,6 +24,9 @@
   body{font-family:var(--sans);color:var(--ink);background:var(--paper);
     -webkit-font-smoothing:antialiased;line-height:1.5;overflow:hidden}
   ::selection{background:var(--accent);color:#fff}
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+  button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .app{display:flex;flex-direction:column;height:100vh;flex:1;min-width:0}
 
   .bar{display:flex;align-items:center;gap:12px;padding:10px 20px;border-bottom:1px solid var(--line);
@@ -368,10 +372,10 @@
 </head>
 <body>
 <div class="shell">
-<nav class="sidebar" id="sidebar">
+<nav class="sidebar" id="sidebar" aria-label="메인 내비게이션">
   <div class="sb-tabs">
-    <button class="sb-tab-icon" title="사이드바 접기" onclick="toggleSidebar()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></button>
-    <button class="sb-tab-icon" title="검색"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+    <button class="sb-tab-icon" title="사이드바 접기" aria-label="사이드바 접기" onclick="toggleSidebar()"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></button>
+    <button class="sb-tab-icon" title="검색" aria-label="검색"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
   </div>
   <div class="sb-mode-tabs">
     <button class="sb-mtab active"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> Chat</button>
@@ -430,7 +434,7 @@
   </header>
 
   <div class="stage">
-    <section class="main-col">
+    <main class="main-col" role="main">
       <div class="col-head">
         <span class="tag">Main thread</span>
         <span class="title" id="colTitle">도쿄 3박 4일 일정</span>
@@ -440,6 +444,7 @@
         <div class="land-greeting" id="landGreeting"></div>
         <div class="land-input">
           <div class="inrow">
+            <label for="landIn" class="sr-only">메시지 입력</label>
             <textarea id="landIn" rows="1" placeholder="오늘 어떤 도움을 드릴까요?">11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘. 신주쿠·시부야·아사쿠사 위주로</textarea>
             <div class="inbar">
               <button class="iconbtn plus" title="첨부">+</button>
@@ -467,6 +472,7 @@
         <div class="suggest" id="suggest"></div>
         <div id="quoteWrap"></div>
         <div class="inrow">
+          <label for="mainIn" class="sr-only">메시지 입력</label>
           <textarea id="mainIn" rows="1" placeholder="메시지를 입력하세요…"></textarea>
           <div class="inbar">
             <button class="iconbtn plus" title="첨부 (데모)" aria-label="첨부">+</button>
@@ -479,14 +485,14 @@
           </div>
         </div>
       </div>
-    </section>
-    <div class="history-drawer" id="historyDrawer"></div>
-    <aside class="side-col collapsed" id="sideCol"><div id="sideContent"></div></aside>
+    </main>
+    <div class="history-drawer" id="historyDrawer" role="dialog" aria-label="히스토리" tabindex="-1"></div>
+    <aside class="side-col collapsed" id="sideCol" aria-label="사이드 트랙 패널"><div id="sideContent"></div></aside>
   </div>
 </div>
 </div>
 
-<div id="selmenu">
+<div id="selmenu" role="toolbar" aria-label="텍스트 선택 메뉴">
   <button onclick="selChoose('main')">답글 ↰</button>
   <span class="sep"></span>
   <button class="primary" onclick="selChoose('side')">↳ 사이드로 묻기</button>
@@ -600,7 +606,7 @@ const SIDE_ALIASES={
   '아메요코':['아메요코'],
   '야나카':['야나카'],
 };
-const SIDE_PINS={'JR패스':'교통: JR패스 ✕, 스이카 ○','eSIM':'통신: 각자 eSIM ○'};
+const SIDE_PINS={'JR패스':'교통: 스이카','eSIM':'각자 eSIM 하나씩'};
 function sideTopicKey(seed){
   let s=(seed||'').toLowerCase().replace(/\s+/g,'');
   // 끝에 붙은 한국어 조사 떼기 (패스를 → 패스, 아메요코에서 → 아메요코)
