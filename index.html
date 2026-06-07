@@ -346,7 +346,7 @@
   .art-chev{color:var(--faint);flex:none;transition:transform .2s;margin-left:auto}
   .artifact.min .art-chev{transform:rotate(180deg)}
   .artifact.has-side{flex:none;max-height:38%}
-  .art-hist{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:2px 8px;border-radius:10px;cursor:pointer;margin-left:4px;transition:.14s;white-space:nowrap}
+  .art-hist{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--muted);background:none;border:none;padding:4px;border-radius:6px;cursor:pointer;margin-left:4px;transition:.14s;white-space:nowrap}
   .art-hist:hover{background:#eae6dc;color:var(--ink)}
   .hist-popup{position:absolute;top:42px;right:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 20px rgba(27,25,22,.1);z-index:25;min-width:180px;max-width:260px;padding:8px;display:none;animation:pop .14s ease both}
   .hist-popup.show{display:block}
@@ -699,7 +699,7 @@ function renderSide(){
   if(S.artifact){
     const a=S.artifact;
     const hcnt=S.folded.length;
-    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head" onclick="toggleArtifact()"><span class="art-ttl">${escapeHtml(a.title)}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">히스토리 ${hcnt}</span>`:''}<svg class="art-chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 10 12 15 17 10"/></svg><button class="side-close-m" onclick="event.stopPropagation();closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head" onclick="toggleArtifact()"><span class="art-ttl">${escapeHtml(a.title)}</span>${hcnt?`<span class="art-hist" title="히스토리" onclick="event.stopPropagation();toggleHistoryPopup()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> ${hcnt}</span>`:''}<svg class="art-chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 10 12 15 17 10"/></svg><button class="side-close-m" onclick="event.stopPropagation();closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
     if(!S.artifactMin) html+=`<div class="art-resize" id="artResize"></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
