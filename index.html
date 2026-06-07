@@ -1033,6 +1033,7 @@ function applyModeUI(m){
   const lin=document.getElementById('mLinear');lin.classList.toggle('on',m==='linear');lin.classList.toggle('linear',m==='linear');
   const col=document.getElementById('sideCol');
   if(m==='side'&&(S.sides.length||S.artifact))col.classList.add('open');else col.classList.remove('open');
+  const stb=document.getElementById('sideToggleBtn');if(stb)stb.style.display=m==='side'?'':'none';
   syncBusy();
 }
 function setMode(m){
