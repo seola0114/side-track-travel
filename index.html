@@ -281,7 +281,7 @@
   body.sbhide .sidebar{display:none}
   @media(max-width:1024px){.sidebar{display:none}.sb-toggle{display:none}}
   /* v2: 일정표 영속 패널 + 사이드 트레이 + 열린질문 경계 */
-  .artifact{flex:none;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);max-height:50%;overflow:hidden}
+  .artifact{flex:none;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);max-height:38%;overflow:hidden}
   .art-head{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:linear-gradient(90deg,var(--accent-soft),var(--surface));flex:none}
   .art-head .art-ic{font-size:14px}
   .art-head .art-ttl{font-weight:700;font-size:13.5px}
@@ -579,7 +579,6 @@ function renderSide(){
   /* ── 활성 사이드 채팅 ── */
   if(sd){
     const isReview=sd.reviewFoldedId!=null, open=sd.kind==='open';
-    html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl" title="${escapeHtml(sd.seed)}">${escapeHtml(sd.seed)}</span>${isReview?'<span class="review-badge">↩ 다시 보기</span>':''}<button class="x" title="닫기" onclick="closeSide()">×</button></div>`;
     html+=`<div class="side-body" id="sideBody"><div class="seed"><small>선택한 부분${open?' · 탐색형':''}</small>"${escapeHtml(sd.seed)}"</div>`;
     sd.msgs.forEach(m=>{
       if(m.role==='user') html+=`<div class="smsg user"><div class="who">나</div><div class="sb">${escapeHtml(m.text)}</div></div>`;
