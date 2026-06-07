@@ -697,7 +697,7 @@ function renderSide(){
   /* ── 사이드 트레이 탭 ── */
   const sd=activeSideObj();
   if(S.sides.length){
-    html+=`<div class="side-tray">`+S.sides.map(x=>`<div class="stab${x.id===S.activeSide?' on':''}" onclick="switchSide(${x.id})"><span class="stdot ${x.kind}"></span><span class="stlbl">${escapeHtml(trayLabel(x))}</span><span class="stx" title="닫기" onclick="closeSideById(event,${x.id})">×</span></div>`).join('')+`</div>`;
+    html+=`<div class="side-tray">`+S.sides.map(x=>`<div class="stab${x.id===S.activeSide?' on':''}" onclick="switchSide(${x.id})"><span class="stlbl">${escapeHtml(trayLabel(x))}</span><span class="stx" title="닫기" onclick="closeSideById(event,${x.id})">×</span></div>`).join('')+`</div>`;
   }
   /* ── 활성 사이드 채팅 ── */
   if(sd){
