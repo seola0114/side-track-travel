@@ -259,15 +259,15 @@
   body.sbhide .sidebar{display:none}
   @media(max-width:1024px){.sidebar{display:none}.sb-toggle{display:none}}
   /* v2: 일정표 영속 패널 + 사이드 트레이 + 열린질문 경계 */
-  .artifact{flex:none;display:flex;flex-direction:column;margin:10px 22px 0;border:1px solid var(--line);border-radius:14px;background:var(--surface);max-height:44%;overflow:hidden;box-shadow:0 3px 14px rgba(27,25,22,.05)}
-  .art-head{display:flex;align-items:center;gap:9px;padding:11px 15px;border-bottom:1px solid var(--line);cursor:pointer;background:linear-gradient(90deg,var(--accent-soft),var(--surface));flex:none}
+  .artifact{flex:none;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);max-height:50%;overflow:hidden}
+  .art-head{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:linear-gradient(90deg,var(--accent-soft),var(--surface));flex:none}
   .art-head .art-ic{font-size:14px}
   .art-head .art-ttl{font-weight:700;font-size:13.5px}
   .art-head .art-ver{font-family:var(--mono);font-size:9px;color:var(--accent);background:var(--accent-soft);border:1px solid var(--accent-line);padding:2px 7px;border-radius:11px}
   .art-head .art-min{margin-left:auto;color:var(--faint);font-size:13px;transition:.2s}
   .artifact.min .art-min{transform:rotate(180deg)}
-  .art-body{padding:14px 17px;overflow-y:auto;font-size:13.5px;line-height:1.7;cursor:text}
-  .art-body::-webkit-scrollbar{width:8px}.art-body::-webkit-scrollbar-thumb{background:#d5cfc2;border-radius:9px;border:2px solid var(--surface)}
+  .art-body{padding:12px 14px;overflow-y:auto;font-size:12.5px;line-height:1.65;cursor:text}
+  .art-body::-webkit-scrollbar{width:7px}.art-body::-webkit-scrollbar-thumb{background:#d5cfc2;border-radius:9px;border:2px solid var(--surface)}
   .artifact.min .art-body{display:none}
   .side-tray{display:flex;gap:5px;padding:9px 12px 2px;flex-wrap:wrap;flex:none}
   .stab{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:9px;padding:5px 6px 5px 9px;font-size:11.5px;color:var(--muted);cursor:pointer;max-width:150px;transition:.14s}
@@ -343,7 +343,6 @@
         <span class="anchor-pill">메인 일정은 깨끗하게 유지</span>
       </div>
       <div class="pinrail" id="pinrail" style="display:none"></div>
-      <div class="artifact" id="artifact" style="display:none"></div>
       <button class="returnbtn" id="returnBtn" onclick="returnToItinerary()">📍 일정표 다시 보기 — 한참 위로 스크롤</button>
       <div class="thread" id="thread"></div>
       <div class="composer">
@@ -544,10 +543,17 @@ function renderSide(){
       :`<div class="side-empty"><div class="ic" style="background:#f6e4e1;border-color:#e6bcb4;color:var(--warn)">⚠</div><p class="linear-note">대조군 · 일반 선형 채팅</p><p>사이드 트랙이 없어 옆으로 새는 질문이 모두 <b>메인 맥락에 쌓입니다</b>. 좌측 메인 맥락 숫자가 올라가고, 일정표가 위로 밀리는 걸 보세요.</p></div>`;
     return;}
   let html='';
+  /* ── 일정표 패널 (상단 고정) ── */
+  if(S.artifact){
+    const a=S.artifact;
+    html+=`<div class="artifact${S.artifactMin?' min':''}"><div class="art-head" onclick="toggleArtifact()"><span class="art-ic">📋</span><span class="art-ttl">${escapeHtml(a.title)}</span><span class="art-ver">${a.ver}</span><span class="art-min">⌄</span></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+  }
+  /* ── 사이드 트레이 탭 ── */
   const sd=activeSideObj();
   if(S.sides.length){
     html+=`<div class="side-tray">`+S.sides.map(x=>`<div class="stab${x.id===S.activeSide?' on':''}" onclick="switchSide(${x.id})"><span class="stdot ${x.kind}"></span><span class="stlbl">${escapeHtml(trayLabel(x))}</span><span class="stx" title="닫기" onclick="closeSideById(event,${x.id})">×</span></div>`).join('')+`</div>`;
   }
+  /* ── 활성 사이드 채팅 ── */
   if(sd){
     const isReview=sd.reviewFoldedId!=null, open=sd.kind==='open';
     html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">${open?'탐색 질문':'옆으로 새는 질문'}</span>${isReview?'<span class="review-badge">↩ 다시 보기</span>':''}<button class="x" title="닫기" onclick="closeSide()">×</button></div>`;
@@ -569,8 +575,7 @@ function renderSide(){
     html+=`</div>`;
   }else{
     html+=`<div class="side-head"><span class="tag">Side track</span><span class="ttl">독립 작업 공간</span></div>`;
-    if(!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
-    else html+=`<div class="side-body"><p style="font-size:12px;color:var(--faint);margin-bottom:6px">접어둔 사이드 트랙 — 메인 일정은 깨끗하게 유지됩니다.</p></div>`;
+    if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length){html+=`<div class="folded">`+S.folded.map(f=>`<div class="fcard" title="눌러서 다시 보기" onclick="reopenFolded(${f.id})"><span class="fdot ${f.kind}"></span><span class="ftxt">${escapeHtml(f.title)}</span><span class="freopen">↩ 다시 보기</span><span class="pinned ${f.kind}">${f.kind==='note'?'메모':'핀 완료'}</span></div>`).join('')+`</div>`;}
   c.innerHTML=html;const sb=document.getElementById('sideBody');if(sb)sb.scrollTop=sb.scrollHeight;
@@ -592,7 +597,7 @@ function renderHud(){
   if(pill){
     pill.classList.toggle('warnpill',S.mode==='linear');
     if(S.mode==='linear')pill.textContent='대조군 · 일정표가 스크롤 위로 밀림';
-    else if(S.artifact)pill.textContent='일정표 = 고정 패널 · 대화와 분리';
+    else if(S.artifact)pill.textContent='일정표 = 사이드 고정 · 대화와 분리';
     else pill.textContent='메인 일정은 깨끗하게 유지';
   }
 }
@@ -664,15 +669,8 @@ function renderQuote(){
   w.innerHTML=`<div class="quote-card"><button class="qx" title="답글 취소" onclick="clearQuote()">×</button><div class="qlbl">↰ 답글</div><div class="qtxt">${escapeHtml(S.quote)}</div></div>`;
 }
 function clearQuote(){S.quote=null;renderQuote();}
-function renderArtifact(){
-  const p=document.getElementById('artifact');if(!p)return;
-  if(S.mode!=='side'||!S.artifact){p.style.display='none';p.innerHTML='';return;}
-  p.style.display='flex';p.classList.toggle('min',!!S.artifactMin);
-  const a=S.artifact;
-  p.innerHTML=`<div class="art-head" onclick="toggleArtifact()"><span class="art-ic">📋</span><span class="art-ttl">${escapeHtml(a.title)}</span><span class="art-ver">${a.ver}</span><span class="art-min">⌄</span></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div>`;
-}
-function toggleArtifact(){S.artifactMin=!S.artifactMin;renderArtifact();}
-function renderAll(){renderMain();renderArtifact();renderPinRail();renderReturnBtn();renderSide();renderHud();renderGuide();renderSuggest();renderQuote();}
+function toggleArtifact(){S.artifactMin=!S.artifactMin;renderSide();}
+function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide();renderHud();renderGuide();renderSuggest();renderQuote();}
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
@@ -700,6 +698,7 @@ function baseMainSend(){
     if(st.pendingPins.length){st.pendingPins=[];}
     if(st.step===1)st.step=2;
     if(st.pins.length&&st.step>=6)st.pins.forEach(p=>p.done=true);
+    if(st.artifact)document.getElementById('sideCol').classList.add('open');
     st.busy=false;if(st===S){syncBusy();renderAll();}
   },replyDelay());
 }
@@ -745,7 +744,7 @@ function switchSide(id){S.activeSide=id;renderAll();}
 function finishSide(id){
   S.sides=S.sides.filter(x=>x.id!==id);
   if(S.activeSide===id)S.activeSide=S.sides.length?S.sides[S.sides.length-1].id:null;
-  if(!S.sides.length)document.getElementById('sideCol').classList.remove('open');
+  if(!S.sides.length&&!S.artifact)document.getElementById('sideCol').classList.remove('open');
 }
 function closeSideById(ev,id){if(ev&&ev.stopPropagation)ev.stopPropagation();finishSide(id);renderAll();}
 function closeSide(){const a=activeSideObj();if(a)finishSide(a.id);renderAll();}
@@ -820,7 +819,7 @@ function applyModeUI(m){
   document.getElementById('mSide').classList.toggle('on',m==='side');
   const lin=document.getElementById('mLinear');lin.classList.toggle('on',m==='linear');lin.classList.toggle('linear',m==='linear');
   const col=document.getElementById('sideCol');
-  if(m==='side'&&S.sides.length)col.classList.add('open');else col.classList.remove('open');
+  if(m==='side'&&(S.sides.length||S.artifact))col.classList.add('open');else col.classList.remove('open');
   syncBusy();
 }
 function setMode(m){
