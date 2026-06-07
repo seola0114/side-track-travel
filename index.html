@@ -899,7 +899,7 @@ const LOG_URL='https://script.google.com/macros/s/AKfycbxc2QEyxO1bkR6R_fdIdwnB_g
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
   const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
-  navigator.sendBeacon(LOG_URL,JSON.stringify(d));
+  fetch(LOG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{});
 }
 
 /* ===== UTILS ===== */
