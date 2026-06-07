@@ -643,6 +643,7 @@ function mdfmt(t){
   h=h.replace(/<br>(<div class="(li|mdh)">)/g,'$1').replace(/(<\/div>)<br>/g,'$1');
   return h;
 }
+let _lastMainHtml='';
 function renderMain(){
   const t=document.getElementById('thread');let html='';
   S.display.forEach(m=>{
@@ -650,7 +651,7 @@ function renderMain(){
     else if(m.role==='typing') html+=`<div class="msg assistant"><div class="who">Assistant</div><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`;
     else html+=`<div class="msg assistant"${m.text===SCRIPT.main1?' id="itinMsg"':''}><div class="who">Assistant</div><div class="bubble selectable">${hintSeeds(mdfmt(m.text))}</div></div>`;
   });
-  t.innerHTML=html;t.scrollTop=t.scrollHeight;
+  if(html!==_lastMainHtml){_lastMainHtml=html;t.innerHTML=html;t.scrollTop=t.scrollHeight;}
 }
 function renderSide(){
   const c=document.getElementById('sideContent');const col=document.getElementById('sideCol');
