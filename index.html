@@ -899,8 +899,11 @@ const LOG_URL='https://script.google.com/macros/s/AKfycbxc2QEyxO1bkR6R_fdIdwnB_g
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
   const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
-  fetch(LOG_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify(d)}).catch(()=>{});
+  const form=document.createElement('form');form.method='POST';form.action=LOG_URL;form.target='_logframe';form.style.display='none';
+  Object.entries(d).forEach(([k,v])=>{const inp=document.createElement('input');inp.name=k;inp.value=v;form.appendChild(inp);});
+  document.body.appendChild(form);form.submit();form.remove();
 }
+if(!document.getElementById('_logframe')){const f=document.createElement('iframe');f.name='_logframe';f.id='_logframe';f.style.display='none';document.body.appendChild(f);}
 
 /* ===== UTILS ===== */
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
