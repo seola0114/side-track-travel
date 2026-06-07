@@ -350,6 +350,12 @@
   .hist-popup.show{display:block}
   .hist-popup .hp-title{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:2px 4px 6px}
   .art-head{position:relative}
+  .hist-list-head{display:flex;align-items:center;justify-content:space-between;padding:0 2px 10px;font-weight:700;font-size:14px;color:var(--ink)}
+  .hist-list-head .x{background:none;border:none;font-size:18px;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:6px}
+  .hist-list-head .x:hover{background:#eae6dc;color:var(--ink)}
+  .hist-item{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border:1px solid var(--line);border-radius:10px;margin-bottom:6px;cursor:pointer;transition:.14s;font-size:13px;color:var(--ink)}
+  .hist-item:hover{background:#f3f0ea;border-color:#ccc}
+  .hist-item-arrow{color:var(--faint);font-size:13px}
   .side-close-m{display:none;margin-left:auto;background:none;border:none;font-size:18px;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:6px;flex:none}
   .side-close-m:hover{background:#eae6dc;color:var(--ink)}
   .side-tray{display:flex;gap:5px;padding:9px 16px 4px;flex-wrap:wrap;flex:none}
@@ -725,8 +731,11 @@ function renderSide(){
       html+=`<div class="sinrow"><textarea id="sideIn" rows="1" placeholder="${open?'여기서 자유롭게 더 묻기…':'이 질문에만 묻기…'}"></textarea><button class="send" onclick="onSideSend()">↑</button></div>`;
     }
     html+=`</div>`;
+  }else if(_showHistList&&S.folded.length){
+    html+=`<div class="side-body" id="sideBody"><div class="hist-list-head"><span>히스토리</span><button class="x" onclick="_showHistList=false;renderSide()">×</button></div>`;
+    html+=S.folded.map(f=>`<div class="hist-item" onclick="_showHistList=false;openHistory(${f.id})"><span class="hist-item-title">${escapeHtml(f.title)}</span><span class="hist-item-arrow">→</span></div>`).join('');
+    html+=`</div>`;
   }else{
-    html+=``;
     if(!S.artifact&&!S.folded.length) html+=`<div class="side-empty"><div class="ic">↳</div><p>일정표나 답변에서 궁금한 한 부분을 <b>드래그·탭</b>해 <b>사이드로 묻기</b>를 누르면, 일정표를 건드리지 않고 여기서 처리합니다. 여러 개를 동시에 띄워둘 수도 있어요.</p></div>`;
   }
   if(S.folded.length&&!S.artifact){
@@ -855,16 +864,8 @@ document.addEventListener('mousedown',function(e){
   document.addEventListener('mousemove',onMove);
   document.addEventListener('mouseup',onUp);
 });
-function toggleHistoryPopup(){
-  const existing=document.querySelector('.hist-popup');
-  if(existing){existing.remove();return;}
-  const head=document.querySelector('.art-head');if(!head)return;
-  let html=`<div class="hist-popup show"><div class="hp-title">히스토리</div>`;
-  html+=S.folded.map(f=>`<div class="fchip" style="max-width:100%;margin:3px 0" onclick="document.querySelector('.hist-popup').remove();openHistory(${f.id})"><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('');
-  html+=`</div>`;
-  head.insertAdjacentHTML('beforeend',html);
-  setTimeout(()=>document.addEventListener('click',function cl(e){if(!e.target.closest('.hist-popup')&&!e.target.closest('.art-hist')){const p=document.querySelector('.hist-popup');if(p)p.remove();document.removeEventListener('click',cl);}},{once:false}),0);
-}
+let _showHistList=false;
+function toggleHistoryPopup(){_showHistList=!_showHistList;renderSide();}
 function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide();renderHud();renderGuide();renderSuggest();renderQuote();}
 
 /* ===== MAIN COMPOSER ===== */
