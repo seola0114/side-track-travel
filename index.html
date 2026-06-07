@@ -641,9 +641,9 @@ function renderGuide(){
 }
 function renderSuggest(){
   const w=document.getElementById('suggest');
-  if(S._chipUsed){w.innerHTML='';return;}
   const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;
   const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];
+  if(S._usedKeys&&S._usedKeys.has(key)){w.innerHTML='';return;}
   const chips=map[key]||[];
   w.innerHTML=chips.length?`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${c}\`)">${c}</button>`).join(''):'';
 }
@@ -701,7 +701,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;S._chipUsed=true;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;if(!S._usedKeys)S._usedKeys=new Set();const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];if(key!=null)S._usedKeys.add(key);document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
@@ -726,7 +726,6 @@ function baseMainSend(){
     if(st.step===1)st.step=2;
     if(st.pins.length&&st.step>=6)st.pins.forEach(p=>p.done=true);
     if(st.artifact)document.getElementById('sideCol').classList.add('open');
-    st._chipUsed=false;
     st.busy=false;if(st===S){syncBusy();renderAll();}
   },replyDelay());
 }
@@ -847,7 +846,6 @@ function onMainSend(){
       const rep=LINEAR_REPLIES[step]||'계속 진행해 주세요.';
       st.apiLen++;st.display.pop();st.display.push({role:'assistant',text:rep});
       if(step<6)st.step++;else st.step=7;
-      st._chipUsed=false;
       st.busy=false;if(st===S){syncBusy();renderAll();}
     },450);
   }else{baseMainSend();}
