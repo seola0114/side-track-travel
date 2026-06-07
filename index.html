@@ -50,9 +50,9 @@
   .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden;transition:width .22s cubic-bezier(.2,.8,.2,1),border .22s}
   .side-col.collapsed{width:0;border-left:none;overflow:hidden}
   #sideContent{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
-  .side-expand{position:absolute;right:0;top:50%;transform:translateY(-50%);z-index:15;background:var(--surface);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px;padding:8px 4px;cursor:pointer;color:var(--muted);font-size:13px;box-shadow:-3px 0 10px rgba(27,25,22,.06);transition:.14s;display:none}
+  .side-expand{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:15;background:var(--surface);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px;padding:12px 5px;cursor:pointer;color:var(--muted);font-size:14px;box-shadow:-3px 0 10px rgba(27,25,22,.08);transition:.14s;display:none}
   .side-expand:hover{color:var(--ink);background:#f3f0ea}
-  .side-col.collapsed~.side-expand,.side-expand.show{display:block}
+  .side-expand.show{display:block}
   .side-collapse{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:2px 5px;border-radius:5px;flex:none;margin-left:4px}
   .side-collapse:hover{color:var(--ink);background:#eae6dc}
   .art-resize{height:6px;cursor:ns-resize;background:transparent;border-top:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;transition:background .12s}
