@@ -612,7 +612,15 @@ function sideTopicKey(seed){
 function getSideReplyFor(sd){
   const topic=sd.topicKey?SCRIPT.side[sd.topicKey]:null;
   const turn=sd.msgs.filter(m=>m.role==='assistant').length;
-  if(topic)return turn<topic.length?topic[turn]:SCRIPT.sideFollow;
+  if(topic){
+    const lastUser=(sd.msgs.filter(m=>m.role==='user').pop()||{}).text||'';
+    const isApply=lastUser.includes('일정')||lastUser.includes('나아')||lastUser.includes('어떤');
+    const idx=isApply&&topic.length>1?1:(turn<topic.length?turn:null);
+    if(idx!==null&&!sd._usedIdx){sd._usedIdx=new Set();}
+    if(idx!==null&&sd._usedIdx&&!sd._usedIdx.has(idx)){sd._usedIdx.add(idx);return topic[idx];}
+    if(idx!==null&&turn<topic.length){const unused=[...Array(topic.length).keys()].find(i=>!sd._usedIdx||!sd._usedIdx.has(i));if(unused!=null){if(sd._usedIdx)sd._usedIdx.add(unused);return topic[unused];}}
+    return SCRIPT.sideFollow;
+  }
   if(turn===0)return `"${sd.seed}" 부분이군요. 이건 정해진 답이 있는 결정형 질문이 아니라 탐색형에 가까워요. 데모라 상세 답변이 준비된 결정 항목은 JR패스·eSIM 정도이고요.\n\n그래도 사이드 트랙의 쓰임은 같아요 — 메인 일정을 건드리지 않고 여기서 자유롭게 더 살펴본 뒤, 핀할 결론이 없으면 메모로 남겨둘 수 있습니다.`;
   return SCRIPT.sideFollow;
 }
