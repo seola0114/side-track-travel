@@ -936,7 +936,7 @@ function setView(v){
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
 
 /* ===== LOGGING ===== */
-const LOG_URL='https://script.google.com/macros/s/AKfycbw3ZRoIP73i0-ODZB1cLFXVbeOiIph4K8bYbmvndqZUMuHuuPXkQAZ8TsbRE7qNhWw/exec';
+const LOG_URL='https://script.google.com/macros/s/AKfycbxIxvj6Gtfa5iGyR0ZjSgxCW5rTCW8RmSw-twBof2d4JZXk6VZpliemU_m9MS4rdlE/exec';
 const TESTER=new URLSearchParams(location.search).get('tester')||'';
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
