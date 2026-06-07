@@ -699,7 +699,7 @@ function renderSide(){
   if(S.artifact){
     const a=S.artifact;
     const hcnt=S.folded.length;
-    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head" onclick="toggleArtifact()"><span class="art-ttl">${escapeHtml(a.title)}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">히스토리 ${hcnt}</span>`:''}<svg class="art-chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg><button class="side-close-m" onclick="event.stopPropagation();closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
+    html+=`<div class="artifact${S.artifactMin?' min':''}${S.sides.length?' has-side':''}" id="artifactEl"><div class="art-head" onclick="toggleArtifact()"><span class="art-ttl">${escapeHtml(a.title)}</span>${hcnt?`<span class="art-hist" onclick="event.stopPropagation();toggleHistoryPopup()">히스토리 ${hcnt}</span>`:''}<svg class="art-chev" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="7 10 12 15 17 10"/></svg><button class="side-close-m" onclick="event.stopPropagation();closeSidePanel()">×</button></div><div class="art-body selectable" id="artBody">${hintSeeds(mdfmt(a.body))}</div></div>`;
     if(!S.artifactMin) html+=`<div class="art-resize" id="artResize"></div>`;
   }
   /* ── 사이드 트레이 탭 ── */
