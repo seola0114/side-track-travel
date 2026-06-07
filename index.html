@@ -582,10 +582,8 @@ function renderGuide(){
 }
 function renderSuggest(){
   const w=document.getElementById('suggest');
-  if(S._usedChipStep===S.step){w.innerHTML='';return;}
   const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;
-  const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];
-  const chips=map[key]||[];
+  const chips=map[S.step]||[];
   w.innerHTML=chips.length?`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${c}\`)">${c}</button>`).join(''):'';
 }
 function renderPinRail(){
@@ -641,7 +639,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;S._usedChipStep=S.step;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
