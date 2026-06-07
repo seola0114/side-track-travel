@@ -709,6 +709,7 @@ function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
   if(S.busy)return;
   const i=document.getElementById('mainIn');const text=i.value.trim();if(!text)return;
+  logEvent('main_send',text);
   i.value='';autoGrow(i);
   const st=S;
   const q=st.quote||null;st.quote=null;
@@ -763,6 +764,7 @@ function activeSideObj(){return S.sides.find(x=>x.id===S.activeSide)||null;}
 function trayLabel(x){const t=x.seed||'질문';return t.length>9?t.slice(0,8)+'…':t;}
 function foldTitle(seed){return seed.length>20?seed.slice(0,19)+'…':seed;}
 function openSide(seed){
+  logEvent('open_side',seed);
   const id=++S.seq;const tk=sideTopicKey(seed);
   S.sides.push({id,seed,topicKey:tk,kind:tk?'decision':'open',msgs:[],busy:false,suggests:SCENARIO.sideSuggests()});
   S.activeSide=id;
@@ -781,6 +783,7 @@ function sideSuggest(t){const sd=activeSideObj();if(!sd||sd.busy)return;const i=
 function onSideSend(){
   const sd=activeSideObj();if(!sd||sd.busy)return;
   const i=document.getElementById('sideIn');const text=i.value.trim();if(!text)return;
+  logEvent('side_send',text,sd.seed);
   i.value='';sd.msgs.push({role:'user',text});sd.msgs.push({role:'typing'});sd.busy=true;renderSide();
   const out=getSideReplyFor(sd);
   setTimeout(()=>{sd.msgs.pop();sd.msgs.push({role:'assistant',text:out});sd.busy=false;renderSide();},replyDelay());
@@ -890,6 +893,14 @@ function setView(v){
   renderSide();
 }
 function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
+
+/* ===== LOGGING ===== */
+const LOG_URL=''; // Google Apps Script 웹앱 URL
+function logEvent(type,content,seed){
+  if(!LOG_URL)return;
+  const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
+  navigator.sendBeacon(LOG_URL,JSON.stringify(d));
+}
 
 /* ===== UTILS ===== */
 function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
