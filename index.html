@@ -587,7 +587,10 @@ function renderSide(){
     });
     html+=`</div><div class="side-foot">`;
     if(!sd.busy){
-      html+=`<div class="ssuggest">`+sd.suggests.map(x=>`<button class="schip" onclick="sideSuggest(\`${x}\`)">${x}</button>`).join('')+`</div>`;
+      const topic=sd.topicKey?SCRIPT.side[sd.topicKey]:null;
+      const turns=sd.msgs.filter(m=>m.role==='assistant').length;
+      const hasMore=topic&&turns<topic.length;
+      if(hasMore) html+=`<div class="ssuggest">`+sd.suggests.map(x=>`<button class="schip" onclick="sideSuggest(\`${x}\`)">${x}</button>`).join('')+`</div>`;
       html+=`<div class="sinrow"><textarea id="sideIn" rows="1" placeholder="${open?'여기서 자유롭게 더 묻기…':'이 질문에만 묻기…'}"></textarea><button class="send" onclick="onSideSend()">↑</button></div>`;
     }
     if(sd.msgs.some(m=>m.role==='assistant')){
