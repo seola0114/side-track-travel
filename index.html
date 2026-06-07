@@ -422,8 +422,8 @@
       <button id="vGuide" onclick="setView('guide')">🎓 가이드 모드</button>
     </div>
     <div class="toggle">
-      <button id="mSide" class="on" onclick="setMode('side')">사이드 트랙</button>
-      <button id="mLinear" onclick="setMode('linear')">기본 채팅</button>
+      <button id="mSide" class="on" onclick="setMode('side')">TO BE</button>
+      <button id="mLinear" onclick="setMode('linear')">AS IS</button>
     </div>
     <button class="reset" onclick="resetAll()">↺ 처음부터</button>
     <div class="hud">
@@ -1052,7 +1052,7 @@ function setView(v){
   document.getElementById('vProduct').classList.toggle('on',v==='product');
   document.body.classList.toggle('product',v==='product');
   const mL=document.getElementById('mLinear'),rb=document.getElementById('returnBtn');
-  if(mL)mL.textContent=(v==='product')?'기본 채팅':'일반 채팅 (대조)';
+  if(mL)mL.textContent=(v==='product')?'AS IS':'AS IS (대조)';
   if(rb)rb.textContent=(v==='product')?'📍 일정표 다시 보기':'📍 일정표 다시 보기 — 한참 위로 스크롤';
   renderSide();
 }
