@@ -202,8 +202,8 @@
   .pinchip .pcd{width:6px;height:6px;border-radius:50%;background:var(--pin);flex:none}
   .pinchip .pcx{border:none;background:none;color:var(--faint);cursor:pointer;font-size:13px;line-height:1;padding:1px 4px;border-radius:6px}
   .pinchip .pcx:hover{background:#f0e3d0;color:var(--warn)}
-  .pinchip.landing{animation:land .42s cubic-bezier(.2,1.3,.3,1) both}
-  @keyframes land{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+  .pinchip.landing{animation:land .35s ease both}
+  @keyframes land{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
   .flychip{position:fixed;z-index:80;background:var(--pin);color:#fff;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:700;box-shadow:0 12px 30px rgba(179,106,36,.42);pointer-events:none;white-space:nowrap;transition:transform .62s cubic-bezier(.4,0,.2,1),opacity .62s ease}
   .returnbtn{position:absolute;left:50%;top:54px;transform:translateX(-50%);z-index:25;background:var(--warn);color:#fff;border:none;border-radius:22px;padding:8px 15px;font-family:var(--sans);font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 8px 22px rgba(162,59,46,.3);display:none;align-items:center;gap:6px;animation:rise .3s ease both}
   .returnbtn.show{display:inline-flex}
@@ -770,7 +770,7 @@ function renderPinRail(){
   r.style.display='flex';
   r.innerHTML=`<span class="rlbl">📌 확정한 결정 · 고정</span>`+
     validPins.map(p=>`<span class="pinchip${p.landing?' landing':''}"><span class="pcd"></span>${escapeHtml(p.txt)}<button class="pcx" title="제거" onclick="removePin(${p.id})">×</button></span>`).join('');
-  validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;},460);});
+  validPins.forEach(p=>{if(p.landing)setTimeout(()=>{p.landing=false;renderPinRail();},400);});
 }
 function renderReturnBtn(){
   document.getElementById('returnBtn').classList.toggle('show',S.mode==='linear'&&S.apiLen>=6);
@@ -945,7 +945,7 @@ function bringToMain(){
   const sd=activeSideObj();if(!sd||sd.busy||sd.kind!=='decision')return;
   if(!sd.msgs.some(m=>m.role==='assistant'))return;
   const lastA=[...sd.msgs].reverse().find(m=>m.role==='assistant');
-  const line=summarizeForPin(sd.seed,lastA&&lastA.text);
+  const line=summarizeForPin(sd.seed,lastA&&lastA.text)||sd.seed;
   if(sd.reviewFoldedId!=null){
     const f=S.folded.find(x=>x.id===sd.reviewFoldedId);
     if(f){f.msgs=sd.msgs.map(m=>({...m}));const pin=S.pins.find(pp=>pp.id===f.pinId);if(pin)pin.txt=line;}
