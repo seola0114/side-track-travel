@@ -348,6 +348,18 @@
   .bring.note{background:#6E6B64}.bring.note:hover{background:#54514b}
   .fdot.note{background:var(--faint);border-radius:2px}
   .pinned.note{color:var(--muted);background:#eceae3;border-color:#ddd9cf}
+  /* 랜딩 페이지 */
+  .landing{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 40px 60px;gap:28px}
+  .landing.hidden{display:none}
+  .land-greeting{font-size:32px;font-weight:600;letter-spacing:-.02em;color:var(--ink);text-align:center}
+  .land-greeting .land-spark{color:var(--accent);font-size:28px;margin-right:6px}
+  .land-input{width:100%;max-width:640px}
+  .land-input .inrow{margin:0;max-width:100%}
+  .land-actions{display:flex;gap:8px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+  .land-chip{font-family:var(--sans);font-size:13px;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:8px 16px;cursor:pointer;transition:.14s;display:flex;align-items:center;gap:6px}
+  .land-chip:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+  .main-col.chatting .landing{display:none}
+  .main-col:not(.chatting) .col-head,.main-col:not(.chatting) .thread,.main-col:not(.chatting) .composer,.main-col:not(.chatting) .pinrail,.main-col:not(.chatting) .returnbtn{display:none!important}
 </style>
 </head>
 <body>
@@ -410,7 +422,7 @@
     </div>
     <div class="bar-right">
       <button class="bar-btn" id="sideToggleBtn" onclick="toggleSideCol()" title="사이드 패널"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/></svg></button>
-      <button class="bar-btn ghost-btn" title="시크릿 사용"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2c-3 0-6 2.5-6 6v3c-1.5.5-3 1.5-3 3 0 0 1 4 3 6s4.5 2 6 2 4 0 6-2 3-6 3-6c0-1.5-1.5-2.5-3-3V8c0-3.5-3-6-6-6z"/><circle cx="9.5" cy="13" r="1.2"/><circle cx="14.5" cy="13" r="1.2"/><path d="M9 17s1.5 1.5 3 1.5 3-1.5 3-1.5"/></svg></button>
+      <button class="bar-btn ghost-btn" title="시크릿 사용"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a3 3 0 0 0-3 3v2H5a3 3 0 0 0-3 3c0 3 1.5 6 4 8 1.5 1.2 3.5 2 6 2s4.5-.8 6-2c2.5-2 4-5 4-8a3 3 0 0 0-3-3h-1V5a3 3 0 0 0-3-3H9z"/><circle cx="9" cy="12" r="1"/><circle cx="15" cy="12" r="1"/><path d="M12 19v-3"/></svg></button>
     </div>
   </header>
 
@@ -420,6 +432,29 @@
         <span class="tag">Main thread</span>
         <span class="title" id="colTitle">도쿄 3박 4일 일정</span>
         <span class="anchor-pill">메인 일정은 깨끗하게 유지</span>
+      </div>
+      <div class="landing" id="landing">
+        <div class="land-greeting" id="landGreeting"></div>
+        <div class="land-input">
+          <div class="inrow">
+            <textarea id="landIn" rows="1" placeholder="오늘 어떤 도움을 드릴까요?"></textarea>
+            <div class="inbar">
+              <button class="iconbtn plus" title="첨부">+</button>
+              <div class="inbar-right">
+                <button class="modelpill">Opus 4.8 <span class="mlvl">높음</span> <span class="mcv">⌄</span></button>
+                <button class="iconbtn mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/></svg></button>
+                <button class="iconbtn eq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="8" x2="6" y2="16"/><line x1="10" y1="5" x2="10" y2="19"/><line x1="14" y1="9" x2="14" y2="15"/><line x1="18" y1="6" x2="18" y2="18"/></svg></button>
+              </div>
+            </div>
+          </div>
+          <div class="land-actions">
+            <button class="land-chip" onclick="landStart('작성하기')">✏️ 작성하기</button>
+            <button class="land-chip" onclick="landStart('학습하기')">🎓 학습하기</button>
+            <button class="land-chip" onclick="landStart('Drive에서')">📁 Drive에서</button>
+            <button class="land-chip" onclick="landStart('Calendar에서')">📅 Calendar에서</button>
+            <button class="land-chip" onclick="landStart('Gmail에서')">📧 Gmail에서</button>
+          </div>
+        </div>
       </div>
       <div class="pinrail" id="pinrail" style="display:none"></div>
       <button class="returnbtn" id="returnBtn" onclick="returnToItinerary()">📍 일정표 다시 보기 — 한참 위로 스크롤</button>
@@ -801,7 +836,7 @@ function renderAll(){renderMain();renderPinRail();renderReturnBtn();renderSide()
 
 /* ===== MAIN COMPOSER ===== */
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
-function sendSuggest(t){if(S.busy)return;if(!S._usedKeys)S._usedKeys=new Set();const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];if(key!=null)S._usedKeys.add(key);document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
+function sendSuggest(t){if(S.busy)return;if(!LANDED){LANDED=true;renderLanding();}if(!S._usedKeys)S._usedKeys=new Set();const map=S.mode==='side'?SCENARIO.chips.side:SCENARIO.chips.linear;const key=Object.keys(map).map(Number).filter(k=>k<=S.step).sort((a,b)=>b-a)[0];if(key!=null)S._usedKeys.add(key);document.getElementById('suggest').innerHTML='';const i=document.getElementById('mainIn');i.value=t;onMainSend();}
 function syncBusy(){document.getElementById('mainSend').disabled=!!S.busy;}
 function setBusy(b){S.busy=b;syncBusy();}
 function baseMainSend(){
@@ -976,8 +1011,11 @@ function setMode(m){
 }
 function resetAll(){
   const m=S.mode;
-  STATES={side:null,linear:null};   // 양쪽 모두 초기화
-  newModeState(m);applyModeUI(m);renderAll();
+  STATES={side:null,linear:null};
+  LANDED=false;
+  newModeState(m);applyModeUI(m);renderAll();renderLanding();
+  document.getElementById('sideCol').classList.add('collapsed');
+  const tb=document.getElementById('sideToggleBtn');if(tb)tb.classList.remove('active');
 }
 let VIEW='guide';
 function setView(v){
@@ -1010,9 +1048,35 @@ function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollH
 document.getElementById('mainIn').addEventListener('input',e=>autoGrow(e.target));
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing&&document.activeElement&&document.activeElement.id==='sideIn'){e.preventDefault();onSideSend();}});
 
+/* ===== LANDING ===== */
+let LANDED=false;
+function getTimeGreeting(){
+  const h=new Date().getHours();
+  if(h<6)return '🌙 새벽이에요';if(h<12)return '☀️ 좋은 아침이에요';if(h<18)return '✳️ 오후예요';return '🌆 좋은 저녁이에요';
+}
+function renderLanding(){
+  const mc=document.querySelector('.main-col');
+  const lg=document.getElementById('landGreeting');
+  if(!LANDED){
+    mc.classList.remove('chatting');
+    if(lg)lg.innerHTML=`<span class="land-spark">${getTimeGreeting().split(' ')[0]}</span> ${getTimeGreeting().split(' ').slice(1).join(' ')}, seola님`;
+  }else{
+    mc.classList.add('chatting');
+  }
+}
+function startChat(text){
+  LANDED=true;greet();renderLanding();renderAll();
+  if(text){const i=document.getElementById('mainIn');i.value=text;onMainSend();}
+}
+function landStart(label){startChat('');}
+document.getElementById('landIn').addEventListener('input',e=>autoGrow(e.target));
+document.getElementById('landIn').addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&!e.shiftKey&&!e.isComposing){e.preventDefault();const t=e.target.value.trim();startChat(t);}
+});
+
 /* ===== INIT ===== */
 function toggleSidebar(){document.body.classList.toggle('sbhide');}
-S=freshState();greet();renderAll();setView('product');
+S=freshState();renderAll();setView('product');renderLanding();
 </script>
 </body>
 </html>
