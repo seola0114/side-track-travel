@@ -152,8 +152,8 @@
   .folded-toggle .ft-ic{font-size:12px}
   .folded-toggle .ft-cnt{font-family:var(--mono);font-size:9.5px;color:var(--pin);background:var(--pin-soft);border:1px solid #ecd8bb;padding:1px 7px;border-radius:10px}
   .folded-chips{display:flex;gap:5px;margin-top:6px;flex-wrap:wrap}
-  .fchip{display:inline-flex;align-items:center;gap:5px;background:#e9e6de;border:1px solid #ddd9cf;border-radius:8px;padding:4px 9px;font-size:10.5px;color:var(--muted);cursor:pointer;transition:.14s;max-width:160px}
-  .fchip:hover{border-color:var(--accent-line);color:var(--ink);background:var(--accent-soft)}
+  .fchip{display:inline-flex;align-items:center;gap:5px;background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:5px 10px;font-size:11px;color:var(--muted);cursor:pointer;transition:.14s;max-width:160px}
+  .fchip:hover{border-color:#ccc;color:var(--ink);background:#f3f0ea}
   .fchip .fdot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex:none}
   .fchip .fdot.note{background:var(--faint);border-radius:1px}
   .fchip .flbl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -337,7 +337,7 @@
   .art-head{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:var(--surface);flex:none}
   .art-head .art-ic{font-size:16px}
   .art-head .art-ttl{font-weight:700;font-size:14.5px;color:var(--ink)}
-  .art-head .art-ver{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--accent-deep);background:var(--accent-soft);border:1px solid var(--accent-line);padding:3px 8px;border-radius:11px}
+  .art-head .art-ver{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:3px 8px;border-radius:11px}
   .art-head .art-min{margin-left:auto;color:var(--faint);font-size:13px;transition:.2s}
   .artifact.min .art-min{transform:rotate(180deg)}
   .art-body{padding:12px 14px;overflow-y:auto;font-size:12.5px;line-height:1.65;cursor:text}
@@ -346,9 +346,9 @@
   .artifact.has-side{flex:none;max-height:38%}
   .art-hist{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper);border:1px solid var(--line);padding:2px 8px;border-radius:10px;cursor:pointer;margin-left:4px;transition:.14s;white-space:nowrap}
   .art-hist:hover{background:#eae6dc;color:var(--ink)}
-  .hist-popup{position:absolute;top:42px;right:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 28px rgba(27,25,22,.15);z-index:25;min-width:180px;max-width:260px;padding:8px 6px;display:none;animation:pop .14s ease both}
+  .hist-popup{position:absolute;top:42px;right:10px;background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 20px rgba(27,25,22,.1);z-index:25;min-width:180px;max-width:260px;padding:8px;display:none;animation:pop .14s ease both}
   .hist-popup.show{display:block}
-  .hist-popup .hp-title{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:2px 8px 6px}
+  .hist-popup .hp-title{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:2px 4px 6px}
   .art-head{position:relative}
   .side-close-m{display:none;margin-left:auto;background:none;border:none;font-size:18px;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:6px;flex:none}
   .side-close-m:hover{background:#eae6dc;color:var(--ink)}
@@ -860,7 +860,7 @@ function toggleHistoryPopup(){
   if(existing){existing.remove();return;}
   const head=document.querySelector('.art-head');if(!head)return;
   let html=`<div class="hist-popup show"><div class="hp-title">히스토리</div>`;
-  html+=S.folded.map(f=>`<div class="fchip" style="max-width:100%;margin:3px 2px" onclick="document.querySelector('.hist-popup').remove();openHistory(${f.id})"><span class="fdot ${f.kind}"></span><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('');
+  html+=S.folded.map(f=>`<div class="fchip" style="max-width:100%;margin:3px 0" onclick="document.querySelector('.hist-popup').remove();openHistory(${f.id})"><span class="flbl">${escapeHtml(f.title)}</span></div>`).join('');
   html+=`</div>`;
   head.insertAdjacentHTML('beforeend',html);
   setTimeout(()=>document.addEventListener('click',function cl(e){if(!e.target.closest('.hist-popup')&&!e.target.closest('.art-hist')){const p=document.querySelector('.hist-popup');if(p)p.remove();document.removeEventListener('click',cl);}},{once:false}),0);
