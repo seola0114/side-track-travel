@@ -937,9 +937,10 @@ function greet(){S.display.push({role:'assistant',text:SCENARIO.greeting});}
 
 /* ===== LOGGING ===== */
 const LOG_URL='https://script.google.com/macros/s/AKfycbw3ZRoIP73i0-ODZB1cLFXVbeOiIph4K8bYbmvndqZUMuHuuPXkQAZ8TsbRE7qNhWw/exec';
+const TESTER=new URLSearchParams(location.search).get('tester')||'';
 function logEvent(type,content,seed){
   if(!LOG_URL)return;
-  const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step};
+  const d={timestamp:new Date().toISOString(),mode:S.mode,type,content,seed:seed||'',step:S.step,tester:TESTER};
   const form=document.createElement('form');form.method='POST';form.action=LOG_URL;form.target='_logframe';form.style.display='none';
   Object.entries(d).forEach(([k,v])=>{const inp=document.createElement('input');inp.name=k;inp.value=v;form.appendChild(inp);});
   document.body.appendChild(form);form.submit();form.remove();
