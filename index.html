@@ -280,6 +280,21 @@
   .conv-title{font-size:14px;font-weight:600;color:var(--ink)}
   body.sbhide .sidebar{display:none}
   @media(max-width:1024px){.sidebar{display:none}.sb-toggle{display:none}}
+  @media(max-width:640px){
+    .bar{padding:8px 12px;gap:6px}
+    .vtoggle,.toggle{display:none}
+    .hud{display:none}
+    .reset{display:none}
+    .thread{padding:16px 12px 8px}
+    .composer{padding:8px 12px 12px}
+    .msg,.inrow,.suggest,.pins{max-width:100%}
+    .msg{margin-bottom:12px}
+    .guide{width:calc(100% - 24px);left:12px;bottom:12px}
+    .col-head{padding:8px 12px}
+    .side-col.open{width:100%;max-width:100%}
+    .history-drawer{right:0;width:100%}
+    #selmenu{max-width:90vw}
+  }
   /* v2: 일정표 영속 패널 + 사이드 트레이 + 열린질문 경계 */
   .artifact{flex:none;display:flex;flex-direction:column;margin:0;border-bottom:1px solid var(--line);background:var(--surface);max-height:38%;overflow:hidden}
   .art-head{display:flex;align-items:center;gap:9px;padding:10px 14px;border-bottom:1px solid var(--line);cursor:pointer;background:linear-gradient(90deg,var(--accent-soft),var(--surface));flex:none}
