@@ -50,9 +50,10 @@
   .side-col{width:388px;flex:none;border-left:1px solid var(--line);background:linear-gradient(180deg,#fbfaf7,#f1eee6);display:flex;flex-direction:column;min-height:0;overflow:hidden;transition:width .22s cubic-bezier(.2,.8,.2,1),border .22s}
   .side-col.collapsed{width:0;border-left:none;overflow:hidden}
   #sideContent{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
-  .side-expand{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:15;background:var(--surface);border:1px solid var(--line);border-right:none;border-radius:8px 0 0 8px;padding:12px 5px;cursor:pointer;color:var(--muted);font-size:14px;box-shadow:-3px 0 10px rgba(27,25,22,.08);transition:.14s;display:none}
-  .side-expand:hover{color:var(--ink);background:#f3f0ea}
-  .side-expand.show{display:block}
+  .bar-right{display:flex;gap:6px;margin-left:auto;align-items:center}
+  .bar-btn{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:6px 11px;cursor:pointer;transition:.15s;white-space:nowrap}
+  .bar-btn:hover{color:var(--ink);border-color:#ccc}
+  .bar-btn.active{color:var(--accent-deep);border-color:var(--accent-line);background:var(--accent-soft)}
   .side-collapse{background:none;border:none;color:var(--faint);cursor:pointer;font-size:14px;padding:2px 5px;border-radius:5px;flex:none;margin-left:4px}
   .side-collapse:hover{color:var(--ink);background:#eae6dc}
   .art-resize{height:6px;cursor:ns-resize;background:transparent;border-top:1px solid var(--line);flex:none;display:flex;align-items:center;justify-content:center;transition:background .12s}
@@ -394,6 +395,10 @@
       </div>
       <button class="reset" onclick="resetAll()">↺ 처음부터</button>
     </div>
+    <div class="bar-right">
+      <button class="bar-btn" id="sideToggleBtn" onclick="toggleSideCol()">↳ 사이드 패널</button>
+      <button class="bar-btn" onclick="resetAll()">↺ 처음부터</button>
+    </div>
   </header>
 
   <div class="stage">
@@ -424,7 +429,6 @@
     </section>
     <div class="history-drawer" id="historyDrawer"></div>
     <aside class="side-col collapsed" id="sideCol"><div id="sideContent"></div></aside>
-    <button class="side-expand show" id="sideExpand" onclick="toggleSideCol()" title="사이드 패널 열기">‹</button>
   </div>
 </div>
 </div>
@@ -743,9 +747,10 @@ function clearQuote(){S.quote=null;renderQuote();}
 function toggleArtifact(){S.artifactMin=!S.artifactMin;renderSide();}
 function closeSidePanel(){document.getElementById('sideCol').classList.remove('open');}
 function toggleSideCol(){
-  const col=document.getElementById('sideCol'),btn=document.getElementById('sideExpand');
+  const col=document.getElementById('sideCol');
   col.classList.toggle('collapsed');
-  btn.classList.toggle('show',col.classList.contains('collapsed'));
+  const tb=document.getElementById('sideToggleBtn');
+  if(tb)tb.classList.toggle('active',!col.classList.contains('collapsed'));
 }
 /* 아티팩트 높이 드래그 리사이즈 */
 document.addEventListener('mousedown',function(e){
@@ -807,7 +812,7 @@ function baseMainSend(){
     if(st.pendingPins.length){st.pendingPins=[];}
     if(st.step===1)st.step=2;
     if(st.pins.length&&st.step>=6)st.pins.forEach(p=>p.done=true);
-    if(st.artifact)document.getElementById('sideCol').classList.add('open');
+    if(st.artifact){const sc=document.getElementById('sideCol');sc.classList.add('open');sc.classList.remove('collapsed');const tb=document.getElementById('sideToggleBtn');if(tb)tb.classList.add('active');}
     st.busy=false;if(st===S){syncBusy();renderAll();}
   },replyDelay());
 }
@@ -848,7 +853,7 @@ function openSide(seed){
   S.sides.push({id,seed,topicKey:tk,kind:tk?'decision':'open',msgs:[],busy:false,suggests:SCENARIO.sideSuggests()});
   S.activeSide=id;
   if(S.step===2)S.step=3;
-  document.getElementById('sideCol').classList.add('open');renderAll();
+  const _sc=document.getElementById('sideCol');_sc.classList.add('open');_sc.classList.remove('collapsed');const _tb=document.getElementById('sideToggleBtn');if(_tb)_tb.classList.add('active');renderAll();
 }
 function switchSide(id){S.activeSide=id;renderAll();}
 function finishSide(id){
@@ -899,7 +904,7 @@ function reopenFolded(id){
   const sid=++S.seq;
   S.sides.push({id:sid,seed:f.seed||'',topicKey:f.topicKey||null,kind:f.kind==='pin'?'decision':'open',msgs:f.msgs.map(m=>({...m})),busy:false,suggests:SCENARIO.sideSuggests(),reviewFoldedId:f.id});
   S.activeSide=sid;
-  document.getElementById('sideCol').classList.add('open');renderAll();
+  const _sc=document.getElementById('sideCol');_sc.classList.add('open');_sc.classList.remove('collapsed');const _tb=document.getElementById('sideToggleBtn');if(_tb)_tb.classList.add('active');renderAll();
 }
 /* ===== HISTORY DRAWER ===== */
 function openHistory(id){
