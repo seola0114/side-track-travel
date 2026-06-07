@@ -437,13 +437,14 @@
         <div class="land-greeting" id="landGreeting"></div>
         <div class="land-input">
           <div class="inrow">
-            <textarea id="landIn" rows="1" placeholder="오늘 어떤 도움을 드릴까요?"></textarea>
+            <textarea id="landIn" rows="1" placeholder="오늘 어떤 도움을 드릴까요?">11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘. 신주쿠·시부야·아사쿠사 위주로</textarea>
             <div class="inbar">
               <button class="iconbtn plus" title="첨부">+</button>
               <div class="inbar-right">
                 <button class="modelpill">Opus 4.8 <span class="mlvl">높음</span> <span class="mcv">⌄</span></button>
                 <button class="iconbtn mic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><line x1="12" y1="18" x2="12" y2="22"/></svg></button>
                 <button class="iconbtn eq"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="6" y1="8" x2="6" y2="16"/><line x1="10" y1="5" x2="10" y2="19"/><line x1="14" y1="9" x2="14" y2="15"/><line x1="18" y1="6" x2="18" y2="18"/></svg></button>
+                <button class="send" onclick="startChat(document.getElementById('landIn').value.trim())">↑</button>
               </div>
             </div>
           </div>
