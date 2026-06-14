@@ -92,7 +92,7 @@ body.sbhide .bar{padding-left:52px}
 
 /* grid */
 .gridwrap{padding:9px;overflow-x:auto}
-table.grid{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed;min-width:480px}
+table.grid{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed;min-width:520px}
 table.grid th{font-size:11px;font-weight:600;color:var(--muted);padding:3px 0 5px;text-align:center}
 table.grid th .sub{display:block;font-weight:400;color:var(--faint);font-size:10px}
 table.grid td.tm{width:38px;font-family:var(--mono);font-size:9px;color:var(--faint);text-align:right;padding-right:6px;vertical-align:top;line-height:1.3}
@@ -436,29 +436,56 @@ const DAYS=[
   {d:'Day 3',date:'11.09 水'},
   {d:'Day 4',date:'11.10 木'},
 ];
-const ROWS=['09:00','11:30','13:00','15:30','18:30','21:00'];
-const ROWLABEL=['아침','오전','점심','오후','저녁','밤'];
+const ROWS=['07:00','09:00','10:30','12:00','13:30','15:00','17:00','19:00','21:00'];
+const ROWLABEL=['기상','오전①','오전②','점심','오후①','오후②','저녁준비','저녁','밤'];
 /* baseGrid[row][day] — txt: 장소, sub: 활동, meta: 태그(예약/이동/소요), detail: 펼침 설명 */
+/* 9 rows: 07:00 기상 / 09:00 오전① / 10:30 오전② / 12:00 점심 / 13:30 오후① / 15:00 오후② / 17:00 저녁준비 / 19:00 저녁 / 21:00 밤 */
 function baseGrid(){return [
-  [ {t:'dec',badge:'항공',txt:'나리타 도착',sub:'10:35 착륙 · 입국 수속',key:'arrive',meta:['✈ 비행'],detail:'나리타 공항 도착 후 입국 심사·수하물. eSIM이 켜지면 바로 구글맵으로 이동 경로 확인.'},
-    {t:'routine',txt:'조식',sub:'호텔'}, {t:'routine',txt:'조식',sub:'호텔'}, {t:'routine',txt:'조식',sub:'호텔'} ],
-  [ {t:'dec',badge:'교통',txt:'NEX → 신주쿠',sub:'스카이라이너 환승',key:'transit',meta:['🚃 스이카'],detail:'나리타 익스프레스로 신주쿠까지 약 80분. 스이카 한 번 태그로 환승까지 해결.'},
-    {t:'act',txt:'아사쿠사',sub:'센소지·나카미세',meta:['📷 인증샷'],detail:'센소지·나카미세 거리 산책, 기모노 대여 인증샷. 갓 구운 멜론빵 군것질.'},
-    {t:'act',txt:'시부야',sub:'스카이·스크램블',meta:['🔖 예약'],detail:'시부야 스카이 전망대(오전 예약 권장) → 스크램블 교차로 → 109 쇼핑.'},
-    {t:'dec',badge:'예약',txt:'팀랩 플래닛',sub:'09:00 시간 지정',key:'teamlab',meta:['🔖 예약'],detail:'시간 지정 예약 필수. 맨발 전시라 편한 복장 권장. 약 90분 소요.'} ],
-  [ {t:'act',txt:'체크인·휴식',sub:'호텔 신주쿠',detail:'호텔 체크인 후 짐 정리·휴식. 첫날은 시차 적응용으로 여유 있게.'},
-    {t:'act',txt:'우에노 공원',sub:'국립박물관·아메요코',detail:'우에노 공원·국립박물관 관람 후 아메요코 시장 군것질.'},
-    {t:'act',txt:'시내 쇼핑',sub:'긴자·마루노우치',detail:'긴자 편집숍·백화점 쇼핑. 점심은 백화점 식당가에서.'},
-    {t:'act',txt:'오다이바',sub:'레인보우브리지 뷰',meta:['🚃 유리카모메'],detail:'유리카모메 노선으로 오다이바. 레인보우브리지·자유의 여신상 뷰.'} ],
-  [ {t:'act',txt:'메이지신궁',sub:'단풍 산책',detail:'메이지신궁 단풍 산책 → 오모테산도 카페 거리.'},
-    {t:'act',txt:'시부야 요코초',sub:'이자카야',meta:['🍶 저녁'],detail:'시부야 요코초에서 이자카야 분위기로 저녁.'},
-    {t:'act',txt:'야나카 긴자',sub:'옛 골목 산책',detail:'옛 정취가 남은 야나카 긴자 골목 산책, 길거리 간식.'},
-    {t:'dec',badge:'항공',txt:'나리타 출발',sub:'18:10 이륙',key:'depart',meta:['✈ 비행'],detail:'스카이라이너로 나리타 이동, 출국 수속 후 18:10 출발.'} ],
-  [ {t:'act',txt:'오모이데요코초',sub:'꼬치구이 저녁',key:'d1eve',meta:['🍶 저녁'],detail:'가부키초·오모이데요코초(추억의 골목)에서 꼬치구이에 맥주 한잔.'},
-    {t:'act',txt:'시부야 디너',sub:'스카이 야경'},
-    {t:'act',txt:'라멘 골목',sub:'마지막 밤'},
-    {t:'act',txt:'공항·귀가',sub:'면세 쇼핑'} ],
-  [ {t:'routine',txt:'호텔·취침',sub:'신주쿠'}, {t:'routine',txt:'호텔·취침',sub:'신주쿠'}, {t:'routine',txt:'호텔·취침',sub:'신주쿠'}, {t:'act',txt:'집 도착',sub:'밤 늦게'} ],
+  /* row 0 — 07:00 기상 */
+  [ {t:'dec',badge:'항공',txt:'기내 · 출발',sub:'07:25 나리타행 탑승',key:'arrive',meta:['✈ 비행'],detail:'인천 07:25 출발. 기내에서 입국카드 작성, eSIM 설정 확인.'},
+    {t:'routine',txt:'기상·조식',sub:'07:00 호텔 조식 뷔페',detail:'호텔 1층 조식 뷔페. 07:00–09:30 운영.'},
+    {t:'routine',txt:'기상·조식',sub:'07:00 호텔 조식 뷔페',detail:'호텔 1층 조식 뷔페. 07:00–09:30 운영.'},
+    {t:'routine',txt:'기상·짐 정리',sub:'07:00 체크아웃 준비',detail:'체크아웃 11:00까지. 짐은 프런트에 맡기고 출발.'} ],
+  /* row 1 — 09:00 오전① */
+  [ {t:'dec',badge:'항공',txt:'나리타 도착',sub:'10:35 착륙 · 입국 심사 40분',meta:['✈ 도착'],detail:'나리타 공항 도착. 입국 심사(약 30–40분), 수하물 수취, 세관 통과. eSIM 켜서 구글맵 확인.'},
+    {t:'act',txt:'아사쿠사 이동',sub:'09:00 호텔출발 → 30분',meta:['🚃 긴자선'],detail:'신주쿠→아사쿠사 지하철 긴자선 약 30분. 스이카 태그.'},
+    {t:'act',txt:'시부야 스카이',sub:'09:30 전망대 입장 (예약)',meta:['🔖 예약','📷 인증샷'],detail:'시부야 스카이 전망대 09:30 시간 지정 예약. 옥상 SKY STAGE에서 도쿄 전경 촬영. 약 60분 소요.'},
+    {t:'dec',badge:'예약',txt:'팀랩 플래닛',sub:'09:00 시간 지정 · 90분',key:'teamlab',meta:['🔖 예약'],detail:'시간 지정 예약 필수. 맨발 전시라 양말·짧은 바지 권장. 약 90분 소요. 사물함에 짐 보관.'} ],
+  /* row 2 — 10:30 오전② */
+  [ {t:'dec',badge:'교통',txt:'NEX → 신주쿠',sub:'11:15 발 · 80분 소요',key:'transit',meta:['🚃 스이카'],detail:'나리타 익스프레스(NEX) 11:15 출발, 신주쿠 12:35 도착. 스이카로 태그. 지정석 추천.'},
+    {t:'act',txt:'센소지 · 나카미세',sub:'10:00–11:30 · 산책 90분',meta:['📷 인증샷'],detail:'센소지 본당 참배 → 나카미세 거리 산책. 기모노 대여 인증샷, 갓 구운 멜론빵 군것질. 인력거 체험 가능.'},
+    {t:'act',txt:'스크램블 교차로',sub:'10:30 도보 이동 · 30분',meta:['📷 인증샷'],detail:'시부야 스카이에서 도보로 스크램블 교차로 이동. 하치코상 기념사진, 교차로 횡단 체험.'},
+    {t:'act',txt:'오다이바 이동',sub:'10:30 유리카모메 · 30분',meta:['🚃 유리카모메'],detail:'토요스→오다이바 유리카모메 노선 약 30분. 레인보우브리지 위를 지나는 뷰 포인트.'} ],
+  /* row 3 — 12:00 점심 */
+  [ {t:'act',txt:'신주쿠 도착',sub:'12:35 착 · 호텔 짐 맡기기',detail:'신주쿠역 도착 후 호텔에 짐 맡기기 (체크인 15:00). 역 근처에서 가볍게 점심.'},
+    {t:'act',txt:'아사쿠사 점심',sub:'12:00 텐동·소바 맛집',meta:['🍜 맛집'],detail:'아사쿠사 텐동 맛집(텐야) 또는 소바 전문점. 대기 15–20분 예상. 예산 ¥1,200–1,800.'},
+    {t:'act',txt:'시부야 109 점심',sub:'12:00 식당가 라멘',meta:['🍜 맛집'],detail:'시부야 109 빌딩 지하 식당가 또는 근처 이치란 라멘. 예산 ¥1,000–1,500.'},
+    {t:'act',txt:'오다이바 관광',sub:'11:30–13:00 · 해변 산책',meta:['📷 인증샷'],detail:'오다이바 해변공원 → 자유의 여신상 → 레인보우브리지 뷰. 건담 유니콘 실물대 입상 관람.'} ],
+  /* row 4 — 13:30 오후① */
+  [ {t:'act',txt:'체크인·휴식',sub:'13:30–15:00 · 호텔 정리',detail:'호텔 얼리 체크인 또는 로비 대기. 짐 정리·샤워·시차 적응 휴식. 첫날이라 여유 있게.'},
+    {t:'act',txt:'우에노 공원',sub:'13:30–15:30 · 국립박물관',meta:['🎫 ¥1,000'],detail:'우에노 공원 산책 → 도쿄 국립박물관 관람(¥1,000). 가을 단풍 포인트. 약 2시간 소요.'},
+    {t:'act',txt:'긴자 쇼핑',sub:'13:30–16:00 · 백화점 순회',meta:['🛍 쇼핑'],detail:'긴자 미츠코시 백화점, 유니클로 긴자점(12층), 이토야 문구점. 면세 가능.'},
+    {t:'act',txt:'오다이바 점심',sub:'13:00 다이버시티 푸드코트',meta:['🍜 맛집'],detail:'다이버시티 도쿄 프라자 푸드코트에서 점심. 예산 ¥1,000–1,500.'} ],
+  /* row 5 — 15:00 오후② */
+  [ {t:'act',txt:'메이지신궁',sub:'15:00–16:30 · 단풍 산책',detail:'메이지신궁 참배 → 신궁 숲길 단풍 산책. 오모테산도 방면 출구로 나와 카페거리 이동.'},
+    {t:'act',txt:'아메요코 시장',sub:'15:30–17:00 · 군것질',meta:['🛍 쇼핑'],detail:'우에노 아메요코 시장. 건어물·과일·의류 구경, 길거리 음식(야키토리·초코바나나). 흥정 가능.'},
+    {t:'act',txt:'마루노우치',sub:'16:00–17:30 · 도쿄역 일대',meta:['📷 인증샷'],detail:'도쿄역 마루노우치 출구 야경 포인트. KITTE 빌딩 옥상정원에서 도쿄역 촬영.'},
+    {t:'dec',badge:'교통',txt:'나리타 이동',sub:'15:00 스카이라이너 · 60분',key:'depart',meta:['🚃 스카이라이너'],detail:'우에노→나리타 스카이라이너 15:00 출발, 16:00 도착. 출국 수속 여유 2시간 확보.'} ],
+  /* row 6 — 17:00 저녁준비 */
+  [ {t:'act',txt:'오모테산도 카페',sub:'16:30–17:30 · 휴식',detail:'오모테산도 카페거리에서 커피·디저트 휴식. 블루보틀 커피 또는 % 아라비카 추천.'},
+    {t:'act',txt:'시부야 이동',sub:'17:00 지하철 · 20분',meta:['🚃 이동'],detail:'우에노→시부야 JR야마노테선 약 30분. 저녁 식사 장소 주변 도착.'},
+    {t:'act',txt:'야나카 긴자',sub:'17:00–18:30 · 옛 골목',detail:'옛 정취가 남은 야나카 긴자 골목 산책. 석양 계단(夕やけだんだん)에서 일몰 감상. 길거리 간식.'},
+    {t:'dec',badge:'항공',txt:'출국 수속',sub:'16:00–17:30 · 면세 쇼핑',meta:['✈ 비행','🛍 면세'],detail:'나리타 공항 출국 심사 후 면세점 쇼핑. 로이스 초콜릿·도쿄바나나 인기. 18:10 탑승 시작.'} ],
+  /* row 7 — 19:00 저녁 */
+  [ {t:'act',txt:'오모이데요코초',sub:'18:30–20:00 · 꼬치구이',key:'d1eve',meta:['🍶 저녁'],detail:'가부키초·오모이데요코초(추억의 골목)에서 꼬치구이에 맥주 한잔. 좁은 골목 분위기가 포인트. 예산 ¥2,000–3,000/인.'},
+    {t:'act',txt:'시부야 요코초',sub:'19:00–21:00 · 이자카야',meta:['🍶 저녁'],detail:'시부야 요코초에서 이자카야 분위기로 저녁. 다양한 가게가 모여 있어 취향대로 선택. 예산 ¥3,000–4,000/인.'},
+    {t:'act',txt:'라멘 골목',sub:'19:00–20:30 · 마지막 저녁',meta:['🍜 맛집'],detail:'신주쿠 라멘 골목(후우우진)에서 마지막 밤 라멘. 교토풍 쇼유라멘 추천. 예산 ¥1,000–1,500.'},
+    {t:'dec',badge:'항공',txt:'나리타 출발',sub:'18:10 이륙',meta:['✈ 비행'],detail:'18:10 이륙. 기내식 제공. 인천 도착 20:40 예정.'} ],
+  /* row 8 — 21:00 밤 */
+  [ {t:'routine',txt:'호텔·취침',sub:'21:00 귀환 · 신주쿠',detail:'도보로 호텔 귀환. 편의점에서 간식·음료 구입. 내일 일정 확인 후 취침.'},
+    {t:'routine',txt:'호텔·취침',sub:'22:00 귀환 · 신주쿠',detail:'시부야→신주쿠 전철 15분. 호텔 귀환 후 온천(대욕장) 이용. 내일 일정 확인.'},
+    {t:'routine',txt:'호텔·취침',sub:'21:00 귀환 · 짐 싸기',detail:'마지막 밤. 호텔 귀환 후 짐 정리·패킹. 내일 체크아웃 준비.'},
+    {t:'act',txt:'인천 도착',sub:'20:40 착륙 · 귀가',meta:['✈ 도착'],detail:'인천공항 20:40 도착. 입국 수속 후 공항철도 또는 택시로 귀가.'} ],
 ];}
 
 /* ================= SCRIPTED CONTENT ================= */
@@ -610,7 +637,7 @@ function renderLeft(){
     S.grid[ri].forEach((cOrig,ci)=>{
       // 조정안 hover 미리보기: d1eve 칸([4][0])을 해당 안 내용으로 임시 표시
       let c=cOrig, previewing=false;
-      if(S._previewAdjust!=null && ri===4 && ci===0){
+      if(S._previewAdjust!=null && ri===7 && ci===0){
         const pv=SCRIPT.adjust[S._previewAdjust];
         if(pv&&pv.cell){ c={t:'act',txt:pv.cell.txt,sub:pv.cell.sub,meta:pv.cell.meta,key:'d1eve'}; previewing=true; }
       }
@@ -942,13 +969,13 @@ function applyDelay(){
   S.ledger.forEach(d=>{ d.pill='keep'; d.pillLabel='유지'; d.state='live'; });
   S.ledger.push({txt:'Day 1 저녁 — 도착 지연 영향',pill:'affected',pillLabel:'영향',src:'조정 대상',state:'affected',topic:'d1eve'});
   // grid: break d1 evening cell (row index 4 = 저녁, day 0)
-  S.grid[4][0]={t:'act',txt:'⚠ 첫날 저녁',sub:'조정 필요',key:'d1eve',broken:true,detail:'도착이 13:35로 밀려 첫날 저녁 일정이 영향받았어요. 아래 조정안 중 하나를 고르면 이 칸만 갱신됩니다.'};
+  S.grid[7][0]={t:'act',txt:'⚠ 첫날 저녁',sub:'조정 필요',key:'d1eve',broken:true,detail:'도착이 13:35로 밀려 첫날 저녁 일정이 영향받았어요. 아래 조정안 중 하나를 고르면 이 칸만 갱신됩니다.'};
 }
 function chooseAdjust(ai){
   const a=SCRIPT.adjust[ai];
   if(S.meter&&S.meter.active)meterCount('click');
   // replace grid cell
-  S.grid[4][0]=(ai===0)
+  S.grid[7][0]=(ai===0)
     ?{t:'act',txt:'신주쿠 근처 저녁',sub:'호텔 도보권',key:'d1eve',changed:true,meta:['🍶 저녁'],detail:'도착 지연을 감안해 호텔 근처 가벼운 저녁으로 변경. 이동 부담 최소화.'}
     :{t:'act',txt:'도쿄타워 야경',sub:'늦은 저녁',key:'d1eve',changed:true,meta:['📷 야경'],detail:'지연된 도착 후 도쿄타워 야경을 보고 늦은 저녁. 첫날 분위기를 살리는 선택.'};
   // update ledger affected -> adjusted
