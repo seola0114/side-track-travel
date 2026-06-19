@@ -515,10 +515,13 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 .qs-opts{display:flex;flex-direction:column}
 .qs-opt{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.12s}
 .qs-opt:last-child{border-bottom:none}
-.qs-opt:active{background:var(--accent-bg)}
-.qs-opt .qs-num{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none;transition:.14s}
-.qs-opt.selected .qs-num{background:var(--accent);color:#fff}
-.qs-opt .qs-txt{font-size:14px;color:var(--ink)}
+.qs-opt:active{background:var(--accent-bg);transform:scale(.98)}
+.qs-opt:active .qs-num{background:var(--accent);color:#fff;transform:scale(1.1)}
+.qs-opt .qs-num{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none;transition:all .18s cubic-bezier(.4,0,.2,1)}
+.qs-opt.selected .qs-num{background:var(--accent);color:#fff;transform:scale(1.1)}
+.qs-opt.selected{background:var(--accent-bg)}
+.qs-opt .qs-txt{font-size:14px;color:var(--ink);transition:.14s}
+.qs-opt.selected .qs-txt{color:var(--accent-deep);font-weight:600}
 </style>
 </head>
 <body>
@@ -579,7 +582,6 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
       <button id="mLinear" onclick="setMode('linear')">일반 채팅 (대조)</button>
     </div>
     <span class="spacer"></span>
-    <button class="reset" onclick="resetAll()">↺ 처음부터</button>
   </header>
 
   <div class="landing" id="landing">
@@ -615,13 +617,12 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   <div class="stage">
     <!-- LEFT: work state -->
     <section class="col left-col">
-      <div class="col-head"><span class="tag">Work state</span><span class="ttl">작업 상태</span></div>
       <div class="left-scroll" id="leftScroll"></div>
     </section>
 
     <!-- MIDDLE: conversation -->
     <section class="col mid-col">
-      <div class="col-head"><span class="tag">Conversation</span><span class="ttl" id="colTitle">대화</span></div>
+      <div class="col-head" id="colTitle" style="display:none"></div>
       <div class="thread" id="thread"></div>
       <div class="composer">
         <div class="suggest" id="suggest"></div>
@@ -941,19 +942,6 @@ function renderLeft(){
     h+=`</div></div></div>`;
   }
   h+=`</div>`;
-  h+=`</div>`;
-  // ledger
-  h+=`<div class="panel"><div class="panel-h"><span class="ic">▤</span> 결정 기록</div>`;
-  if(!S.ledger.length){
-    h+=`<div class="empty-note">아직 기록된 결정이 없어요.<br>대화에서 결론이 나오면 여기 한 줄씩 쌓입니다.</div>`;
-  }else{
-    h+=`<div class="ledger">`;
-    S.ledger.forEach(d=>{
-      h+=`<div class="lrow ${d.state==='affected'?'affected':''} ${d.landing?'landing':''}"><span class="pill ${d.pill}">${d.pillLabel}</span><span class="ltxt">${esc(d.txt)}</span><span class="src">${d.src}</span></div>`;
-      if(d.landing)setTimeout(()=>{d.landing=false;},460);
-    });
-    h+=`</div>`;
-  }
   h+=`</div>`;
   w.innerHTML=h;
 }
