@@ -413,7 +413,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .cal-wk-hdr .cal-dh:active{background:var(--accent-bg)}
   .cal-wk-body{display:flex;position:relative}
   .cal-gutter{width:38px;flex:none}
-  .cal-hr-label{position:absolute;right:6px;font-family:var(--mono);font-size:9px;color:var(--faint);transform:translateY(-50%);line-height:1}
+  .cal-hr-label{position:absolute;right:4px;font-family:var(--mono);font-size:10px;color:var(--faint);transform:translateY(-50%);line-height:1}
   .cal-hr-line{position:absolute;left:38px;right:0;border-top:1px solid var(--line);pointer-events:none}
   .cal-wk-col{flex:1;position:relative;border-left:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
   .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 3px;overflow:hidden;font-size:8px;font-weight:600;line-height:1.15;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
@@ -937,7 +937,9 @@ function renderLeft(){
       const bdg=c.badge?`<span class="bdg">${esc(c.badge)}</span>`:'';
       const meta=(c.meta&&c.meta.length)?c.meta.map(m=>`<span class="ctag">${esc(m)}</span>`).join(''):'';
       const detail=c.detail?`<div class="ev-detail">${esc(c.detail)}</div>`:'';
-      h+=`<div class="${cls}" style="top:${top}px;height:${Math.max(ht,40)}px" onclick="toggleCell(${ri},${calDay})"><div class="ev-top">${bdg}${meta}</div><div class="ev-title">${esc(c.txt)}</div><div class="ev-sub">${esc(c.sub||'')}</div>${detail}</div>`;
+      const minH=Math.max(ht,CAL_PX*0.8);
+      const showSub=ht>=CAL_PX*0.7;
+      h+=`<div class="${cls}" style="top:${top}px;height:${minH}px" onclick="toggleCell(${ri},${calDay})"><div class="ev-top">${bdg}${meta}</div><div class="ev-title">${esc(c.txt)}</div>${showSub?`<div class="ev-sub">${esc(c.sub||'')}</div>`:''}${detail}</div>`;
     });
     h+=`</div></div></div>`;
   }
@@ -1473,7 +1475,7 @@ let calView='week',calDay=0;
 const SLOT_T=[{s:7,e:9},{s:9,e:10.5},{s:10.5,e:12},{s:12,e:13.5},{s:13.5,e:15},{s:15,e:17},{s:17,e:19},{s:19,e:21},{s:21,e:22}];
 let CAL_PX=30;// px per hour, adjustable by pinch zoom
 let calScale=1;
-function calDrill(d){calView='day';calDay=d;CAL_PX=50;calScale=1;renderLeft();}
+function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;renderLeft();}
 function calBack(){calView='week';CAL_PX=30;calScale=1;renderLeft();}
 function initCalPinch(){
   const el=document.getElementById('leftScroll');if(!el)return;
