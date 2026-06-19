@@ -499,6 +499,26 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .quote-card{padding:7px 10px 7px 11px}
   .quote-card .qtxt{font-size:12px}
 }
+
+/* ---- questionnaire bottom sheet ---- */
+.qs-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);display:none}
+.qs-backdrop.open{display:block}
+.qs-sheet{position:fixed;bottom:0;left:0;right:0;z-index:510;background:var(--surface);border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:70vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,12px)}
+.qs-sheet.open{transform:translateY(0)}
+.qs-head{display:flex;align-items:center;padding:14px 18px 10px;gap:8px;border-bottom:1px solid var(--line);flex:none}
+.qs-nav{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--faint)}
+.qs-nav button{background:none;border:none;font-size:16px;color:var(--muted);cursor:pointer;padding:2px 6px}
+.qs-nav button:disabled{opacity:.3;cursor:default}
+.qs-close{margin-left:auto;background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px}
+.qs-body{padding:18px;overflow-y:auto;flex:1}
+.qs-question{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:16px}
+.qs-opts{display:flex;flex-direction:column}
+.qs-opt{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.12s}
+.qs-opt:last-child{border-bottom:none}
+.qs-opt:active{background:var(--accent-bg)}
+.qs-opt .qs-num{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none;transition:.14s}
+.qs-opt.selected .qs-num{background:var(--accent);color:#fff}
+.qs-opt .qs-txt{font-size:14px;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -583,11 +603,11 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
         </div>
       </div>
       <div class="land-features">
-        <button class="land-feat"><span class="fi">✏️</span> 작성하기</button>
-        <button class="land-feat"><span class="fi">🎓</span> 학습하기</button>
-        <button class="land-feat"><span class="fi">📁</span> Drive에서</button>
-        <button class="land-feat"><span class="fi">📅</span> Calendar에서</button>
-        <button class="land-feat"><span class="fi">✉️</span> Gmail에서</button>
+        <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg> 작성하기</button>
+        <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> 학습하기</button>
+        <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg> Drive에서</button>
+        <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendar에서</button>
+        <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Gmail에서</button>
       </div>
     </div>
   </div>
@@ -631,6 +651,22 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 </div>
 
 <div class="guide" id="guide" style="display:none"></div>
+
+<div class="qs-backdrop" id="qsBackdrop" onclick="closeQs()"></div>
+<div class="qs-sheet" id="qsSheet">
+  <div class="qs-head">
+    <div class="qs-nav">
+      <button id="qsPrev" onclick="qsNav(-1)" disabled>&lt;</button>
+      <span id="qsPage">1 중 3</span>
+      <button id="qsNext" onclick="qsNav(1)">&gt;</button>
+    </div>
+    <button class="qs-close" onclick="closeQs()">×</button>
+  </div>
+  <div class="qs-body">
+    <div class="qs-question" id="qsQ"></div>
+    <div class="qs-opts" id="qsOpts"></div>
+  </div>
+</div>
 
 <script>
 /* ================= ITINERARY MODEL ================= */
@@ -695,7 +731,7 @@ function baseGrid(){return [
 
 /* ================= SCRIPTED CONTENT ================= */
 const SCRIPT={
-  draft:`Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페, 팝업)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요 ✨\n\n왼쪽 패널에 Day별 일정표가 생성됐어요. **협력 카페·예약**이 실린 칸은 배지로, 매일 반복되는 조식·취침 같은 루틴은 흐리게 표시돼요. 칸을 누르면 상세 설명이 펼쳐집니다.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 — **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.`,
+  draft:`11월 초, 이케부쿠로 베이스로 팝업/굿즈/캐릭터 카페 중심의 일정을 만들었어요.\n\n왼쪽 패널에 Day별 일정표가 생성됐어요. **협력 카페/예약**이 실린 칸은 배지로, 매일 반복되는 조식/취침 같은 루틴은 흐리게 표시돼요. 칸을 누르면 상세 설명이 펼쳐집니다.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.`,
   side:{
     transit:[
       `**JR패스**는 JR 노선을 일정 기간 무제한으로 타는 외국인 전용 패스예요. 7일권이 약 5만 엔.\n\n"본전"을 뽑으려면 도쿄–오사카처럼 도시 사이를 신칸센으로 여러 번 오가야 하는데, 지금 일정은 **도쿄 시내에만** 머물러요.`,
@@ -909,7 +945,7 @@ function renderLeft(){
   // ledger
   h+=`<div class="panel"><div class="panel-h"><span class="ic">▤</span> 결정 기록</div>`;
   if(!S.ledger.length){
-    h+=`<div class="empty-note">아직 합류한 결정이 없어요.<br>사이드 트랙에서 결론을 <b>메인으로 가져오기</b> 하면 여기 한 줄씩 객체로 쌓입니다.</div>`;
+    h+=`<div class="empty-note">아직 기록된 결정이 없어요.<br>대화에서 결론이 나오면 여기 한 줄씩 쌓입니다.</div>`;
   }else{
     h+=`<div class="ledger">`;
     S.ledger.forEach(d=>{
@@ -1079,9 +1115,15 @@ function routeMain(text){
   if(window.innerWidth<=768){routeMobile(text);return;}
   // side mode routing by phase
   if(S.step===1){
-    S.msgs.push({role:'assistant',text:SCRIPT.draft,choices:true});
-    S.showChoices=true; S.drafted=true; S.step=2;
-    mobNotify('left');
+    S.msgs.push({role:'assistant',text:'11월 도쿄, 좋은 시즌이네요! Seola의 관심사들(코난, 앙상블 스타즈, 카페, 팝업 이벤트 등)을 고려해서 초안을 짜봤습니다. 몇 가지 확인하고 싶은 게 있어서 먼저 물어봐도 될까요?'});
+    renderAll();
+    setTimeout(()=>openQs(()=>{
+      S.msgs.push({role:'assistant',text:SCRIPT.draft,choices:true});
+      S.showChoices=true; S.drafted=true; S.step=2;
+      mobNotify('left');
+      renderAll();
+    }),600);
+    return;
   }else if(S.step===2){
     S.msgs.push({role:'assistant',text:SCRIPT.side.transit[0]});
     S.step=3;
@@ -1114,10 +1156,17 @@ function routeMain(text){
 
 function routeMobile(text){
   if(S.step===1){
-    const draftMob='Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요 ✨\n\n**일정 탭**에서 Day별 일정표를 확인할 수 있어요. 협력 카페·예약이 실린 칸은 배지로, 루틴은 흐리게 표시됩니다. 칸을 누르면 상세 설명이 펼쳐져요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 — **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.';
-    S.msgs.push({role:'assistant',text:draftMob});
-    S.drafted=true; S.step=2;
-    mobNotify('left');
+    S.msgs.push({role:'assistant',text:'11월 도쿄, 좋은 시즌이네요! Seola의 관심사들(코난, 앙상블 스타즈, 카페, 팝업 이벤트 등)을 고려해서 초안을 짜봤습니다. 몇 가지 확인하고 싶은 게 있어서 먼저 물어봐도 될까요?'});
+    renderAll();
+    const draftMob='Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요.\n\n**일정 탭**에서 Day별 일정표를 확인할 수 있어요. 협력 카페/예약이 실린 칸은 배지로, 루틴은 흐리게 표시됩니다. 칸을 누르면 상세 설명이 펼쳐져요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.';
+    setTimeout(()=>openQs(()=>{
+      S.msgs.push({role:'assistant',text:draftMob});
+      S.drafted=true; S.step=2;
+      mobNotify('left');
+      switchMobTab('left');
+      renderAll();
+    }),600);
+    return;
   }else if(S.step===2){
     S.msgs.push({role:'assistant',text:SCRIPT.side.transit[0]});
     S.step=3;
@@ -1392,6 +1441,45 @@ function resetAll(mode){
 }
 
 /* ================= INIT ================= */
+/* ================= QUESTIONNAIRE ================= */
+const QS_DATA=[
+  {q:'11월 중 언제쯤 생각 중인가요?',opts:['11월 초 (1~10일)','11월 중순 (10~20일)','11월 말 (20~30일)']},
+  {q:'이번 여행의 포커스가 있다면?',opts:['팝업/애니 굿즈/캐릭터 카페','관광/먹방 위주','쇼핑 위주','골고루']},
+  {q:'숙소 위치 선호는?',opts:['이케부쿠로 (이전 여행처럼)','시부야/신주쿠 (번화가)','아키하바라 근처','아직 정하지 않음']},
+];
+let qsIdx=0,qsAnswers=[-1,-1,-1],qsCallback=null;
+function openQs(cb){
+  qsIdx=0;qsAnswers=[-1,-1,-1];qsCallback=cb;
+  renderQs();
+  document.getElementById('qsBackdrop').classList.add('open');
+  document.getElementById('qsSheet').classList.add('open');
+}
+function closeQs(){
+  document.getElementById('qsBackdrop').classList.remove('open');
+  document.getElementById('qsSheet').classList.remove('open');
+}
+function renderQs(){
+  const d=QS_DATA[qsIdx];
+  document.getElementById('qsPage').textContent=(qsIdx+1)+' 중 '+QS_DATA.length;
+  document.getElementById('qsQ').textContent=d.q;
+  document.getElementById('qsPrev').disabled=(qsIdx===0);
+  document.getElementById('qsNext').disabled=(qsIdx===QS_DATA.length-1);
+  let h='';
+  d.opts.forEach((o,i)=>{
+    h+=`<div class="qs-opt ${qsAnswers[qsIdx]===i?'selected':''}" onclick="qsPick(${i})"><span class="qs-num">${i+1}</span><span class="qs-txt">${esc(o)}</span></div>`;
+  });
+  document.getElementById('qsOpts').innerHTML=h;
+}
+function qsPick(i){
+  qsAnswers[qsIdx]=i;
+  renderQs();
+  setTimeout(()=>{
+    if(qsIdx<QS_DATA.length-1){qsIdx++;renderQs();}
+    else{closeQs();if(qsCallback)qsCallback();}
+  },350);
+}
+function qsNav(dir){qsIdx=Math.max(0,Math.min(QS_DATA.length-1,qsIdx+dir));renderQs();}
+
 let mobTab='mid';
 let calView='week',calDay=0;
 const SLOT_T=[{s:7,e:9},{s:9,e:10.5},{s:10.5,e:12},{s:12,e:13.5},{s:13.5,e:15},{s:15,e:17},{s:17,e:19},{s:19,e:21},{s:21,e:22}];
