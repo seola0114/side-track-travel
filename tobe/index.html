@@ -375,7 +375,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .app:not(.chatting) .mob-tabs{display:none!important}
 
   /* bottom tab bar */
-  .mob-tabs{display:flex!important;align-items:center;justify-content:space-around;background:var(--paper);border-top:1px solid var(--line);padding:6px 0;padding-bottom:max(6px,env(safe-area-inset-bottom));flex:none;z-index:10}
+  .mob-tabs{display:flex!important;align-items:center;justify-content:space-around;background:var(--paper);border-top:1px solid var(--line);padding:6px 0;padding-bottom:max(16px,env(safe-area-inset-bottom));flex:none;z-index:10}
   .mob-tab{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;font-family:var(--sans);font-size:10px;font-weight:500;color:var(--muted);padding:4px 20px;border-radius:8px;cursor:pointer;position:relative;-webkit-tap-highlight-color:transparent}
   .mob-tab.active{color:var(--accent);font-weight:600}
   .mob-tab svg{width:20px;height:20px}
@@ -460,7 +460,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .msg{max-width:98%}
   .bubble{font-size:14px;line-height:1.65}
   .msg.user .bubble{padding:9px 13px;border-radius:14px;border-bottom-right-radius:5px}
-  .composer{padding:8px 12px 10px}
+  .composer{padding:8px 12px max(14px,env(safe-area-inset-bottom))}
   .suggest{gap:5px;margin-bottom:7px}
   .suggest .lbl{font-size:9px}
   .schip{font-size:11.5px;padding:5px 10px}
@@ -564,7 +564,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 
   <div class="landing" id="landing">
     <div class="land-topbar">
-      <button class="land-menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg></button>
+      <button class="land-menu-btn" onclick="toggleSidebar()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></button>
       <span class="land-avatar">SK</span>
     </div>
     <div class="land-inner">
@@ -1021,6 +1021,9 @@ function renderSuggest(){
   const w=document.getElementById('suggest');let chips=[];
   if(S.mode==='side'&&window.innerWidth>768){
     if(S.step===1)chips=['11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘'];
+    else if(S.step===2)chips=['그런데 JR패스가 뭐야?'];
+    else if(S.step===3)chips=['우리 일정엔 JR패스가 이득이야?'];
+    else if(S.step===4)chips=['eSIM은 뭐야? 우린 뭐가 나아?'];
     else if(S.step===5)chips=['정한 교통·통신 결정 반영해서 최종 일정 줘'];
     else if(S.step===6)chips=['도착 항공편이 3시간 지연됐어'];
   }else if(S.mode==='side'&&window.innerWidth<=768){
@@ -1087,10 +1090,25 @@ function routeMain(text){
     S.msgs.push({role:'assistant',text:SCRIPT.draft,choices:true});
     S.showChoices=true; S.drafted=true; S.step=2;
     mobNotify('left');
+  }else if(S.step===2){
+    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[0]});
+    S.step=3;
+  }else if(S.step===3){
+    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[1]});
+    if(!S.ledger.some(d=>d.topic==='transit'))
+      S.ledger.push({txt:'교통: JR패스 ✕, 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
+    S.step=4;
+  }else if(S.step===4){
+    S.msgs.push({role:'assistant',text:SCRIPT.side.comms[0]+'\n\n'+SCRIPT.side.comms[1]});
+    if(!S.ledger.some(d=>d.topic==='comms'))
+      S.ledger.push({txt:'통신: 포켓와이파이 ✕, 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
+    S.step=5;
   }else if(S.step===5||/최종|반영|확정/.test(text)){
     applyFinalize();
     S.msgs.push({role:'assistant',text:SCRIPT.finalize});
     S.step=6;
+    mobNotify('left');
+    if(window.innerWidth<=768)switchMobTab('left');
   }else if(S.step===6||/지연|늦|취소|휴무/.test(text)){
     meterStart();
     applyDelay();
