@@ -999,8 +999,10 @@ const STEPS=[
   {now:'⑦ 조정안 선택 · 직접 수정',hint:'두 조정안 중 하나를 고르면 그 칸만 갱신·기록됩니다. 일정표 칸을 직접 고쳐도 같은 결정 기록에 남아요.'},
 ];
 function renderGuide(){
+  const el=document.getElementById('gStep');
+  if(!el)return;
   const idx=Math.min(S.step,7)-1;
-  document.getElementById('gStep').textContent=Math.min(S.step,7)+' / 7';
+  el.textContent=Math.min(S.step,7)+' / 7';
   document.getElementById('gNow').innerHTML=STEPS[idx].now;
   document.getElementById('gHint').innerHTML=STEPS[idx].hint;
   let d='';for(let i=0;i<7;i++)d+=`<i class="${i<S.step-1?'done':(i===S.step-1?'cur':'')}"></i>`;
