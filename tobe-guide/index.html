@@ -631,7 +631,16 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   <button onclick="selChoose()">↳ 사이드로 묻기</button>
 </div>
 
-<div class="guide" id="guide" style="display:none"></div>
+<div class="guide" id="guide">
+  <div class="guide-h" onclick="document.getElementById('guide').classList.toggle('min')">
+    <span class="gi">따라하기</span><span class="gstep" id="gStep">1 / 7</span><span class="gmin">⌄</span>
+  </div>
+  <div class="guide-b">
+    <div class="now" id="gNow"></div>
+    <div class="hint" id="gHint"></div>
+    <div class="dots" id="gDots"></div>
+  </div>
+</div>
 
 <script>
 /* ================= ITINERARY MODEL ================= */
