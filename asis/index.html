@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+  <title>As-Is — 기존 클로드 앱 경험</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      background: #FAF6F0;
+      color: #1A1A1A;
+      font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ── Navigation banner ── */
+    .nav-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      height: 36px;
+      background: #E8E4DE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #5C5853;
+    }
+    .nav-banner a {
+      position: absolute;
+      left: 16px;
+      color: #5C5853;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .nav-banner a:active { opacity: 0.6; }
+    .nav-banner span {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #7A756E;
+    }
+
+    /* ── Top bar ── */
+    .top-bar {
+      position: fixed;
+      top: 36px;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      height: 50px;
+      background: #FAF6F0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 16px;
+      border-bottom: 1px solid #E8E4DE;
+    }
+    .top-bar-left button,
+    .top-bar-right button {
+      background: none;
+      border: none;
+      font-size: 22px;
+      color: #1A1A1A;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+    }
+    .top-bar-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* ── Conversation area ── */
+    .conversation {
+      position: fixed;
+      top: 86px;
+      left: 0;
+      right: 0;
+      bottom: 120px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 20px 0;
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
+
+    /* ── Messages ── */
+    .msg-group {
+      margin-bottom: 20px;
+    }
+    .msg-group[hidden] { display: none; }
+
+    .msg-user {
+      display: flex;
+      justify-content: flex-end;
+      padding: 0 16px;
+      margin-bottom: 4px;
+    }
+    .msg-user-bubble {
+      background: #F0EDE7;
+      border-radius: 16px 16px 6px 16px;
+      padding: 11px 15px;
+      max-width: 85%;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: keep-all;
+    }
+
+    .msg-claude {
+      padding: 0 16px;
+    }
+    .msg-claude-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .claude-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #FFF3EE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .claude-avatar svg {
+      width: 16px;
+      height: 16px;
+    }
+    .msg-claude-body {
+      font-size: 15px;
+      line-height: 1.7;
+      padding-left: 0;
+    }
+    .msg-claude-body p {
+      margin-bottom: 10px;
+    }
+    .msg-claude-body strong {
+      font-weight: 700;
+    }
+
+    /* Tables */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 10px 0;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table-wrap table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 320px;
+      font-size: 13px;
+    }
+    .table-wrap th {
+      background: #F5F0E8;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 6px 10px;
+      border-bottom: 2px solid #E0DBCF;
+      text-align: left;
+      white-space: nowrap;
+    }
+    .table-wrap td {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-bottom: 1px solid #ECE7DE;
+      white-space: nowrap;
+    }
+
+    /* Day heading */
+    .day-heading {
+      font-weight: 700;
+      font-size: 15px;
+      margin: 16px 0 6px;
+    }
+
+    /* Action bar */
+    .action-bar {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      padding: 4px 0;
+    }
+    .action-bar button {
+      background: none;
+      border: none;
+      font-size: 16px;
+      color: #8B8680;
+      cursor: pointer;
+      padding: 2px;
+      line-height: 1;
+      opacity: 0.7;
+    }
+
+    /* Pain point annotation */
+    .pain-point {
+      background: #FEF0EE;
+      border-left: 3px solid #E5736A;
+      font-size: 12px;
+      color: #B23B2E;
+      margin: 12px 16px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      line-height: 1.5;
+    }
+    .pain-point[hidden] { display: none; }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: none;
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+    .typing-indicator.active { display: flex; }
+    .typing-indicator .claude-avatar { margin-right: 8px; }
+    .typing-dots {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 0;
+    }
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #8B8680;
+      animation: bounce 1.2s infinite ease-in-out;
+    }
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes bounce {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-6px); }
+    }
+
+    /* ── Bottom area ── */
+    .bottom-area {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #FAF6F0;
+      border-top: 1px solid #E8E4DE;
+      padding-bottom: env(safe-area-inset-bottom, 8px);
+      z-index: 100;
+    }
+
+    /* Chips */
+    .chips-row {
+      display: flex;
+      gap: 8px;
+      padding: 10px 16px 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .chips-row::-webkit-scrollbar { display: none; }
+    .chip {
+      flex-shrink: 0;
+      background: #FFFFFF;
+      border: 1px solid #E0DBCF;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: #1A1A1A;
+      cursor: pointer;
+      white-space: nowrap;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .chip:active {
+      background: #F0EDE7;
+    }
+    .chip[hidden] { display: none; }
+
+    /* Disclaimer */
+    .disclaimer {
+      text-align: center;
+      font-size: 11px;
+      color: #8B8680;
+      padding: 4px 16px 6px;
+      line-height: 1.4;
+    }
+
+    /* Input row */
+    .input-row {
+      display: flex;
+      align-items: center;
+      margin: 0 12px 8px;
+      background: #FFFFFF;
+      border: 1px solid #E0DBCF;
+      border-radius: 24px;
+      padding: 6px 12px;
+      gap: 8px;
+    }
+    .input-row .attach-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      color: #8B8680;
+      cursor: pointer;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .model-badge {
+      flex-shrink: 0;
+      background: #F0EDE7;
+      border-radius: 12px;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: #8B8680;
+      font-weight: 500;
+    }
+    .input-row input {
+      flex: 1;
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 15px;
+      font-family: inherit;
+      color: #1A1A1A;
+      min-width: 0;
+    }
+    .input-row input::placeholder { color: #B5B0A8; }
+    .input-row .mic-btn {
+      background: none;
+      border: none;
+      font-size: 18px;
+      color: #8B8680;
+      cursor: pointer;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    /* ── Unordered/ordered lists ── */
+    .msg-claude-body ul, .msg-claude-body ol {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+    .msg-claude-body li {
+      margin-bottom: 4px;
+    }
+
+    /* completed indicator */
+    .completed-badge {
+      display: none;
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      color: #8B8680;
+    }
+    .completed-badge.visible { display: block; }
+  </style>
+</head>
+<body>
+
+<!-- Navigation banner -->
+<div class="nav-banner">
+  <a href="/">← Side Track 비교</a>
+  <span>AS-IS · 기존 경험</span>
+</div>
+
+<!-- Top bar -->
+<div class="top-bar">
+  <div class="top-bar-left">
+    <button aria-label="Menu">≡</button>
+  </div>
+  <div class="top-bar-right">
+    <button aria-label="New chat">+</button>
+    <button aria-label="More options">···</button>
+  </div>
+</div>
+
+<!-- Conversation -->
+<div class="conversation" id="conversation">
+
+  <!-- ═══ STEP 1 (pre-loaded) ═══ -->
+  <div class="msg-group" id="step1">
+    <div class="msg-user">
+      <div class="msg-user-bubble">11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘</div>
+    </div>
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>11월 도쿄 3박 4일 일정을 짜봤어요! ✈️</p>
+
+        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
+            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
+            <tr><td>11:15</td><td>NEX → 신주쿠 (80분)</td><td>¥3,250</td></tr>
+            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
+            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
+            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
+            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
+            <tr><td>18:30</td><td>오모이데요코초 꼬치구이</td><td>¥2,000-3,000/인</td></tr>
+            <tr><td>21:00</td><td>호텔 복귀 · 취침</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:00</td><td>아사쿠사 이동</td><td>긴자선 30분</td></tr>
+            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
+            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
+            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
+            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
+            <tr><td>17:00</td><td>시부야 이동</td><td>야마노테선</td></tr>
+            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
+            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
+            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
+            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
+            <tr><td>13:30</td><td>긴자 쇼핑</td><td>면세 가능</td></tr>
+            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
+            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
+            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
+            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
+            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
+            <tr><td>10:30</td><td>오다이바 이동</td><td>유리카모메</td></tr>
+            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
+            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
+            <tr><td>15:00</td><td>스카이라이너 → 나리타</td><td>60분</td></tr>
+            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
+            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
+            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p>일정 조정 사항이 있으면 말씀해 주세요! ✨</p>
+
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 2 ═══ -->
+  <div class="msg-group" id="step2" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">그런데 JR패스가 뭐야?</div>
+    </div>
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p><strong>JR패스</strong>는 JR(Japan Railways) 노선을 일정 기간 무제한으로 탈 수 있는 외국인 전용 패스예요.</p>
+        <ul>
+          <li>7일권 약 <strong>¥50,000</strong> (약 45만원)</li>
+          <li>JR 야마노테선, 주오선, NEX 등 JR 노선 무제한</li>
+          <li>도시 간 <strong>신칸센</strong>도 포함 (노조미·미즈호 제외)</li>
+        </ul>
+        <p>"본전"을 뽑으려면 도쿄-오사카 왕복처럼 도시 간 장거리를 여러 번 타야 해요.</p>
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 3 ═══ -->
+  <div class="msg-group" id="step3" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">우리 일정엔 JR패스가 이득이야?</div>
+    </div>
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>이번 일정은 <strong>도쿄 시내만</strong> 돌기 때문에 JR패스는 안 사는 게 맞아요.</p>
+        <ul>
+          <li>시내 이동은 지하철 위주 → JR 노선 많이 안 탐</li>
+          <li>4일 교통비 합쳐도 ¥5,000-8,000 정도</li>
+          <li>JR패스 7일권 ¥50,000과 비교하면 큰 손해</li>
+        </ul>
+        <p><strong>스이카(Suica) 충전식 교통카드</strong>로 탄 만큼만 쓰는 게 이득이에요. 공항에서 발급하고 지하철·버스·편의점까지 다 돼요.</p>
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 4 ═══ -->
+  <div class="msg-group" id="step4" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">eSIM은 뭐야? 우린 뭐가 나아?</div>
+    </div>
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p><strong>eSIM</strong>은 유심칩 없이 QR코드로 바로 설치하는 데이터 요금제예요.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>비교</th><th>eSIM</th><th>포켓와이파이</th><th>로밍</th></tr></thead>
+          <tbody>
+            <tr><td>가격</td><td>4일 ¥1,000</td><td>4일 ¥3,000</td><td>4일 ¥30,000+</td></tr>
+            <tr><td>편의성</td><td>QR 설치</td><td>기기 수령/반납</td><td>신청만</td></tr>
+            <tr><td>공유</td><td>각자 사용</td><td>한 대 공유</td><td>각자</td></tr>
+          </tbody>
+        </table></div>
+        <p>둘이 가니까 <strong>각자 eSIM 하나씩</strong>이 좋아요.</p>
+        <ul>
+          <li>포켓와이파이는 떨어지면 한 명이 끊김</li>
+          <li>각자 구글맵·번역 자유</li>
+          <li>반납 신경 안 써도 됨</li>
+        </ul>
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 5 ═══ -->
+  <div class="msg-group" id="step5" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">지금까지 정한 거 반영해서 최종 일정 줘</div>
+    </div>
+
+    <div class="pain-point" id="pain5">⚠ 기존 결정(스이카, eSIM)을 찾으려면 위로 스크롤해야 합니다</div>
+
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>교통은 스이카, 통신은 각자 eSIM으로 반영한 최종 일정이에요.</p>
+
+        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
+            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
+            <tr><td>10:40</td><td>eSIM 활성화 확인</td><td>미리 설치</td></tr>
+            <tr><td>11:15</td><td>NEX → 신주쿠 (스이카)</td><td>¥3,250</td></tr>
+            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
+            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
+            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
+            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
+            <tr><td>18:30</td><td>오모이데요코초 꼬치구이</td><td>¥2,000-3,000/인</td></tr>
+            <tr><td>21:00</td><td>호텔 복귀 · 취침</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:00</td><td>아사쿠사 이동 (스이카)</td><td>긴자선 30분</td></tr>
+            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
+            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
+            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
+            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
+            <tr><td>17:00</td><td>시부야 이동 (스이카)</td><td>야마노테선</td></tr>
+            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
+            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
+            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
+            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
+            <tr><td>13:30</td><td>긴자 쇼핑 (스이카)</td><td>면세 가능</td></tr>
+            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
+            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
+            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
+            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
+            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
+            <tr><td>10:30</td><td>오다이바 이동 (스이카)</td><td>유리카모메</td></tr>
+            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
+            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
+            <tr><td>15:00</td><td>스카이라이너 → 나리타 (스이카)</td><td>60분</td></tr>
+            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
+            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
+            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p>일정 조정 사항이 있으면 말씀해 주세요! ✨</p>
+
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 6 ═══ -->
+  <div class="msg-group" id="step6" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">도착 항공편이 3시간 지연됐어</div>
+    </div>
+
+    <div class="pain-point" id="pain6">⚠ 결정이 대화에 흩어져 있어 AI가 직접 찾지 못합니다</div>
+
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>도착이 3시간 늦어지면 Day 1 일정을 조정해야겠네요.</p>
+        <p>그런데 이전에 교통이랑 통신을 어떻게 정하셨었죠? <strong>위쪽 대화를 확인해서 알려주시면</strong> 그에 맞춰 영향 범위를 파악하고 조정할게요.</p>
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 7 ═══ -->
+  <div class="msg-group" id="step7" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">교통은 스이카, 통신은 eSIM이었어</div>
+    </div>
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>확인 감사해요! 교통은 스이카, 통신은 eSIM이네요. 둘 다 도착 시간과 무관하니 그대로 유지해요.</p>
+        <p>Day 1 저녁만 조정하면 돼요. 어떤 방향으로 바꿀까요?</p>
+        <ol>
+          <li>호텔 근처에서 가볍게</li>
+          <li>도쿄타워 야경 + 늦은 저녁</li>
+        </ol>
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ STEP 8 ═══ -->
+  <div class="msg-group" id="step8" hidden>
+    <div class="msg-user">
+      <div class="msg-user-bubble">첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘</div>
+    </div>
+
+    <div class="pain-point" id="pain8">⚠ 변경된 부분만 보고 싶어도 전체 일정이 다시 출력됩니다</div>
+
+    <div class="msg-claude">
+      <div class="msg-claude-header">
+        <div class="claude-avatar">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+        </div>
+      </div>
+      <div class="msg-claude-body">
+        <p>Day 1 저녁을 신주쿠 근처로 변경했어요.</p>
+
+        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
+            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
+            <tr><td>10:40</td><td>eSIM 활성화 확인</td><td>미리 설치</td></tr>
+            <tr><td>11:15</td><td>NEX → 신주쿠 (스이카)</td><td>¥3,250</td></tr>
+            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
+            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
+            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
+            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
+            <tr><td>19:30</td><td>신주쿠 근처 가벼운 저녁</td><td>¥1,500-2,000/인</td></tr>
+            <tr><td>21:30</td><td>호텔 복귀 · 취침</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:00</td><td>아사쿠사 이동 (스이카)</td><td>긴자선 30분</td></tr>
+            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
+            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
+            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
+            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
+            <tr><td>17:00</td><td>시부야 이동 (스이카)</td><td>야마노테선</td></tr>
+            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
+            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
+            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
+            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
+            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
+            <tr><td>13:30</td><td>긴자 쇼핑 (스이카)</td><td>면세 가능</td></tr>
+            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
+            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
+            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
+            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <tbody>
+            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
+            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
+            <tr><td>10:30</td><td>오다이바 이동 (스이카)</td><td>유리카모메</td></tr>
+            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
+            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
+            <tr><td>15:00</td><td>스카이라이너 → 나리타 (스이카)</td><td>60분</td></tr>
+            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
+            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
+            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
+          </tbody>
+        </table></div>
+
+        <p>변경 사항:</p>
+        <ul>
+          <li>Day 1 18:30 오모이데요코초 → <strong>19:30 신주쿠 근처 가벼운 저녁</strong></li>
+          <li>취침 시간 21:00 → 21:30</li>
+        </ul>
+        <p>이전에 정하신 교통(스이카)·통신(eSIM)은 그대로 유지돼요. 더 수정할 부분 있으면 말씀해 주세요! ✨</p>
+
+        <div class="action-bar">
+          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Typing indicator -->
+  <div class="typing-indicator" id="typingIndicator">
+    <div class="claude-avatar">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+    </div>
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- Completion badge -->
+  <div class="completed-badge" id="completedBadge">
+    대화가 끝났습니다. Side Track 비교 페이지로 돌아가려면 상단 링크를 눌러 주세요.
+  </div>
+
+</div><!-- /conversation -->
+
+<!-- Bottom area -->
+<div class="bottom-area">
+  <div class="chips-row" id="chipsRow">
+    <button class="chip" id="chip2" onclick="advance()">그런데 JR패스가 뭐야?</button>
+    <button class="chip" id="chip3" onclick="advance()" hidden>우리 일정엔 JR패스가 이득이야?</button>
+    <button class="chip" id="chip4" onclick="advance()" hidden>eSIM은 뭐야? 우린 뭐가 나아?</button>
+    <button class="chip" id="chip5" onclick="advance()" hidden>지금까지 정한 거 반영해서 최종 일정 줘</button>
+    <button class="chip" id="chip6" onclick="advance()" hidden>도착 항공편이 3시간 지연됐어</button>
+    <button class="chip" id="chip7" onclick="advance()" hidden>교통은 스이카, 통신은 eSIM이었어</button>
+    <button class="chip" id="chip8" onclick="advance()" hidden>첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘</button>
+  </div>
+  <div class="disclaimer">Claude는 AI이며 실수할 수 있습니다. 응답을 다시 한번 확인해 주세요.</div>
+  <div class="input-row">
+    <button class="attach-btn" aria-label="Attach">+</button>
+    <span class="model-badge">Haiku 4.5</span>
+    <input type="text" placeholder="Claude에게 응답하기" disabled>
+    <button class="mic-btn" aria-label="Voice input">🎙</button>
+  </div>
+</div>
+
+<script>
+  let step = 1;
+  let isAnimating = false;
+
+  const CHIPS = [
+    null, // index 0 unused
+    null, // step 1 is pre-loaded
+    '그런데 JR패스가 뭐야?',
+    '우리 일정엔 JR패스가 이득이야?',
+    'eSIM은 뭐야? 우린 뭐가 나아?',
+    '지금까지 정한 거 반영해서 최종 일정 줘',
+    '도착 항공편이 3시간 지연됐어',
+    '교통은 스이카, 통신은 eSIM이었어',
+    '첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘',
+  ];
+
+  const TOTAL_STEPS = 8;
+
+  function advance() {
+    if (isAnimating || step >= TOTAL_STEPS) return;
+    isAnimating = true;
+
+    step++;
+
+    // Hide current chip
+    const currentChip = document.getElementById('chip' + step);
+    if (currentChip) currentChip.hidden = true;
+
+    // Show the user message portion first (the msg-group but Claude response will appear after typing)
+    const group = document.getElementById('step' + step);
+    if (!group) { isAnimating = false; return; }
+
+    // Reveal the group to show user message
+    group.hidden = false;
+
+    // Hide Claude's response parts initially
+    const claudeMsg = group.querySelector('.msg-claude');
+    const painPoint = group.querySelector('.pain-point');
+    if (claudeMsg) claudeMsg.style.display = 'none';
+    if (painPoint) painPoint.style.display = 'none';
+
+    // Scroll to the new user message
+    const conv = document.getElementById('conversation');
+    requestAnimationFrame(() => {
+      conv.scrollTop = conv.scrollHeight;
+    });
+
+    // Show typing indicator
+    const typing = document.getElementById('typingIndicator');
+    typing.classList.add('active');
+    requestAnimationFrame(() => {
+      conv.scrollTop = conv.scrollHeight;
+    });
+
+    // After delay, show Claude response
+    setTimeout(() => {
+      typing.classList.remove('active');
+
+      if (painPoint) painPoint.style.display = '';
+      if (claudeMsg) claudeMsg.style.display = '';
+
+      // Show next chip
+      const nextChip = document.getElementById('chip' + (step + 1));
+      if (nextChip) {
+        nextChip.hidden = false;
+      }
+
+      // If all steps done, show completion
+      if (step >= TOTAL_STEPS) {
+        document.getElementById('completedBadge').classList.add('visible');
+      }
+
+      // Scroll to show the new response
+      requestAnimationFrame(() => {
+        // Scroll to the user message of this step so user sees context
+        const userMsg = group.querySelector('.msg-user');
+        if (userMsg) {
+          userMsg.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          conv.scrollTop = conv.scrollHeight;
+        }
+      });
+
+      isAnimating = false;
+    }, 400);
+  }
+
+  // Initial scroll to bottom
+  window.addEventListener('load', () => {
+    const conv = document.getElementById('conversation');
+    conv.scrollTop = conv.scrollHeight;
+  });
+</script>
+
+</body>
+</html>
