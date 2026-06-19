@@ -24,70 +24,218 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* ── Navigation banner ── */
-    .nav-banner {
+    /* ── Top bar (real Claude app style) ── */
+    .top-bar {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
-      z-index: 200;
-      height: 36px;
-      background: #E8E4DE;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      color: #5C5853;
-    }
-    .nav-banner a {
-      position: absolute;
-      left: 16px;
-      color: #5C5853;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    .nav-banner a:active { opacity: 0.6; }
-    .nav-banner span {
-      font-weight: 700;
-      letter-spacing: 0.5px;
-      color: #7A756E;
-    }
-
-    /* ── Top bar ── */
-    .top-bar {
-      position: fixed;
-      top: 36px;
-      left: 0;
-      right: 0;
       z-index: 100;
-      height: 50px;
+      height: 48px;
       background: #FAF6F0;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 16px;
+      padding: 0 12px;
       border-bottom: 1px solid #E8E4DE;
     }
-    .top-bar-left button,
-    .top-bar-right button {
-      background: none;
-      border: none;
-      font-size: 22px;
-      color: #1A1A1A;
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+    }
+    .hamburger-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #E0DBCF;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
-      padding: 4px;
+      font-size: 18px;
+      color: #1A1A1A;
       line-height: 1;
+    }
+    .hamburger-btn:active {
+      background: #F0EDE7;
+    }
+    .top-bar-center {
+      flex: 1;
     }
     .top-bar-right {
       display: flex;
-      gap: 12px;
       align-items: center;
+    }
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #4A4A4A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+
+    /* ── Sidebar overlay ── */
+    .sidebar-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 250;
+      display: none;
+    }
+    .sidebar-backdrop.open { display: block; }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300px;
+      height: 100%;
+      background: #FAF6F0;
+      z-index: 300;
+      transform: translateX(-100%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      overflow-y: auto;
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 4px;
+    }
+    .sidebar-logo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #1A1A1A;
+    }
+    .sidebar-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sidebar-header-actions button {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid #E0DBCF;
+      background: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      color: #5C5853;
+      line-height: 1;
+    }
+    .sidebar-header-actions button:active {
+      background: #F0EDE7;
+    }
+
+    .sidebar-menu {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 16px;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: #1A1A1A;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.12s;
+    }
+    .sidebar-item:hover, .sidebar-item:active {
+      background: #EDEAE4;
+    }
+    .sidebar-item-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+    .sidebar-item-label {
+      flex: 1;
+    }
+    .sidebar-item .pill-new {
+      background: #16A34A;
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 10px;
+      letter-spacing: 0.2px;
+    }
+
+    .sidebar-section-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #8B8680;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 12px 10px 6px;
+    }
+
+    .sidebar-item.active {
+      background: #E8E4DE;
+      font-weight: 600;
+    }
+
+    .sidebar-bottom {
+      margin-top: auto;
+      border-top: 1px solid #E8E4DE;
+      padding-top: 12px;
+    }
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 6px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+    .sidebar-user:hover {
+      background: #EDEAE4;
+    }
+    .sidebar-user-info {
+      flex: 1;
+    }
+    .sidebar-user-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1A1A1A;
+    }
+    .sidebar-user-plan {
+      font-size: 12px;
+      color: #8B8680;
+    }
+    .sidebar-user-chevron {
+      font-size: 14px;
+      color: #8B8680;
     }
 
     /* ── Conversation area ── */
     .conversation {
       position: fixed;
-      top: 86px;
+      top: 48px;
       left: 0;
       right: 0;
       bottom: 120px;
@@ -256,7 +404,6 @@
       left: 0;
       right: 0;
       background: #FAF6F0;
-      border-top: 1px solid #E8E4DE;
       padding-bottom: env(safe-area-inset-bottom, 8px);
       z-index: 100;
     }
@@ -291,11 +438,22 @@
 
     /* Disclaimer */
     .disclaimer {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
       font-size: 11px;
       color: #8B8680;
       padding: 4px 16px 6px;
       line-height: 1.4;
+    }
+    .disclaimer-icon {
+      flex-shrink: 0;
+    }
+    .disclaimer-icon svg {
+      width: 14px;
+      height: 14px;
+      display: block;
     }
 
     /* Input row */
@@ -306,26 +464,36 @@
       background: #FFFFFF;
       border: 1px solid #E0DBCF;
       border-radius: 24px;
-      padding: 6px 12px;
+      padding: 10px 8px 10px 12px;
       gap: 8px;
     }
     .input-row .attach-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid #C5C0B8;
       background: none;
-      border: none;
-      font-size: 20px;
+      font-size: 18px;
       color: #8B8680;
       cursor: pointer;
       flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       line-height: 1;
     }
     .model-badge {
       flex-shrink: 0;
-      background: #F0EDE7;
+      background: #EDEAE4;
       border-radius: 12px;
-      padding: 3px 10px;
+      padding: 4px 10px;
       font-size: 12px;
-      color: #8B8680;
+      color: #5C5853;
       font-weight: 500;
+      cursor: pointer;
+    }
+    .model-badge:active {
+      background: #E0DBCF;
     }
     .input-row input {
       flex: 1;
@@ -338,7 +506,8 @@
       min-width: 0;
     }
     .input-row input::placeholder { color: #B5B0A8; }
-    .input-row .mic-btn {
+    .input-row .mic-btn,
+    .input-row .voice-btn {
       background: none;
       border: none;
       font-size: 18px;
@@ -346,6 +515,24 @@
       cursor: pointer;
       flex-shrink: 0;
       line-height: 1;
+      padding: 2px;
+    }
+    .send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: #D97757;
+      border: none;
+      color: white;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .send-btn:active {
+      background: #C4654A;
     }
 
     /* ── Unordered/ordered lists ── */
@@ -366,34 +553,138 @@
       color: #8B8680;
     }
     .completed-badge.visible { display: block; }
+
+    /* Web search badge */
+    .web-search-badge {
+      display: inline-block;
+      background: #E8E4DE;
+      color: #5C5853;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      letter-spacing: 0.3px;
+    }
   </style>
 </head>
 <body>
 
-<!-- Navigation banner -->
-<div class="nav-banner">
-  <a href="/">← Side Track 비교</a>
-  <span>AS-IS · 기존 경험</span>
+<!-- Sidebar backdrop -->
+<div class="sidebar-backdrop" id="sidebarBackdrop" onclick="toggleSidebar()"></div>
+
+<!-- Sidebar -->
+<div class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <span class="sidebar-logo">Claude</span>
+    <div class="sidebar-header-actions">
+      <button aria-label="Search" style="font-size:15px;">&#x1F50D;</button>
+      <button aria-label="Close sidebar" onclick="toggleSidebar()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="sidebar-menu">
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:18px; border: 1.5px solid #8B8680; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;">+</span>
+      <span class="sidebar-item-label">새 채팅</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon">&#x1F4AC;</span>
+      <span class="sidebar-item-label">채팅</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon">&#x1F4C1;</span>
+      <span class="sidebar-item-label">프로젝트</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon">&#x1F3A8;</span>
+      <span class="sidebar-item-label">아티팩트</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon">&#x2699;</span>
+      <span class="sidebar-item-label">사용자 지정</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section-label">제품</div>
+  <div class="sidebar-menu">
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-family: monospace; font-size: 14px;">&lt;/&gt;</span>
+      <span class="sidebar-item-label">코드</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon">&#x1F310;</span>
+      <span class="sidebar-item-label">디자인</span>
+      <span class="pill-new">새로 생성</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section-label">즐겨찾기</div>
+  <div class="sidebar-menu">
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#9733;</span>
+      <span class="sidebar-item-label">Career</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#9733;</span>
+      <span class="sidebar-item-label">HID 과제</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#9733;</span>
+      <span class="sidebar-item-label">오늘의 저널링 문장 다듬기</span>
+    </div>
+  </div>
+
+  <div class="sidebar-section-label">최근 항목</div>
+  <div class="sidebar-menu">
+    <div class="sidebar-item active">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#x1F4AC;</span>
+      <span class="sidebar-item-label">코난 도쿄돔시티 가는 법</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#x1F4AC;</span>
+      <span class="sidebar-item-label">신주쿠 디즈니 플래그십 스토어 가는 길</span>
+    </div>
+    <div class="sidebar-item">
+      <span class="sidebar-item-icon" style="font-size:14px;">&#x1F4AC;</span>
+      <span class="sidebar-item-label">도쿄 여행 일정 짜기</span>
+    </div>
+  </div>
+
+  <div class="sidebar-bottom">
+    <div class="sidebar-user" onclick="toggleSidebar()">
+      <div class="user-avatar" style="width:34px; height:34px; font-size:13px;">SK</div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">seola kim</div>
+        <div class="sidebar-user-plan">맥스 플랜</div>
+      </div>
+      <span class="sidebar-user-chevron">&#x2303;</span>
+    </div>
+  </div>
 </div>
 
 <!-- Top bar -->
 <div class="top-bar">
   <div class="top-bar-left">
-    <button aria-label="Menu">≡</button>
+    <button class="hamburger-btn" aria-label="Menu" onclick="toggleSidebar()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    </button>
   </div>
+  <div class="top-bar-center"></div>
   <div class="top-bar-right">
-    <button aria-label="New chat">+</button>
-    <button aria-label="More options">···</button>
+    <div class="user-avatar">SK</div>
   </div>
 </div>
 
 <!-- Conversation -->
 <div class="conversation" id="conversation">
 
-  <!-- ═══ STEP 1 (pre-loaded) ═══ -->
+  <!-- STEP 1 (pre-loaded) -->
   <div class="msg-group" id="step1">
     <div class="msg-user">
-      <div class="msg-user-bubble">11월 도쿄 3박 4일, 둘이서 갈 건데 일정 초안 짜줘</div>
+      <div class="msg-user-bubble">코난 도쿄돔시티 어케가? 지금 아키하바라</div>
     </div>
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -402,86 +693,37 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>11월 도쿄 3박 4일 일정을 짜봤어요! ✈️</p>
-
-        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
+        <span class="web-search-badge">웹 검색됨</span>
+        <p>도쿄돔시티 가는 법이에요!</p>
+        <p><strong>JR 츄오·소부선</strong> 타고 스이도바시(水道橋)역 하차, 약 8분이면 도착해요. 환승 없이 직통이라 제일 편해요. 동쪽 출구로 나오면 바로 보여요.</p>
+        <p>지금 도쿄돔시티에서 코난 행사가 열리고 있어요:</p>
+        <p><strong>방송 30주년 기념 명탐정 코난 전</strong></p>
         <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
           <tbody>
-            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
-            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
-            <tr><td>11:15</td><td>NEX → 신주쿠 (80분)</td><td>¥3,250</td></tr>
-            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
-            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
-            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
-            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
-            <tr><td>18:30</td><td>오모이데요코초 꼬치구이</td><td>¥2,000-3,000/인</td></tr>
-            <tr><td>21:00</td><td>호텔 복귀 · 취침</td><td></td></tr>
+            <tr><td>장소</td><td>프리즘 홀</td></tr>
+            <tr><td>기간</td><td>~3/29까지</td></tr>
+            <tr><td>시간</td><td>10:00~19:00</td></tr>
+            <tr><td>당일권</td><td>일반 2,200엔</td></tr>
           </tbody>
         </table></div>
-
-        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:00</td><td>아사쿠사 이동</td><td>긴자선 30분</td></tr>
-            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
-            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
-            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
-            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
-            <tr><td>17:00</td><td>시부야 이동</td><td>야마노테선</td></tr>
-            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
-            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
-            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
-            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
-            <tr><td>13:30</td><td>긴자 쇼핑</td><td>면세 가능</td></tr>
-            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
-            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
-            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
-            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
-            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
-            <tr><td>10:30</td><td>오다이바 이동</td><td>유리카모메</td></tr>
-            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
-            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
-            <tr><td>15:00</td><td>스카이라이너 → 나리타</td><td>60분</td></tr>
-            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
-            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
-            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p>일정 조정 사항이 있으면 말씀해 주세요! ✨</p>
+        <p>어트랙션즈 콜라보도 있어서 관람차, 실내 코스터에 코난 한정 보이스가 나와요!</p>
 
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 2 ═══ -->
+  <!-- STEP 2 -->
   <div class="msg-group" id="step2" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">그런데 JR패스가 뭐야?</div>
+      <div class="msg-user-bubble">2026년껄로줘 이건 끝난거야</div>
     </div>
+
+    <div class="pain-point" id="pain2">&#x26A0; AI가 3월에 종료된 행사를 추천했습니다. 실시간 정보 확인이 필요합니다.</div>
+
     <div class="msg-claude">
       <div class="msg-claude-header">
         <div class="claude-avatar">
@@ -489,24 +731,31 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p><strong>JR패스</strong>는 JR(Japan Railways) 노선을 일정 기간 무제한으로 탈 수 있는 외국인 전용 패스예요.</p>
-        <ul>
-          <li>7일권 약 <strong>¥50,000</strong> (약 45만원)</li>
-          <li>JR 야마노테선, 주오선, NEX 등 JR 노선 무제한</li>
-          <li>도시 간 <strong>신칸센</strong>도 포함 (노조미·미즈호 제외)</li>
-        </ul>
-        <p>"본전"을 뽑으려면 도쿄-오사카 왕복처럼 도시 간 장거리를 여러 번 타야 해요.</p>
+        <span class="web-search-badge">웹 검색됨</span>
+        <p>아 죄송해요! 다시 찾아봤어요. 코난 전시는 3/29에 끝났고, 지금 진행 중인 건 이거예요:</p>
+        <p><strong>명탐정 코난 플라자 도쿄돔시티</strong></p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>항목</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>기간</td><td>2026.04.01 ~ 09.27</td></tr>
+            <tr><td>장소</td><td>센트럴파크 내</td></tr>
+            <tr><td>입장료</td><td>무료 (굿즈샵)</td></tr>
+            <tr><td>특전</td><td>2,500엔 이상 구매 시 클리어카드</td></tr>
+          </tbody>
+        </table></div>
+        <p>&#x1F4CD; 〒112-0004 東京都文京区後楽 1-3-61 東京ドームシティ内 セントラルパーク</p>
+        <p>아키하바라 → JR 츄오·소부선 → 스이도바시역 동쪽 출구 (약 8분), 도보 3~5분이에요.</p>
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 3 ═══ -->
+  <!-- STEP 3 -->
   <div class="msg-group" id="step3" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">우리 일정엔 JR패스가 이득이야?</div>
+      <div class="msg-user-bubble">점프샵도 코난플라자도 갔다왔는데 더 할거없나</div>
     </div>
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -515,24 +764,47 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>이번 일정은 <strong>도쿄 시내만</strong> 돌기 때문에 JR패스는 안 사는 게 맞아요.</p>
+        <p>스이도바시·도쿄돔시티 주변에서 더 할 만한 거 정리해드릴게요:</p>
+
+        <p><strong>도쿄돔시티 내부</strong></p>
         <ul>
-          <li>시내 이동은 지하철 위주 → JR 노선 많이 안 탐</li>
-          <li>4일 교통비 합쳐도 ¥5,000-8,000 정도</li>
-          <li>JR패스 7일권 ¥50,000과 비교하면 큰 손해</li>
+          <li>라쿠아 가든 — 무료 산책, 관람차 "빅 오"</li>
+          <li>선더 돌핀 — 빌딩 뚫고 지나가는 롤러코스터</li>
+          <li>Spa LaQua — 천연온천 + 사우나</li>
+          <li>야구전당박물관 — 입장료 저렴</li>
         </ul>
-        <p><strong>스이카(Suica) 충전식 교통카드</strong>로 탄 만큼만 쓰는 게 이득이에요. 공항에서 발급하고 지하철·버스·편의점까지 다 돼요.</p>
+
+        <p><strong>먹거리</strong></p>
+        <ul>
+          <li>FOOD STADIUM TOKYO (옐로우 빌딩 2F)</li>
+          <li>GO-FUN 푸드코트</li>
+          <li>라쿠아 1~4F 카페·레스토랑</li>
+        </ul>
+
+        <p><strong>근처 동네</strong></p>
+        <ul>
+          <li>진보초(神保町) — 헌책방 거리, 도보 15분</li>
+          <li>이케부쿠로(池袋) — 오타쿠 성지, 마루노우치선 10분
+            <ul>
+              <li>애니메이트 본점, K-BOOKS, 오토메 로드</li>
+            </ul>
+          </li>
+          <li>나카노(中野) — 나카노 브로드웨이, 츄오선 15분</li>
+        </ul>
+
+        <p>뭐 하고 싶은 분위기예요? 쇼핑/먹기/조용히 산책/액티비티?</p>
+
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 4 ═══ -->
+  <!-- STEP 4 -->
   <div class="msg-group" id="step4" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">eSIM은 뭐야? 우린 뭐가 나아?</div>
+      <div class="msg-user-bubble">신주쿠랑 도쿄역 갈 건데 동선 짜줘</div>
     </div>
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -541,35 +813,54 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p><strong>eSIM</strong>은 유심칩 없이 QR코드로 바로 설치하는 데이터 요금제예요.</p>
+        <p>좋아요! 동선 짜드릴게요.</p>
+
+        <p><strong>&#x1F687; 거리 기준</strong></p>
+        <ul>
+          <li>스이도바시 → 도쿄역: 약 10분 (가장 가까움)</li>
+          <li>스이도바시 → 신주쿠: 약 15분 (직통)</li>
+        </ul>
+
+        <p><strong>&#x1F3AF; 추천 동선: 신주쿠 → 도쿄역</strong></p>
+
+        <p class="day-heading">1&#xFE0F;&#x20E3; 스이도바시 → 신주쿠 (츄오·소부선 직통, 15분)</p>
         <div class="table-wrap"><table>
-          <thead><tr><th>비교</th><th>eSIM</th><th>포켓와이파이</th><th>로밍</th></tr></thead>
+          <thead><tr><th>시간</th><th>일정</th></tr></thead>
           <tbody>
-            <tr><td>가격</td><td>4일 ¥1,000</td><td>4일 ¥3,000</td><td>4일 ¥30,000+</td></tr>
-            <tr><td>편의성</td><td>QR 설치</td><td>기기 수령/반납</td><td>신청만</td></tr>
-            <tr><td>공유</td><td>각자 사용</td><td>한 대 공유</td><td>각자</td></tr>
+            <tr><td>도착</td><td>동쪽 출구 → 오타쿠 스팟 밀집</td></tr>
+            <tr><td>2~3h</td><td>애니메이트, 마루이 애니메, 타워레코드</td></tr>
+            <tr><td>점심</td><td>오모이데 요코쵸 or 이치란 라멘</td></tr>
+            <tr><td>&#x1F4F8;</td><td>토호 빌딩 고지라 헤드</td></tr>
           </tbody>
         </table></div>
-        <p>둘이 가니까 <strong>각자 eSIM 하나씩</strong>이 좋아요.</p>
-        <ul>
-          <li>포켓와이파이는 떨어지면 한 명이 끊김</li>
-          <li>각자 구글맵·번역 자유</li>
-          <li>반납 신경 안 써도 됨</li>
-        </ul>
+
+        <p class="day-heading">2&#xFE0F;&#x20E3; 신주쿠 → 도쿄역 (츄오선 쾌속, 15분)</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>시간</th><th>일정</th></tr></thead>
+          <tbody>
+            <tr><td>2h</td><td>도쿄 캐릭터 스트리트 (야에스 B1, 30개 샵)</td></tr>
+            <tr><td>저녁</td><td>도쿄 라멘 스트리트</td></tr>
+            <tr><td>&#x1F4F8;</td><td>마루노우치 빨간 벽돌 야경</td></tr>
+          </tbody>
+        </table></div>
+
+        <p>&#x23F0; 캐릭터 스트리트 20:00 폐점, 애니메이트 21:00 폐점</p>
+        <p>현재 시간이 몇 시예요? 시간에 따라 순서가 달라질 수 있어요!</p>
+
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 5 ═══ -->
+  <!-- STEP 5 -->
   <div class="msg-group" id="step5" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">지금까지 정한 거 반영해서 최종 일정 줘</div>
+      <div class="msg-user-bubble">17:30</div>
     </div>
 
-    <div class="pain-point" id="pain5">⚠ 기존 결정(스이카, eSIM)을 찾으려면 위로 스크롤해야 합니다</div>
+    <div class="pain-point" id="pain5">&#x26A0; 매번 현재 시간을 다시 물어봐야 합니다. 시간이 상태로 유지되지 않습니다.</div>
 
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -578,89 +869,46 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>교통은 스이카, 통신은 각자 eSIM으로 반영한 최종 일정이에요.</p>
+        <p>17:30이면 시간 빠듯해요! 우선순위 정해야 해요.</p>
 
-        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
-            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
-            <tr><td>10:40</td><td>eSIM 활성화 확인</td><td>미리 설치</td></tr>
-            <tr><td>11:15</td><td>NEX → 신주쿠 (스이카)</td><td>¥3,250</td></tr>
-            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
-            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
-            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
-            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
-            <tr><td>18:30</td><td>오모이데요코초 꼬치구이</td><td>¥2,000-3,000/인</td></tr>
-            <tr><td>21:00</td><td>호텔 복귀 · 취침</td><td></td></tr>
-          </tbody>
-        </table></div>
+        <p>&#x23F0; <strong>영업시간 체크 (중요!)</strong></p>
+        <ul>
+          <li>도쿄 캐릭터 스트리트: <strong>20:00 폐점</strong></li>
+          <li>애니메이트 신주쿠: <strong>21:00 폐점</strong></li>
+        </ul>
 
-        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:00</td><td>아사쿠사 이동 (스이카)</td><td>긴자선 30분</td></tr>
-            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
-            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
-            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
-            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
-            <tr><td>17:00</td><td>시부야 이동 (스이카)</td><td>야마노테선</td></tr>
-            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
-            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
-          </tbody>
-        </table></div>
+        <p><strong>&#x1F3AF; 변경 추천: 도쿄역 먼저 → 신주쿠 마무리</strong></p>
+        <p>폐점 빠른 도쿄역부터 가는 게 안전해요.</p>
 
-        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
-            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
-            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
-            <tr><td>13:30</td><td>긴자 쇼핑 (스이카)</td><td>면세 가능</td></tr>
-            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
-            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
-            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
-            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
-          </tbody>
-        </table></div>
+        <p><strong>1&#xFE0F;&#x20E3; 지금~18:00:</strong> 스이도바시 → 도쿄역 (10분)</p>
+        <ul>
+          <li>18:00~19:30: 캐릭터 스트리트 풀집중 &#x1F3AF;</li>
+          <li>19:45~20:30: 라멘 스트리트 저녁 &#x1F35C;</li>
+        </ul>
 
-        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
-            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
-            <tr><td>10:30</td><td>오다이바 이동 (스이카)</td><td>유리카모메</td></tr>
-            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
-            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
-            <tr><td>15:00</td><td>스카이라이너 → 나리타 (스이카)</td><td>60분</td></tr>
-            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
-            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
-            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
-          </tbody>
-        </table></div>
+        <p><strong>2&#xFE0F;&#x20E3; 20:30~:</strong> 도쿄역 → 신주쿠 (15분)</p>
+        <ul>
+          <li>20:45~21:00: 애니메이트 짧게</li>
+          <li>21:00~: 오모이데 요코쵸 술 한잔 &#x1F376;</li>
+        </ul>
 
-        <p>일정 조정 사항이 있으면 말씀해 주세요! ✨</p>
+        <p>&#x1F4A1; 솔직히 말하면 두 곳 다 알차게는 어려워요. 도쿄역만 풀로 즐기고 신주쿠는 다음에가 더 깔끔할 수도 있어요.</p>
+        <p>신주쿠도 꼭 가고 싶어요? 아니면 도쿄역에 집중할까요?</p>
 
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 6 ═══ -->
+  <!-- STEP 6 -->
   <div class="msg-group" id="step6" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">도착 항공편이 3시간 지연됐어</div>
+      <div class="msg-user-bubble">신주쿠는 내일갈래</div>
     </div>
 
-    <div class="pain-point" id="pain6">⚠ 결정이 대화에 흩어져 있어 AI가 직접 찾지 못합니다</div>
+    <div class="pain-point" id="pain6">&#x26A0; 한 곳을 내일로 미루는 것뿐인데 전체 일정이 재출력됩니다. '내일 간다'는 결정은 어디에도 기록되지 않습니다.</div>
 
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -669,20 +917,57 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>도착이 3시간 늦어지면 Day 1 일정을 조정해야겠네요.</p>
-        <p>그런데 이전에 교통이랑 통신을 어떻게 정하셨었죠? <strong>위쪽 대화를 확인해서 알려주시면</strong> 그에 맞춰 영향 범위를 파악하고 조정할게요.</p>
+        <p>좋은 선택이에요! 도쿄역에 집중하면 훨씬 알차요.</p>
+
+        <p><strong>&#x1F5FE; 오늘 저녁 플랜 (17:30~)</strong></p>
+
+        <p><strong>1&#xFE0F;&#x20E3; 17:30~17:45</strong> 스이도바시 → 도쿄역</p>
+        <ul>
+          <li>JR 츄오선 쾌속 (약 10분)</li>
+          <li>야에스 지하 중앙 개찰구로 나가기</li>
+        </ul>
+
+        <p><strong>2&#xFE0F;&#x20E3; 17:45~19:30</strong> 도쿄 캐릭터 스트리트 &#x1F3AF;</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>우선순위</th><th>매장</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>점프샵 (매장별 한정상품 다름)</td></tr>
+            <tr><td>2</td><td>포켓몬 스토어</td></tr>
+            <tr><td>3</td><td>방송국 공식샵 (요미우리TV → 코난 굿즈?)</td></tr>
+            <tr><td>4</td><td>리락쿠마, 울트라맨, 크레용신짱</td></tr>
+          </tbody>
+        </table></div>
+        <p>&#x26A0; <strong>20:00 폐점</strong>, 19:45엔 계산대로!</p>
+
+        <p><strong>3&#xFE0F;&#x20E3; 19:45~20:45</strong> 도쿄 라멘 스트리트 &#x1F35C;</p>
+        <ul>
+          <li>같은 이치반가이 B1, 유명 라멘집 8곳</li>
+        </ul>
+
+        <p><strong>4&#xFE0F;&#x20E3; 20:45~</strong> 마루노우치 야경 &#x1F4F8;</p>
+        <ul>
+          <li>빨간 벽돌 역사 라이트업</li>
+          <li>KITTE 빌딩 옥상 (23시까지)</li>
+        </ul>
+
+        <p>&#x1F4A1; 도쿄 오카시랜드도 같은 층! 칼비·글리코 한정과자 잠깐 들르기 좋아요.</p>
+        <p>내일 신주쿠 갈 때 또 도와드릴게요! &#x1F575;&#xFE0F;</p>
+
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 7 ═══ -->
+  <!-- STEP 7 -->
   <div class="msg-group" id="step7" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">교통은 스이카, 통신은 eSIM이었어</div>
+      <div class="msg-user-bubble">코난 스탬프랠리 도쿄역엔 있어?</div>
     </div>
+
+    <div class="pain-point" id="pain7">&#x26A0; 스탬프랠리처럼 여러 장소에 걸친 진행상황을 추적할 수 없습니다. 어디서 찍었고 어디를 안 찍었는지 대화에서 찾을 수 없습니다.</div>
+
     <div class="msg-claude">
       <div class="msg-claude-header">
         <div class="claude-avatar">
@@ -690,26 +975,34 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>확인 감사해요! 교통은 스이카, 통신은 eSIM이네요. 둘 다 도착 시간과 무관하니 그대로 유지해요.</p>
-        <p>Day 1 저녁만 조정하면 돼요. 어떤 방향으로 바꿀까요?</p>
-        <ol>
-          <li>호텔 근처에서 가볍게</li>
-          <li>도쿄타워 야경 + 늦은 저녁</li>
-        </ol>
+        <span class="web-search-badge">웹 검색됨</span>
+        <p>도쿄역에는 코난 스탬프 없어요! &#x1F631;</p>
+        <p>27역 중에 도쿄역은 빠져 있어요. 도쿄역 근처에서 가장 가까운 스탬프 설치역은:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>역</th><th>캐릭터</th><th>도쿄역에서</th></tr></thead>
+          <tbody>
+            <tr><td>신바시(新橋)</td><td>진 &#x1F5A4;</td><td>야마노테선 1정거장</td></tr>
+            <tr><td>아키하바라(秋葉原)</td><td>카즈하</td><td>야마노테선 2정거장</td></tr>
+            <tr><td>우에노(上野)</td><td>미츠히코 + 상품교환</td><td>야마노테선 4정거장</td></tr>
+          </tbody>
+        </table></div>
+        <p>&#x1F4A1; 지금 도쿄역 가는 길이면, 신바시 잠깐 들러서 진 스탬프 찍고 → 도쿄역 코스 어때요?</p>
+        <p>스이도바시 → 도쿄역 → 신바시 (5분) → 다시 도쿄역</p>
+        <p>아니면 도쿄역 캐릭터 스트리트만 집중할까요?</p>
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ═══ STEP 8 ═══ -->
+  <!-- STEP 8 -->
   <div class="msg-group" id="step8" hidden>
     <div class="msg-user">
-      <div class="msg-user-bubble">첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘</div>
+      <div class="msg-user-bubble">아까 코난플라자 주소 뭐였지?</div>
     </div>
 
-    <div class="pain-point" id="pain8">⚠ 변경된 부분만 보고 싶어도 전체 일정이 다시 출력됩니다</div>
+    <div class="pain-point" id="pain8">&#x26A0; 한 번 나온 정보를 다시 찾으려면 긴 대화를 스크롤해야 합니다. 주소, 영업시간, 가격 같은 핵심 정보가 대화 속에 묻혀 있습니다.</div>
 
     <div class="msg-claude">
       <div class="msg-claude-header">
@@ -718,82 +1011,18 @@
         </div>
       </div>
       <div class="msg-claude-body">
-        <p>Day 1 저녁을 신주쿠 근처로 변경했어요.</p>
-
-        <p class="day-heading">Day 1 (11/7 월) — 도착 · 신주쿠</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:25</td><td>인천 출발 (나리타행)</td><td>✈ 비행</td></tr>
-            <tr><td>10:35</td><td>나리타 도착 · 입국 심사</td><td>~40분</td></tr>
-            <tr><td>10:40</td><td>eSIM 활성화 확인</td><td>미리 설치</td></tr>
-            <tr><td>11:15</td><td>NEX → 신주쿠 (스이카)</td><td>¥3,250</td></tr>
-            <tr><td>12:35</td><td>신주쿠 도착, 호텔에 짐 맡기기</td><td></td></tr>
-            <tr><td>13:30</td><td>체크인 · 휴식</td><td>시차 적응</td></tr>
-            <tr><td>15:00</td><td>메이지신궁 · 단풍 산책</td><td>90분</td></tr>
-            <tr><td>16:30</td><td>오모테산도 카페 휴식</td><td></td></tr>
-            <tr><td>19:30</td><td>신주쿠 근처 가벼운 저녁</td><td>¥1,500-2,000/인</td></tr>
-            <tr><td>21:30</td><td>호텔 복귀 · 취침</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p class="day-heading">Day 2 (11/8 화) — 아사쿠사 · 우에노</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:00</td><td>아사쿠사 이동 (스이카)</td><td>긴자선 30분</td></tr>
-            <tr><td>10:00</td><td>센소지 · 나카미세 거리</td><td>90분</td></tr>
-            <tr><td>12:00</td><td>아사쿠사 텐동/소바 점심</td><td>¥1,200-1,800</td></tr>
-            <tr><td>13:30</td><td>우에노 공원 · 국립박물관</td><td>¥1,000</td></tr>
-            <tr><td>15:30</td><td>아메요코 시장</td><td>군것질</td></tr>
-            <tr><td>17:00</td><td>시부야 이동 (스이카)</td><td>야마노테선</td></tr>
-            <tr><td>19:00</td><td>시부야 요코초 이자카야</td><td>¥3,000-4,000/인</td></tr>
-            <tr><td>22:00</td><td>호텔 복귀</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p class="day-heading">Day 3 (11/9 수) — 시부야 · 긴자</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>호텔 조식</td><td></td></tr>
-            <tr><td>09:30</td><td>시부야 스카이 전망대</td><td>예약 필요</td></tr>
-            <tr><td>10:30</td><td>스크램블 교차로 · 하치코</td><td>📷</td></tr>
-            <tr><td>12:00</td><td>시부야 109 식당가 라멘</td><td>¥1,000-1,500</td></tr>
-            <tr><td>13:30</td><td>긴자 쇼핑 (스이카)</td><td>면세 가능</td></tr>
-            <tr><td>16:00</td><td>마루노우치 · 도쿄역</td><td>KITTE 옥상</td></tr>
-            <tr><td>17:00</td><td>야나카 긴자 옛 골목</td><td>석양 계단</td></tr>
-            <tr><td>19:00</td><td>라멘 골목 저녁</td><td>¥1,000-1,500</td></tr>
-            <tr><td>21:00</td><td>호텔 · 짐 싸기</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p class="day-heading">Day 4 (11/10 목) — 팀랩 · 출국</p>
-        <div class="table-wrap"><table>
-          <thead><tr><th>시간</th><th>일정</th><th>비고</th></tr></thead>
-          <tbody>
-            <tr><td>07:00</td><td>기상 · 체크아웃</td><td></td></tr>
-            <tr><td>09:00</td><td>팀랩 플래닛</td><td>예약 · 90분</td></tr>
-            <tr><td>10:30</td><td>오다이바 이동 (스이카)</td><td>유리카모메</td></tr>
-            <tr><td>11:30</td><td>오다이바 해변 · 건담</td><td>📷</td></tr>
-            <tr><td>13:00</td><td>다이버시티 푸드코트</td><td>¥1,000-1,500</td></tr>
-            <tr><td>15:00</td><td>스카이라이너 → 나리타 (스이카)</td><td>60분</td></tr>
-            <tr><td>16:00</td><td>출국 수속 · 면세 쇼핑</td><td></td></tr>
-            <tr><td>18:10</td><td>나리타 출발</td><td></td></tr>
-            <tr><td>20:40</td><td>인천 도착</td><td></td></tr>
-          </tbody>
-        </table></div>
-
-        <p>변경 사항:</p>
+        <p>아까 알려드렸던 거 다시 정리해드릴게요:</p>
+        <p><strong>명탐정 코난 플라자 도쿄돔시티</strong></p>
+        <p>&#x1F4CD; 〒112-0004 東京都文京区後楽 1-3-61<br>東京ドームシティ内 セントラルパーク</p>
         <ul>
-          <li>Day 1 18:30 오모이데요코초 → <strong>19:30 신주쿠 근처 가벼운 저녁</strong></li>
-          <li>취침 시간 21:00 → 21:30</li>
+          <li>기간: 2026.04.01 ~ 09.27</li>
+          <li>시간: 11:00 ~ 19:00</li>
+          <li>입장료: 무료</li>
+          <li>특전: 2,500엔 이상 구매 시 클리어카드</li>
         </ul>
-        <p>이전에 정하신 교통(스이카)·통신(eSIM)은 그대로 유지돼요. 더 수정할 부분 있으면 말씀해 주세요! ✨</p>
-
+        <p>구글맵에 "名探偵コナンプラザ 東京ドームシティ" 검색하면 바로 나와요!</p>
         <div class="action-bar">
-          <button>📋</button><button>↗</button><button>▶</button><button>👍</button><button>💬</button><button>↻</button>
+          <button title="Copy">&#x1F4CB;</button><button title="Share">&#x2197;</button><button title="Play">&#x25B6;</button><button title="Like">&#x1F44D;</button><button title="Comment">&#x1F4AC;</button><button title="Retry">&#x21BB;</button>
         </div>
       </div>
     </div>
@@ -811,7 +1040,7 @@
 
   <!-- Completion badge -->
   <div class="completed-badge" id="completedBadge">
-    대화가 끝났습니다. Side Track 비교 페이지로 돌아가려면 상단 링크를 눌러 주세요.
+    대화가 끝났습니다.
   </div>
 
 </div><!-- /conversation -->
@@ -819,20 +1048,27 @@
 <!-- Bottom area -->
 <div class="bottom-area">
   <div class="chips-row" id="chipsRow">
-    <button class="chip" id="chip2" onclick="advance()">그런데 JR패스가 뭐야?</button>
-    <button class="chip" id="chip3" onclick="advance()" hidden>우리 일정엔 JR패스가 이득이야?</button>
-    <button class="chip" id="chip4" onclick="advance()" hidden>eSIM은 뭐야? 우린 뭐가 나아?</button>
-    <button class="chip" id="chip5" onclick="advance()" hidden>지금까지 정한 거 반영해서 최종 일정 줘</button>
-    <button class="chip" id="chip6" onclick="advance()" hidden>도착 항공편이 3시간 지연됐어</button>
-    <button class="chip" id="chip7" onclick="advance()" hidden>교통은 스이카, 통신은 eSIM이었어</button>
-    <button class="chip" id="chip8" onclick="advance()" hidden>첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘</button>
+    <button class="chip" id="chip2" onclick="advance()">2026년껄로줘 이건 끝난거야</button>
+    <button class="chip" id="chip3" onclick="advance()" hidden>점프샵도 코난플라자도 갔다왔는데 더 할거없나</button>
+    <button class="chip" id="chip4" onclick="advance()" hidden>신주쿠랑 도쿄역 갈 건데 동선 짜줘</button>
+    <button class="chip" id="chip5" onclick="advance()" hidden>17:30</button>
+    <button class="chip" id="chip6" onclick="advance()" hidden>신주쿠는 내일갈래</button>
+    <button class="chip" id="chip7" onclick="advance()" hidden>코난 스탬프랠리 도쿄역엔 있어?</button>
+    <button class="chip" id="chip8" onclick="advance()" hidden>아까 코난플라자 주소 뭐였지?</button>
   </div>
-  <div class="disclaimer">Claude는 AI이며 실수할 수 있습니다. 응답을 다시 한번 확인해 주세요.</div>
+  <div class="disclaimer">
+    <span class="disclaimer-icon">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+    </span>
+    <span>Claude는 AI이며 실수할 수 있습니다.</span>
+  </div>
   <div class="input-row">
     <button class="attach-btn" aria-label="Attach">+</button>
     <span class="model-badge">Haiku 4.5</span>
     <input type="text" placeholder="Claude에게 응답하기" disabled>
-    <button class="mic-btn" aria-label="Voice input">🎙</button>
+    <button class="mic-btn" aria-label="Voice input">&#x1F399;</button>
+    <button class="voice-btn" aria-label="Voice output">&#x1F50A;</button>
+    <button class="send-btn" aria-label="Send">&#x2191;</button>
   </div>
 </div>
 
@@ -843,13 +1079,13 @@
   const CHIPS = [
     null, // index 0 unused
     null, // step 1 is pre-loaded
-    '그런데 JR패스가 뭐야?',
-    '우리 일정엔 JR패스가 이득이야?',
-    'eSIM은 뭐야? 우린 뭐가 나아?',
-    '지금까지 정한 거 반영해서 최종 일정 줘',
-    '도착 항공편이 3시간 지연됐어',
-    '교통은 스이카, 통신은 eSIM이었어',
-    '첫날 저녁은 신주쿠 근처에서 가볍게로 바꿔줘',
+    '2026년껄로줘 이건 끝난거야',
+    '점프샵도 코난플라자도 갔다왔는데 더 할거없나',
+    '신주쿠랑 도쿄역 갈 건데 동선 짜줘',
+    '17:30',
+    '신주쿠는 내일갈래',
+    '코난 스탬프랠리 도쿄역엔 있어?',
+    '아까 코난플라자 주소 뭐였지?',
   ];
 
   const TOTAL_STEPS = 8;
@@ -921,6 +1157,12 @@
 
       isAnimating = false;
     }, 400);
+  }
+
+  // Sidebar toggle
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarBackdrop').classList.toggle('open');
   }
 
   // Initial scroll to bottom
