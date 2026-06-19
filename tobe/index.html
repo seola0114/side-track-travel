@@ -500,6 +500,37 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .quote-card .qtxt{font-size:12px}
 }
 
+/* ---- event detail modal ---- */
+.ev-backdrop{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.35);display:none}
+.ev-backdrop.open{display:block}
+.ev-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:410;background:var(--surface);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.ev-modal.open{transform:translateY(0)}
+@media(min-width:769px){.ev-modal{left:auto;width:420px;border-left:1px solid var(--line);transform:translateX(100%)}.ev-modal.open{transform:translateX(0)}}
+.ev-modal-head{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex:none;gap:8px}
+.ev-modal-head button{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px}
+.ev-modal-head .ev-spacer{flex:1}
+.ev-modal-body{flex:1;overflow-y:auto;padding:20px 18px}
+.ev-modal-color{width:14px;height:14px;border-radius:4px;flex:none}
+.ev-modal-color.act{background:#5B9BD5}
+.ev-modal-color.dec{background:#E6A837}
+.ev-modal-color.routine{background:#D5D3CC}
+.ev-modal-color.broken{background:#D94B3F}
+.ev-modal-color.changed{background:var(--accent)}
+.ev-modal-title{font-size:20px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.ev-modal-time{font-size:13px;color:var(--faint);margin-bottom:16px}
+.ev-modal-row{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.ev-modal-row svg{width:18px;height:18px;color:var(--faint);flex:none;margin-top:1px}
+.ev-modal-row .ev-row-txt{font-size:14px;color:var(--ink);line-height:1.6}
+.ev-modal-row .ev-row-label{font-size:11px;color:var(--faint);margin-bottom:2px}
+.ev-modal-tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}
+.ev-modal-tags .etag{font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--line);border-radius:6px;padding:2px 7px}
+.ev-modal-chat{border-top:1px solid var(--line);padding:10px 14px;padding-bottom:max(14px,env(safe-area-inset-bottom));flex:none;background:var(--paper)}
+.ev-modal-chat .ev-chat-label{font-size:11px;color:var(--faint);margin-bottom:6px}
+.ev-modal-inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 14px}
+.ev-modal-inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.ev-modal-inrow textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:80px;line-height:1.5;padding:4px 0}
+.ev-modal-inrow .send{width:32px;height:32px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:14px;cursor:pointer;display:grid;place-items:center;flex:none}
+
 /* ---- questionnaire bottom sheet ---- */
 .qs-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);display:none}
 .qs-backdrop.open{display:block}
@@ -652,6 +683,24 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 </div>
 
 <div class="guide" id="guide" style="display:none"></div>
+
+<div class="ev-backdrop" id="evBackdrop" onclick="closeEvModal()"></div>
+<div class="ev-modal" id="evModal">
+  <div class="ev-modal-head">
+    <button onclick="closeEvModal()">x</button>
+    <span class="ev-spacer"></span>
+    <button><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+    <button>...</button>
+  </div>
+  <div class="ev-modal-body" id="evModalBody"></div>
+  <div class="ev-modal-chat">
+    <div class="ev-chat-label">Claude에게 이 일정 수정 요청</div>
+    <div class="ev-modal-inrow">
+      <textarea id="evChatIn" rows="1" placeholder="예: 시간을 30분 뒤로 옮겨줘"></textarea>
+      <button class="send" onclick="evChatSend()">↑</button>
+    </div>
+  </div>
+</div>
 
 <div class="qs-backdrop" id="qsBackdrop" onclick="closeQs()"></div>
 <div class="qs-sheet" id="qsSheet">
@@ -1350,6 +1399,10 @@ function chooseAdjust(ai){
 
 /* ================= CELL DETAIL EXPAND ================= */
 function toggleCell(ri,ci){
+  // mobile or day view: open detail modal
+  if(window.innerWidth<=768 || calView==='day'){
+    openEvModal(ri,ci);return;
+  }
   const key=ri+'-'+ci;
   S._openCell=(S._openCell===key)?null:key;
   renderAll();
@@ -1431,6 +1484,43 @@ function resetAll(mode){
 }
 
 /* ================= INIT ================= */
+/* ================= EVENT DETAIL MODAL ================= */
+let evModalCell=null;
+function openEvModal(ri,ci){
+  evModalCell={ri,ci};
+  const c=S.grid[ri][ci];
+  const sl=SLOT_T[ri];
+  const startH=Math.floor(sl.s),startM=Math.round((sl.s%1)*60);
+  const endH=Math.floor(sl.e),endM=Math.round((sl.e%1)*60);
+  const timeStr=`${DAYS[ci].date} ${DAYS[ci].d} · ${String(startH).padStart(2,'0')}:${String(startM).padStart(2,'0')} - ${String(endH).padStart(2,'0')}:${String(endM).padStart(2,'0')}`;
+  let h=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:6px"><div class="ev-modal-color ${c.t}"></div><div class="ev-modal-title">${esc(c.txt)}</div></div>`;
+  h+=`<div class="ev-modal-time">${timeStr}</div>`;
+  if(c.sub){h+=`<div class="ev-modal-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div><div class="ev-row-label">시간</div><div class="ev-row-txt">${esc(c.sub)}</div></div></div>`;}
+  if(c.detail){h+=`<div class="ev-modal-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg><div><div class="ev-row-label">상세</div><div class="ev-row-txt">${esc(c.detail)}</div></div></div>`;}
+  if(c.meta&&c.meta.length){h+=`<div class="ev-modal-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg><div><div class="ev-row-label">태그</div><div class="ev-modal-tags">${c.meta.map(m=>`<span class="etag">${esc(m)}</span>`).join('')}</div></div></div>`;}
+  if(c.badge){h+=`<div class="ev-modal-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><div><div class="ev-row-label">유형</div><div class="ev-row-txt">${esc(c.badge)}</div></div></div>`;}
+  document.getElementById('evModalBody').innerHTML=h;
+  document.getElementById('evBackdrop').classList.add('open');
+  document.getElementById('evModal').classList.add('open');
+  document.getElementById('evChatIn').value='';
+}
+function closeEvModal(){
+  document.getElementById('evBackdrop').classList.remove('open');
+  document.getElementById('evModal').classList.remove('open');
+  evModalCell=null;
+}
+function evChatSend(){
+  const inp=document.getElementById('evChatIn');
+  const txt=inp.value.trim();if(!txt||!evModalCell)return;
+  const c=S.grid[evModalCell.ri][evModalCell.ci];
+  // simulate Claude modifying the event
+  S.grid[evModalCell.ri][evModalCell.ci].changed=true;
+  S.msgs.push({role:'user',text:`[${c.txt}] ${txt}`});
+  S.msgs.push({role:'assistant',text:`"${c.txt}" 일정을 수정했어요. 일정표에서 변경된 칸을 확인할 수 있습니다.`});
+  closeEvModal();
+  renderAll();
+}
+
 /* ================= QUESTIONNAIRE ================= */
 const QS_DATA=[
   {q:'11월 중 언제쯤 생각 중인가요?',opts:['11월 초 (1~10일)','11월 중순 (10~20일)','11월 말 (20~30일)']},
