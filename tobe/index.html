@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
-<title>To-Be — Side Track 경험</title>
+<title>To-Be — Claude 경험</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -552,10 +552,10 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 <div class="app" id="app">
   <button class="sb-toggle" title="사이드바 열기" onclick="toggleSidebar()">☰</button>
   <header class="bar">
-    <div class="brand"><span class="dot"></span><h1>Side Track</h1></div>
+    <div class="brand"><span class="dot"></span><h1>Claude</h1></div>
     <span class="proto-pill">프로토타입 · 도쿄 3박 4일</span>
     <div class="toggle">
-      <button id="mSide" class="on" onclick="setMode('side')">Side Track</button>
+      <button id="mSide" class="on" onclick="setMode('side')">Claude</button>
       <button id="mLinear" onclick="setMode('linear')">일반 채팅 (대조)</button>
     </div>
     <span class="spacer"></span>
@@ -568,7 +568,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
       <span class="land-avatar">SK</span>
     </div>
     <div class="land-inner">
-      <div class="land-logo"><span class="dot"></span> Side Track</div>
+      <div class="land-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg> Claude</div>
       <h2 class="land-title">오늘 어떤 여행을 계획해 볼까요?</h2>
       <div class="land-input-wrap">
         <div class="land-input-top">
@@ -799,15 +799,15 @@ function renderHUD(){
   el.style.display='block';
   let body='';
   if(m.active){
-    body=`<div class="mh-h"><span class="mh-rec"></span> 재계획 측정 중 · ${S.mode==='side'?'Side Track':'일반 채팅'}</div>
+    body=`<div class="mh-h"><span class="mh-rec"></span> 재계획 측정 중 · ${S.mode==='side'?'Claude':'일반 채팅'}</div>
       <div class="mh-row"><span>행동 수</span><b>${m.actions}</b></div>
       <div class="mh-sub">스크롤 ${m.scrolls} · 메시지 ${m.msgs} · 클릭 ${m.clicks}</div>`;
   }else if(m.done){
-    body=`<div class="mh-h">재계획 완료 · ${S.mode==='side'?'Side Track':'일반 채팅'}</div>
+    body=`<div class="mh-h">재계획 완료 · ${S.mode==='side'?'Claude':'일반 채팅'}</div>
       <div class="mh-row"><span>행동 수</span><b>${mine.actions}</b></div>
       <div class="mh-sub">스크롤 ${mine.scrolls} · 메시지 ${mine.msgs} · 클릭 ${mine.clicks} · ${fmtSec(mine.ms)}</div>`;
     if(other){
-      const oName=S.mode==='side'?'일반 채팅':'Side Track';
+      const oName=S.mode==='side'?'일반 채팅':'Claude';
       body+=`<div class="mh-cmp"><div class="mh-cmp-t">두 모드 비교 (행동 수)</div>
         <div class="mh-bar"><span class="mh-lab">${S.mode==='side'?'Side':'일반'}</span><div class="mh-track"><div class="mh-fill me" style="width:${barW(mine.actions,other.actions)}%"></div></div><b>${mine.actions}</b></div>
         <div class="mh-bar"><span class="mh-lab">${oName==='일반 채팅'?'일반':'Side'}</span><div class="mh-track"><div class="mh-fill ot" style="width:${barW(other.actions,mine.actions)}%"></div></div><b>${other.actions}</b></div>
