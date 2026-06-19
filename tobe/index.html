@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>To-Be — Claude 경험</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -416,7 +416,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .cal-hr-label{position:absolute;right:6px;font-family:var(--mono);font-size:9px;color:var(--faint);transform:translateY(-50%);line-height:1}
   .cal-hr-line{position:absolute;left:38px;right:0;border-top:1px solid var(--line);pointer-events:none}
   .cal-wk-col{flex:1;position:relative;border-left:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
-  .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:3px 4px;overflow:hidden;font-size:9px;font-weight:600;line-height:1.2;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
+  .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 3px;overflow:hidden;font-size:8px;font-weight:600;line-height:1.15;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
   .cal-ev.act{background:#5B9BD5}
   .cal-ev.routine{background:#D5D3CC;color:var(--routine-ink);font-weight:500}
   .cal-ev.dec{background:#E6A837;color:#5C3D0E}
@@ -919,7 +919,7 @@ function renderLeft(){
         const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
         let cls='cal-ev '+c.t;
         if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=40?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
+        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
       });
       h+=`</div>`;
     });
@@ -1471,9 +1471,33 @@ function qsNav(dir){qsIdx=Math.max(0,Math.min(QS_DATA.length-1,qsIdx+dir));rende
 let mobTab='mid';
 let calView='week',calDay=0;
 const SLOT_T=[{s:7,e:9},{s:9,e:10.5},{s:10.5,e:12},{s:12,e:13.5},{s:13.5,e:15},{s:15,e:17},{s:17,e:19},{s:19,e:21},{s:21,e:22}];
-const CAL_PX=50;// px per hour
-function calDrill(d){calView='day';calDay=d;renderLeft();}
-function calBack(){calView='week';renderLeft();}
+let CAL_PX=30;// px per hour, adjustable by pinch zoom
+let calScale=1;
+function calDrill(d){calView='day';calDay=d;CAL_PX=50;calScale=1;renderLeft();}
+function calBack(){calView='week';CAL_PX=30;calScale=1;renderLeft();}
+function initCalPinch(){
+  const el=document.getElementById('leftScroll');if(!el)return;
+  let startDist=0,startPx=0;
+  el.addEventListener('touchstart',e=>{
+    if(e.touches.length===2){
+      startDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      startPx=CAL_PX;
+      e.preventDefault();
+    }
+  },{passive:false});
+  el.addEventListener('touchmove',e=>{
+    if(e.touches.length===2&&startDist>0){
+      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      const ratio=dist/startDist;
+      const minPx=calView==='week'?18:30;
+      const maxPx=calView==='week'?60:90;
+      CAL_PX=Math.round(Math.max(minPx,Math.min(maxPx,startPx*ratio)));
+      renderLeft();
+      e.preventDefault();
+    }
+  },{passive:false});
+  el.addEventListener('touchend',()=>{startDist=0;});
+}
 function toggleSidebar(){
   if(window.innerWidth<=1100){document.body.classList.toggle('sb-open');}
   else{document.body.classList.toggle('sbhide');}
@@ -1526,6 +1550,7 @@ document.addEventListener('click',e=>{
 },true);
 
 resetAll('side');
+initCalPinch();
 </script>
 </body>
 </html>
