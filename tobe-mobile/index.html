@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>To-Be — Claude (PC)</title>
+<title>To-Be — Claude (Mobile)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -334,10 +334,19 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 /* ---- flychip (merge into ledger) ---- */
 .flychip{position:fixed;z-index:80;background:var(--dec);color:#fff;border-radius:20px;padding:6px 13px;font-size:12.5px;font-weight:700;box-shadow:0 12px 30px rgba(176,121,46,.42);pointer-events:none;white-space:nowrap;transition:transform .62s cubic-bezier(.4,0,.2,1),opacity .62s ease}
 
-/* ---- mobile elements always hidden (PC version) ---- */
-.mob-tabs{display:none!important}
-.mob-itin{display:none!important}
-.land-topbar{display:none!important}
+/* ---- force mobile layout ---- */
+.sidebar{display:none!important}
+.sb-toggle{display:none!important}
+body{display:block!important}
+.app{height:100dvh}
+.stage{grid-template-columns:1fr!important}
+.col{display:none!important;border-right:0;border-bottom:0}
+.col.mob-active{display:flex!important;height:100%}
+.bar{display:none!important}
+.gridwrap{display:none!important}
+.mob-itin{display:block!important}
+.mob-tabs{display:none}
+.itin-card,.diff-card{display:block}
 .sb-overlay{display:none;position:fixed;inset:0;z-index:55;background:rgba(0,0,0,.3);-webkit-tap-highlight-color:transparent}
 
 /* ---- tablet (≤1100px) ---- */
