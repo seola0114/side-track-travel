@@ -834,7 +834,7 @@ const SCRIPT={
   sideFollow:`더 궁금하면 계속 물어봐요. 정리됐으면 **메인으로 가져오기**로 결론만 결정 기록에 합류시키면 됩니다.`,
   genericSide:(seed)=>`"${seed}" 부분이군요. 이 데모는 교통(JR패스)·통신(eSIM) 두 주제에 상세 답변이 준비돼 있어요.\n\n핵심은 같습니다 — 메인 일정을 건드리지 않고 여기서만 더 묻고, 결론만 결정 기록으로 가져옵니다.`,
   finalize:`정한 교통·통신 결정을 일정에 반영했어요. 확정본은 여기 다시 길게 출력하지 않고 — **왼쪽 일정표가 제자리에서 갱신**되고, 두 결정이 결정 기록에 한 줄씩 남았습니다. 이게 핵심이에요: 결정이 대화 로그가 아니라 다시 꺼내 쓸 단위로 보존됩니다.\n\n이제 여행 중에 변수가 생겨도, 흩어진 기록을 뒤질 필요가 없어요.`,
-  delayReply:`도착편 지연을 결정 기록에 비춰봤어요.\n\n- **교통(스이카)·통신(eSIM)** → 영향 없음, 그대로 **유지**\n- 영향받는 건 **Day 1 저녁** 하나예요\n\n도착이 늦어져 Animate Cafe 예약 시간이 조정 대상입니다. 왼쪽 일정표에서 그 칸만 떠올랐고, 아래 두 조정안 중 하나를 고르면 그 칸만 갱신돼요.`,
+  delayReply:`3시간 지연을 일정에 반영했어요.\n\n**변경된 부분:**\n- 하네다 도착: 12:30 → **15:30**\n- 이케부쿠로 도착: 14:00 → **17:20**\n- 선샤인시티 탐방: **시간 부족** (생략 가능)\n- Animate Cafe: **예약 조정 필요**\n\n교통(스이카)/통신(eSIM)은 영향 없어요. Animate Cafe 예약을 어떻게 할지 아래에서 골라주세요.`,
   adjust:[
     {h:'안 A · 카페 취소',tl:'Animate Cafe 취소, 호텔 근처 저녁. 피로 최소.',pro:'피로 적음',con:'카페 포기',pin:'Day 1 저녁: Animate Cafe 취소, 호텔 근처 (지연 대응)',
      was:'17:00 Animate Cafe 저녁',now:'19:30 이케부쿠로역 근처 저녁',shift:'+2.5시간 · 21:30 취침',
@@ -1430,18 +1430,28 @@ function applyFinalize(){
 function applyDelay(){
   // mark ledger keep/affected
   S.ledger.forEach(d=>{ d.pill='keep'; d.pillLabel='유지'; d.state='live'; });
-  S.ledger.push({txt:'Day 1 저녁 — 도착 지연 영향',pill:'affected',pillLabel:'영향',src:'조정 대상',state:'affected',topic:'d1eve'});
-  // grid: break d1 evening cell (row index 4 = 저녁, day 0)
-  S.grid[7][0]={t:'act',txt:'⚠ Animate Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'도착이 늦어져 Animate Cafe 예약 시간이 영향받았어요. 아래 조정안 중 하나를 고르면 이 칸만 갱신됩니다.'};
+  S.ledger.push({txt:'Day 1 도착~저녁 — 지연 영향',pill:'affected',pillLabel:'영향',src:'조정 대상',state:'affected',topic:'d1eve'});
+  // grid: 3시간 지연 → 도착 시간부터 연쇄 변경
+  S.grid[1][0]={t:'dec',badge:'항공',txt:'하네다 도착',sub:'15:30 착륙 (+3h 지연)',key:'arrive',changed:true,meta:['✈ 도착'],detail:'3시간 지연으로 15:30 도착. 입국 심사 30분.'};
+  S.grid[2][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',key:'transit',changed:true,meta:['🚌 리무진'],detail:'16:00 출발, 17:20 이케부쿠로 도착 예상.'};
+  S.grid[3][0]={t:'act',txt:'이케부쿠로 도착',sub:'17:20 호텔 체크인',changed:true,detail:'지연으로 도착 늦어짐. 체크인 후 바로 저녁.'};
+  S.grid[4][0]={t:'act',txt:'선샤인시티 탐방',sub:'시간 부족 — 생략 가능',broken:true,detail:'도착 지연으로 선샤인시티 방문 시간이 부족해요. 내일로 옮기거나 생략할 수 있어요.'};
+  S.grid[5][0]={t:'act',txt:'체크인만',sub:'휴식 생략',changed:true,detail:'지연으로 체크인 후 바로 저녁으로 이동.'};
+  S.grid[6][0]={t:'act',txt:'Animate Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'원래 17:00 예약이 도착 지연으로 불가. 늦은 타임으로 변경하거나 취소해야 해요.'};
+  S.grid[7][0]={t:'act',txt:'이케부쿠로 저녁',sub:'시간 조정 필요',changed:true,detail:'저녁 시간이 전체적으로 밀림.'};
   mobNotify('left');
 }
 function chooseAdjust(ai){
   const a=SCRIPT.adjust[ai];
   if(S.meter&&S.meter.active)meterCount('click');
-  // replace grid cell
-  S.grid[7][0]=(ai===0)
+  // replace grid cell (Animate Cafe = row 6)
+  S.grid[6][0]=(ai===0)
     ?{t:'act',txt:'이케부쿠로 근처 저녁',sub:'호텔 도보권',key:'d1eve',changed:true,meta:['🍜 저녁'],detail:'도착 지연으로 Animate Cafe 취소. 호텔 근처 가벼운 저녁으로 변경.'}
-    :{t:'act',txt:'Animate Cafe (늦은 타임)',sub:'예약 변경',key:'d1eve',changed:true,meta:['🔖 예약'],detail:'지연된 도착 후 Animate Cafe 늦은 타임으로 변경. 취침 늦어짐.'};
+    :{t:'dec',badge:'예약',txt:'Animate Cafe (늦은 타임)',sub:'20:00 예약 변경',key:'d1eve',changed:true,meta:['🔖 예약'],detail:'지연된 도착 후 Animate Cafe 늦은 타임으로 변경. 취침 늦어짐.'};
+  // 저녁도 같이 조정
+  S.grid[7][0]=(ai===0)
+    ?{t:'act',txt:'이케부쿠로 저녁',sub:'19:30 호텔 근처',changed:true,meta:['🍜 저녁'],detail:'Animate Cafe 대신 호텔 근처에서 가볍게.'}
+    :{t:'act',txt:'이케부쿠로 저녁',sub:'22:00 늦은 저녁',changed:true,meta:['🍜 저녁'],detail:'Animate Cafe 후 늦은 저녁.'};
   // update ledger affected -> adjusted
   const idx=S.ledger.findIndex(d=>d.topic==='d1eve');
   if(idx>=0){S.ledger[idx]={txt:a.pin,pill:'adjust',pillLabel:'조정됨',src:'시스템 조정안',state:'live',topic:'d1eve'};}
