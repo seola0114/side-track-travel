@@ -1289,7 +1289,17 @@ function pickChoice(id){
 
 /* ================= MAIN SEND ================= */
 const CHIP_MAP={'교통':'그런데 JR패스가 뭐야?','통신':'eSIM은 뭐야? 우린 뭐가 나아?','확정':S=>S.step===3?'우리 일정엔 JR패스가 이득이야?':'eSIM은 뭐야? 우린 뭐가 나아?','최종 일정 반영':'정한 교통/통신 결정 반영해서 최종 일정 줘','항공편 3시간 지연':'도착 항공편이 3시간 지연됐어'};
-function sendSuggest(t){if(S.busy)return;const m=CHIP_MAP[t];document.getElementById('mainIn').value=(typeof m==='function'?m(S):m)||t;onMainSend();}
+function sendSuggest(t){
+  if(S.busy)return;
+  const m=CHIP_MAP[t];
+  const text=(typeof m==='function'?m(S):m)||t;
+  const inp=document.getElementById('mainIn');
+  inp.value=text;
+  inp.focus();
+  autoGrow(inp);
+  // scroll input into view
+  inp.scrollIntoView({behavior:'smooth',block:'center'});
+}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
 
 function onMainSend(){
