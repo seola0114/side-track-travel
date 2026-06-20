@@ -349,7 +349,7 @@ body{display:block!important}
 .mob-tabs{display:none!important}
 .gridwrap{display:none!important}
 .mob-itin{display:block!important}
-.itin-card,.diff-card{display:none}
+.itin-card,.diff-card{display:none!important}
 
 /* top bar */
 .mob-bar{display:none;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--paper);flex:none;z-index:10}
@@ -545,7 +545,7 @@ body{display:block!important}
 /* ---- inline itinerary card (artifact) ---- */
 .itin-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.14s;display:none}
 .diff-card{display:none}
-@media(max-width:768px){.itin-card,.diff-card{display:block}}
+/* inline cards disabled - split view shows calendar directly */
 .itin-card:active{transform:scale(.98)}
 .itin-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--faint)}
 .itin-card-head svg{width:16px;height:16px;flex:none}
@@ -563,7 +563,7 @@ body{display:block!important}
 
 /* change diff card */
 .diff-card{background:var(--surface);border:1px solid var(--accent);border-radius:14px;margin-top:12px;overflow:hidden;display:none}
-@media(max-width:768px){.diff-card{display:block}}
+/* diff cards disabled - split view */
 .diff-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
 .diff-card-head svg{width:16px;height:16px;flex:none;color:var(--accent)}
 .diff-card-head .dch-title{font-weight:600;color:var(--accent-deep);flex:1}
