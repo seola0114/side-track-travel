@@ -456,8 +456,8 @@ body{display:block!important}
   .cal-wk-hdr .cal-dh small{display:block;font-size:9px;font-weight:400;color:var(--faint)}
   .cal-wk-hdr .cal-dh:active{background:var(--accent-bg)}
   .cal-wk-body{display:flex;position:relative}
-  .cal-gutter{width:42px;flex:none}
-  .cal-hr-label{position:absolute;right:4px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--faint);transform:translateY(-50%);line-height:1}
+  .cal-gutter{width:42px;flex:none;position:relative;z-index:2;background:var(--paper)}
+  .cal-hr-label{position:absolute;left:2px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--faint);transform:translateY(-50%);line-height:1}
   .cal-hr-line{position:absolute;left:42px;right:0;border-top:1px solid var(--line);pointer-events:none}
   .cal-wk-col{flex:1;position:relative;border-left:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
   .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 3px;overflow:hidden;font-size:8px;font-weight:600;line-height:1.15;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
