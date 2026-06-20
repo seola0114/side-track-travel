@@ -508,7 +508,9 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 }
 
 /* ---- inline itinerary card (artifact) ---- */
-.itin-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.14s}
+.itin-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.14s;display:none}
+.diff-card{display:none}
+@media(max-width:768px){.itin-card,.diff-card{display:block}}
 .itin-card:active{transform:scale(.98)}
 .itin-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--faint)}
 .itin-card-head svg{width:16px;height:16px;flex:none}
@@ -525,7 +527,8 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 .icd-ev.changed{background:var(--accent)}
 
 /* change diff card */
-.diff-card{background:var(--surface);border:1px solid var(--accent);border-radius:14px;margin-top:12px;overflow:hidden}
+.diff-card{background:var(--surface);border:1px solid var(--accent);border-radius:14px;margin-top:12px;overflow:hidden;display:none}
+@media(max-width:768px){.diff-card{display:block}}
 .diff-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
 .diff-card-head svg{width:16px;height:16px;flex:none;color:var(--accent)}
 .diff-card-head .dch-title{font-weight:600;color:var(--accent-deep);flex:1}
