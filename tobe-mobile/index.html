@@ -196,9 +196,15 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 
 /* composer */
 .composer{border-top:1px solid var(--line);padding:12px 18px 16px;background:var(--paper)}
-.suggest{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:9px;align-items:center}
+.suggest{display:flex;flex-direction:column;gap:6px;margin-bottom:9px}
+.suggest:has(.schip){flex-direction:row;flex-wrap:wrap;align-items:center}
 .suggest .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-right:2px}
 .schip{font-family:var(--sans);font-size:12.5px;font-weight:500;border:1px solid var(--accent-line);background:var(--accent-bg);color:var(--accent-deep);border-radius:20px;padding:6px 13px;cursor:pointer;text-align:left;transition:.15s}
+.sug-choice{display:flex;align-items:center;justify-content:space-between;width:100%;font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--dec-line);background:var(--dec-bg);color:var(--dec);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;transition:.15s;-webkit-tap-highlight-color:transparent}
+.sug-choice:active{background:#f0e3c8;transform:scale(.98)}
+.sug-choice+.sug-choice{margin-top:6px}
+.sug-choice .sug-q{font-weight:600;color:var(--ink)}
+.sug-choice .sug-label{font-family:var(--mono);font-size:11px;color:var(--dec);letter-spacing:.02em}
 .schip:hover{background:#e8c9b8}
 .inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:11px 11px 11px 16px;transition:.15s}
 .inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
@@ -1203,19 +1209,25 @@ function renderGuide(){
 function renderSuggest(){
   const w=document.getElementById('suggest');let chips=[];
   if(!S.drafted){
-    chips=['11월 도쿄 3박 4일 일정 짜줘'];
+    chips=[{label:'11월 도쿄 3박 4일 일정 짜줘'}];
   }else if(S.step===2){
-    chips=['1. 교통','2. 통신'];
+    chips=[{q:'교통',label:'교통 -- JR패스를 살까?'},{q:'통신',label:'통신 -- eSIM이 나을까?'}];
   }else if(S.step===3){
-    chips=['스이카로 확정'];
+    chips=[{q:'확정',label:'우리 일정엔 이득이야?'}];
   }else if(S.step===4){
-    chips=['각자 eSIM으로 확정'];
+    chips=[{q:'확정',label:'우린 뭐가 나아?'}];
   }else if(S.step===5){
-    chips=['최종 일정 반영'];
+    chips=[{label:'최종 일정 반영'}];
   }else if(S.step===6){
-    chips=['항공편 3시간 지연'];
+    chips=[{label:'항공편 3시간 지연'}];
   }
-  w.innerHTML=chips.length?`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${esc(c)}\`)">${esc(c)}</button>`).join(''):'';
+  if(!chips.length){w.innerHTML='';return;}
+  if(chips[0].q){
+    // choice-style buttons
+    w.innerHTML=chips.map(c=>`<button class="sug-choice" onclick="sendSuggest(\`${esc(c.q)}\`)"><span class="sug-q">${esc(c.q)}</span><span class="sug-label">${esc(c.label)}</span></button>`).join('');
+  }else{
+    w.innerHTML=`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${esc(c.label)}\`)">${esc(c.label)}</button>`).join('');
+  }
 }
 
 function renderAll(){renderLeft();renderMid();renderRight();renderGuide();renderSuggest();
@@ -1276,8 +1288,8 @@ function pickChoice(id){
 }
 
 /* ================= MAIN SEND ================= */
-const CHIP_MAP={'1. 교통':'그런데 JR패스가 뭐야?','2. 통신':'eSIM은 뭐야? 우린 뭐가 나아?','스이카로 확정':'우리 일정엔 JR패스가 이득이야?','각자 eSIM으로 확정':'eSIM은 뭐야? 우린 뭐가 나아?','최종 일정 반영':'정한 교통/통신 결정 반영해서 최종 일정 줘','항공편 3시간 지연':'도착 항공편이 3시간 지연됐어'};
-function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=CHIP_MAP[t]||t;onMainSend();}
+const CHIP_MAP={'교통':'그런데 JR패스가 뭐야?','통신':'eSIM은 뭐야? 우린 뭐가 나아?','확정':S=>S.step===3?'우리 일정엔 JR패스가 이득이야?':'eSIM은 뭐야? 우린 뭐가 나아?','최종 일정 반영':'정한 교통/통신 결정 반영해서 최종 일정 줘','항공편 3시간 지연':'도착 항공편이 3시간 지연됐어'};
+function sendSuggest(t){if(S.busy)return;const m=CHIP_MAP[t];document.getElementById('mainIn').value=(typeof m==='function'?m(S):m)||t;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
 
 function onMainSend(){
