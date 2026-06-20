@@ -272,7 +272,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 .guide .dots i.cur{background:#f0b89c} .guide .dots i.done{background:var(--accent)}
 
 /* ---- replan meter HUD ---- */
-#meterHUD{position:fixed;right:18px;bottom:18px;width:248px;background:var(--surface);border:1px solid var(--line2);border-radius:13px;padding:12px 14px;font-size:12px;z-index:45;box-shadow:0 10px 30px rgba(0,0,0,.14);display:none}
+#meterHUD{display:none!important}
 #meterHUD .mh-h{font-size:11px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:7px;margin-bottom:8px}
 #meterHUD .mh-rec{width:8px;height:8px;border-radius:50%;background:#d6453f;animation:pulse 1.2s infinite}
 #meterHUD .mh-row{display:flex;justify-content:space-between;align-items:baseline}
@@ -482,6 +482,7 @@ body{display:block!important}
   .cal-ev-full.broken{background:var(--warn-bg);border:1.5px dashed var(--warn-line);color:var(--warn);animation:pulse 1.4s ease-in-out infinite}
   .cal-ev-full.changed{background:var(--accent-bg);border:1px solid var(--accent);color:var(--accent-deep)}
   .cal-ev-full .ev-top{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:2px}
+  .cal-ev-full .ev-time{font-family:var(--mono);font-size:10px;color:var(--faint);opacity:.7}
   .cal-ev-full .ev-title{font-size:14px;font-weight:700}
   .cal-ev-full .ev-sub{font-size:11px;opacity:.85;margin-top:2px}
   .cal-ev-full .ev-detail{margin-top:6px;padding-top:6px;border-top:1px dashed rgba(0,0,0,.15);font-size:11.5px;font-weight:400;opacity:.85;line-height:1.55;display:none}
@@ -574,10 +575,37 @@ body{display:block!important}
 .diff-row .diff-arrow{color:var(--faint);font-size:11px}
 .diff-row .diff-now{color:var(--accent-deep);font-weight:600}
 
+/* ---- streaming cursor ---- */
+.bubble.streaming::after{content:'';display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:1px;vertical-align:text-bottom;animation:blinkcursor .6s step-end infinite}
+@keyframes blinkcursor{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ---- before/after diff ---- */
+.diff-header{display:flex;border-bottom:1px solid var(--line);background:var(--surface)}
+.diff-header-label{flex:1;text-align:center;padding:6px 0;font-size:11px;font-weight:600}
+.diff-header-label.before{color:var(--faint)}
+.diff-header-label.after{color:var(--accent-deep)}
+.diff-cols{display:flex;gap:1px;background:var(--line)}
+.diff-col{flex:1;background:var(--paper);display:flex;flex-direction:column;gap:3px;padding:6px 4px}
+.diff-col.before{opacity:.5}
+.diff-col.before .cal-ev,.diff-col.before .cal-ev-full{opacity:.7}
+.diff-col.after .cal-ev.changed,.diff-col.after .cal-ev-full.changed{border:2px solid var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
+.diff-col.after .cal-ev.broken,.diff-col.after .cal-ev-full.broken{border:2px dashed var(--warn);box-shadow:0 0 0 2px var(--warn-bg)}
+.diff-cell{border-radius:6px;padding:5px 6px;font-size:10px;line-height:1.3;min-height:28px}
+.diff-cell .dc-txt{font-weight:600;font-size:11px}
+.diff-cell .dc-sub{font-size:9px;color:var(--faint);margin-top:1px}
+.diff-cell.routine{background:var(--routine);color:var(--routine-ink)}
+.diff-cell.act{background:var(--surface);border:1px solid var(--line)}
+.diff-cell.dec{background:var(--dec-bg);border:1px solid var(--dec-line);color:var(--dec)}
+.diff-cell.changed{background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent-deep)}
+.diff-cell.broken{background:var(--warn-bg);border:2px dashed var(--warn);color:var(--warn)}
+.diff-cell.same{background:var(--routine);color:var(--routine-ink);opacity:.5}
+.diff-cell.before-changed{opacity:.5;text-decoration:line-through;text-decoration-color:var(--warn)}
+
 /* ---- event detail modal ---- */
 .ev-backdrop{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.35);display:none}
 .ev-backdrop.open{display:block}
-.ev-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:410;background:var(--surface);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
+.ev-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:410;background:var(--surface);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;pointer-events:none}
+.ev-modal.open{pointer-events:auto}
 .ev-modal.open{transform:translateY(0)}
 @media(min-width:769px){.ev-backdrop{background:rgba(0,0,0,.15)}.ev-modal{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:440px;max-height:80vh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.18);opacity:0;transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .22s}.ev-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .ev-modal-head{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex:none;gap:8px}
@@ -608,7 +636,8 @@ body{display:block!important}
 /* ---- questionnaire bottom sheet ---- */
 .qs-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.35);display:none}
 .qs-backdrop.open{display:block}
-.qs-sheet{position:fixed;bottom:0;left:0;right:0;z-index:510;background:var(--surface);border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:70vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,12px)}
+.qs-sheet{position:fixed;bottom:0;left:0;right:0;z-index:510;background:var(--surface);border-radius:18px 18px 0 0;box-shadow:0 -8px 30px rgba(0,0,0,.15);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);max-height:70vh;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,12px);pointer-events:none}
+.qs-sheet.open{pointer-events:auto}
 .qs-sheet.open{transform:translateY(0)}
 .qs-head{display:flex;align-items:center;padding:14px 18px 10px;gap:8px;border-bottom:1px solid var(--line);flex:none}
 .qs-nav{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--faint)}
@@ -998,6 +1027,7 @@ function updateHUD(){renderHUD();}
 
 /* ================= RENDER: LEFT ================= */
 function renderLeft(){
+  const dg=getDisplayGrid();
   const w=document.getElementById('leftScroll');
   if(S.mode==='linear'){
     w.innerHTML=`<div class="linear-banner"><b>대조군 · 일반 선형 채팅</b><br>Claude도, 결정 기록도 없어요. 정한 결정이 가운데 대화에만 쌓이기 때문에, 변수가 생기면 무엇이 영향받았는지 직접 스크롤을 올려 찾아야 합니다.</div>`;
@@ -1015,7 +1045,7 @@ function renderLeft(){
   h+=`</tr></thead><tbody>`;
   ROWS.forEach((rl,ri)=>{
     h+=`<tr><td class="tm">${rl}<span class="tmlbl">${ROWLABEL[ri]}</span></td>`;
-    S.grid[ri].forEach((cOrig,ci)=>{
+    dg[ri].forEach((cOrig,ci)=>{
       // 조정안 hover 미리보기: d1eve 칸([4][0])을 해당 안 내용으로 임시 표시
       let c=cOrig, previewing=false;
       if(S._previewAdjust!=null && ri===7 && ci===0){
@@ -1044,6 +1074,45 @@ function renderLeft(){
   h+=`</tbody></table></div>`;
   // mobile calendar view
   h+=`<div class="mob-itin">`;
+  if(gridSnapshot&&calView==='week'){
+    // find which days have changes
+    const changedDays=[];
+    for(let di=0;di<4;di++){
+      for(let ri=0;ri<9;ri++){
+        if(S.grid[ri][di].changed||S.grid[ri][di].broken){changedDays.push(di);break;}
+      }
+    }
+    if(changedDays.length){
+      h+=`<div style="padding:6px 8px;border-bottom:1px solid var(--line)"><span style="font-size:11px;font-weight:600;color:var(--accent-deep)">일정 변경 비교</span></div>`;
+      changedDays.forEach(di=>{
+        h+=`<div class="diff-header"><span class="diff-header-label before">변경 전</span><span class="diff-header-label after">변경 후</span></div>`;
+        h+=`<div style="display:flex;border-bottom:1px solid var(--line)">`;
+        // day headers
+        h+=`<div style="flex:1;text-align:center;padding:4px;font-size:11px;font-weight:600;color:var(--faint)">${DAYS[di].d}<small style="display:block;font-size:9px;font-weight:400">${DAYS[di].date}</small></div>`;
+        h+=`<div style="flex:1;text-align:center;padding:4px;font-size:11px;font-weight:600;color:var(--accent-deep)">${DAYS[di].d}<small style="display:block;font-size:9px;font-weight:400">${DAYS[di].date}</small></div>`;
+        h+=`</div>`;
+        h+=`<div class="diff-cols">`;
+        // before column
+        h+=`<div class="diff-col before">`;
+        ROWS.forEach((rl,ri)=>{
+          const c=gridSnapshot[ri][di];
+          const isChanged=S.grid[ri][di].changed||S.grid[ri][di].broken;
+          const cls='diff-cell '+c.t+(isChanged?' before-changed':'');
+          h+=`<div class="${cls}"><div class="dc-txt">${esc(c.txt)}</div><div class="dc-sub">${esc(c.sub||'')}</div></div>`;
+        });
+        h+=`</div>`;
+        // after column
+        h+=`<div class="diff-col after">`;
+        ROWS.forEach((rl,ri)=>{
+          const c=S.grid[ri][di];
+          const cls='diff-cell '+c.t+(c.changed?' changed':'')+(c.broken?' broken':'');
+          h+=`<div class="${cls}"><div class="dc-txt">${esc(c.txt)}</div><div class="dc-sub">${esc(c.sub||'')}</div></div>`;
+        });
+        h+=`</div>`;
+        h+=`</div>`;
+      });
+    }
+  }
   const totalH=(22-7)*CAL_PX;
   function hourLines(gutterW){let l='';for(let hr=7;hr<=22;hr++){const y=(hr-7)*CAL_PX;l+=`<div class="cal-hr-label" style="top:${y}px">${String(hr).padStart(2,'0')}</div>`;l+=`<div class="cal-hr-line" style="top:${y}px"></div>`;}return l;}
   if(calView==='week'){
@@ -1054,11 +1123,11 @@ function renderLeft(){
     DAYS.forEach((d,di)=>{
       h+=`<div class="cal-wk-col" onclick="calDrill(${di})">`;
       ROWS.forEach((rl,ri)=>{
-        const c=S.grid[ri][di],sl=SLOT_T[ri];
+        const c=dg[ri][di],sl=SLOT_T[ri];
         const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
         let cls='cal-ev '+c.t;
         if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
+        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${ROWS[ri]} ${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
       });
       h+=`</div>`;
     });
@@ -1068,7 +1137,7 @@ function renderLeft(){
     h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()">‹</button><span class="cal-title">${d.d} · ${d.date}</span><div class="cal-day-nav"><button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''}>‹</button><button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''}>›</button></div><button class="cal-view-btn" onclick="calBack()">전체</button></div>`;
     h+=`<div class="cal-dy"><div class="cal-dy-body" style="height:${totalH}px"><div class="cal-gutter">${hourLines()}</div><div class="cal-dy-lane">`;
     ROWS.forEach((rl,ri)=>{
-      const c=S.grid[ri][calDay],sl=SLOT_T[ri];
+      const c=dg[ri][calDay],sl=SLOT_T[ri];
       const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
       let cls='cal-ev-full '+c.t;
       if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
@@ -1078,7 +1147,8 @@ function renderLeft(){
       const detail=c.detail?`<div class="ev-detail">${esc(c.detail)}</div>`:'';
       const minH=Math.max(ht,CAL_PX*0.8);
       const showSub=ht>=CAL_PX*0.7;
-      h+=`<div class="${cls}" style="top:${top}px;height:${minH}px" onclick="toggleCell(${ri},${calDay})"><div class="ev-top">${bdg}${meta}</div><div class="ev-title">${esc(c.txt)}</div>${showSub?`<div class="ev-sub">${esc(c.sub||'')}</div>`:''}${detail}</div>`;
+      const timeLabel=ROWS[ri];
+      h+=`<div class="${cls}" style="top:${top}px;height:${minH}px" onclick="toggleCell(${ri},${calDay})"><div class="ev-top"><span class="ev-time">${timeLabel}</span>${bdg}${meta}</div><div class="ev-title">${esc(c.txt)}</div>${showSub?`<div class="ev-sub">${esc(c.sub||'')}</div>`:''}${detail}</div>`;
     });
     h+=`</div></div></div>`;
   }
@@ -1115,13 +1185,66 @@ function buildDiffCard(changes){
   return h;
 }
 
+/* ================= STREAMING EFFECT ================= */
+let _streamTimer=null;
+function streamLastMessage(){
+  const msgs=document.querySelectorAll('.msg.assistant .bubble.streaming');
+  const el=msgs[msgs.length-1];if(!el)return;
+  const full=el.getAttribute('data-full');if(!full)return;
+  let idx=0;
+  const parsed=md(full);
+  el.innerHTML='';
+  const speed=12; // ms per character
+  const chunkSize=3; // characters per tick
+  _streamTimer=setInterval(()=>{
+    idx+=chunkSize;
+    if(idx>=parsed.length){
+      el.innerHTML=parsed;
+      el.classList.remove('streaming');
+      clearInterval(_streamTimer);_streamTimer=null;
+      // clear stream flag so re-renders show full text
+      const mi=parseInt(el.getAttribute('data-midx'));
+      if(S.msgs[mi]){S.msgs[mi]._stream=false;S.msgs[mi]._streamDone=true;}
+      // render extras (choices, adjust cards) after streaming done
+      const msgIdx=parseInt(el.getAttribute('data-midx'));
+      const m=S.msgs[msgIdx];
+      if(m){
+        let extra='';
+        if(m.itinCard)extra+=buildItinCard();
+        if(m.diffCard)extra+=buildDiffCard(m.diffCard);
+        if(m.choices&&S.showChoices&&S.mode==='side'){
+          extra+=`<div class="choices">`;
+          S.choices.forEach(c=>{extra+=`<button class="choice ${c.done?'done':''}" ${c.done?'disabled':''} onclick="pickChoice('${c.id}')"><span class="q">${c.q}</span>${c.done?'✓ '+esc(c.label):esc(c.label)}</button>`;});
+          extra+=`</div>`;
+        }
+        if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
+          extra+=`<div class="adjcards">`;
+          SCRIPT.adjust.forEach((a,ai)=>{extra+=`<div class="adjcard ${a.rec?'rec':''}"><h4>${esc(a.h)}</h4><div class="tl">${esc(a.tl)}</div><div class="pc"><span class="pro">+ ${esc(a.pro)}</span> &nbsp; <span class="con">− ${esc(a.con)}</span></div><button onclick="chooseAdjust(${ai})">이 안으로 결정</button></div>`;});
+          extra+=`</div>`;
+        }
+        if(extra)el.insertAdjacentHTML('beforeend',extra);
+      }
+      renderSuggest();
+    }else{
+      el.innerHTML=parsed.slice(0,idx);
+    }
+    const thread=document.getElementById('thread');
+    if(thread)thread.scrollTop=thread.scrollHeight;
+  },speed);
+}
+
 /* ================= RENDER: MIDDLE ================= */
 function renderMid(){
+  if(_streamTimer){clearInterval(_streamTimer);_streamTimer=null;}
   const t=document.getElementById('thread');let h='';
+  const lastAssistIdx=S.msgs.reduce((acc,m,i)=>m.role==='assistant'&&m.text?i:acc,-1);
   S.msgs.forEach((m,i)=>{
     if(m.role==='user')h+=`<div class="msg user"><div class="who">나</div>${m.quote?`<div class="qbubble">${esc(m.quote)}</div>`:''}<div class="bubble">${esc(m.text)}</div></div>`;
     else if(m.role==='typing')h+=`<div class="msg assistant"><div class="who">Assistant</div><div class="bubble"><span class="typing"><i></i><i></i><i></i></span></div></div>`;
-    else{
+    else if(i===lastAssistIdx&&m._stream){
+      // streaming message — render empty, fill via streamLastMessage
+      h+=`<div class="msg assistant"><div class="who">Assistant</div><div class="bubble selectable streaming" data-full="${esc(m.text).replace(/"/g,'&quot;')}" data-midx="${i}"></div></div>`;
+    }else{
       h+=`<div class="msg assistant"><div class="who">Assistant</div><div class="bubble selectable">${md(m.text)}`;
       // inline itinerary card
       if(m.itinCard)h+=buildItinCard();
@@ -1145,6 +1268,8 @@ function renderMid(){
   });
   h+=`<div class="suggest" id="suggest"></div>`;
   t.innerHTML=h;t.scrollTop=t.scrollHeight;
+  // start streaming if needed
+  if(document.querySelector('.bubble.streaming'))streamLastMessage();
 }
 
 /* ================= RENDER: RIGHT ================= */
@@ -1207,27 +1332,8 @@ function renderGuide(){
 
 /* ================= SUGGEST CHIPS (middle composer) ================= */
 function renderSuggest(){
-  const w=document.getElementById('suggest');let chips=[];
-  if(!S.drafted){
-    chips=[{label:'11월 도쿄 3박 4일 일정 짜줘'}];
-  }else if(S.step===2){
-    chips=[{q:'교통',label:'교통 -- JR패스를 살까?'},{q:'통신',label:'통신 -- eSIM이 나을까?'}];
-  }else if(S.step===3){
-    chips=[{q:'확정',label:'우리 일정엔 이득이야?'}];
-  }else if(S.step===4){
-    chips=[{q:'확정',label:'우린 뭐가 나아?'}];
-  }else if(S.step===5){
-    chips=[{label:'최종 일정 반영'}];
-  }else if(S.step===6){
-    chips=[{label:'항공편 3시간 지연'}];
-  }
-  if(!chips.length){w.innerHTML='';return;}
-  if(chips[0].q){
-    // choice-style buttons
-    w.innerHTML=chips.map(c=>`<button class="sug-choice" onclick="sendSuggest(\`${esc(c.q)}\`)"><span class="sug-q">${esc(c.q)}</span><span class="sug-label">${esc(c.label)}</span></button>`).join('');
-  }else{
-    w.innerHTML=`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${esc(c.label)}\`)">${esc(c.label)}</button>`).join('');
-  }
+  const w=document.getElementById('suggest');if(!w)return;
+  w.innerHTML='';
 }
 
 function renderAll(){renderLeft();renderMid();renderRight();renderGuide();renderSuggest();
@@ -1282,24 +1388,15 @@ function getChatHistory(){
 function pickChoice(id){
   if(S.busy)return;
   const ch=S.choices.find(c=>c.id===id);if(!ch||ch.done)return;
-  const text=id==='transit'?'그런데 JR패스가 뭐야?':'eSIM은 뭐야? 우린 뭐가 나아?';
-  document.getElementById('mainIn').value=text;
-  onMainSend();
-}
-
-/* ================= MAIN SEND ================= */
-const CHIP_MAP={'교통':'그런데 JR패스가 뭐야?','통신':'eSIM은 뭐야? 우린 뭐가 나아?','확정':S=>S.step===3?'우리 일정엔 JR패스가 이득이야?':'eSIM은 뭐야? 우린 뭐가 나아?','최종 일정 반영':'정한 교통/통신 결정 반영해서 최종 일정 줘','항공편 3시간 지연':'도착 항공편이 3시간 지연됐어'};
-function sendSuggest(t){
-  if(S.busy)return;
-  const m=CHIP_MAP[t];
-  const text=(typeof m==='function'?m(S):m)||t;
+  const text=id==='transit'?'JR패스가 뭐야? 우리 일정에 이득이야?':'eSIM은 뭐야? 우린 뭐가 나아?';
   const inp=document.getElementById('mainIn');
   inp.value=text;
   inp.focus();
   autoGrow(inp);
-  // scroll input into view
-  inp.scrollIntoView({behavior:'smooth',block:'center'});
 }
+
+/* ================= MAIN SEND ================= */
+function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=t;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
 
 function onMainSend(){
@@ -1310,7 +1407,17 @@ function onMainSend(){
   const q=S.quote; S.quote=null; renderQuote();
   S.msgs.push({role:'user',text,quote:q});
   S.msgs.push({role:'typing'});S.busy=true;renderAll();
-  setTimeout(()=>{ S.msgs.pop(); S.busy=false; routeMain(text); }, delay());
+  setTimeout(()=>{
+    S.msgs.pop(); S.busy=false;
+    routeMain(text);
+    // mark last assistant message for streaming (if not already rendered by questionnaire etc)
+    for(let i=S.msgs.length-1;i>=0;i--){
+      if(S.msgs[i].role==='assistant'&&S.msgs[i].text&&!S.msgs[i]._streamDone){
+        S.msgs[i]._stream=true;break;
+      }
+    }
+    renderAll();
+  }, delay());
 }
 
 /* landing → chat */
@@ -1380,8 +1487,8 @@ function routeMobile(text){
     renderAll();
     const draftMob='Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요.\n\n**일정 탭**에서 Day별 일정표를 확인할 수 있어요. 협력 카페/예약이 실린 칸은 배지로, 루틴은 흐리게 표시됩니다. 칸을 누르면 상세 설명이 펼쳐져요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.';
     setTimeout(()=>openQs(()=>{
-      S.msgs.push({role:'assistant',text:draftMob});
-      S.drafted=true; S.step=2;
+      S.msgs.push({role:'assistant',text:draftMob,choices:true});
+      S.showChoices=true; S.drafted=true; S.step=2;
       document.getElementById('app').classList.add('has-itin');
       renderAll();
     }),600);
@@ -1538,6 +1645,17 @@ function flyToLedger(start, line){
 }
 
 /* ================= FINALIZE ================= */
+/* ================= GRID SNAPSHOT (before/after) ================= */
+let gridSnapshot=null, showBefore=false;
+function saveSnapshot(){
+  gridSnapshot=S.grid.map(row=>row.map(c=>({...c,meta:c.meta?[...c.meta]:undefined})));
+}
+function toggleBeforeAfter(){
+  showBefore=!showBefore;
+  renderLeft();
+}
+function getDisplayGrid(){return showBefore&&gridSnapshot?gridSnapshot:S.grid;}
+
 function applyFinalize(){
   // grid stays; decisions already in ledger. If user skipped side, seed ledger.
   if(!S.ledger.length){
@@ -1550,6 +1668,7 @@ function applyFinalize(){
 
 /* ================= DELAY / REPLAN ================= */
 function applyDelay(){
+  saveSnapshot();
   // mark ledger keep/affected
   S.ledger.forEach(d=>{ d.pill='keep'; d.pillLabel='유지'; d.state='live'; });
   S.ledger.push({txt:'Day 1 도착~저녁 — 지연 영향',pill:'affected',pillLabel:'영향',src:'조정 대상',state:'affected',topic:'d1eve'});
@@ -1564,6 +1683,7 @@ function applyDelay(){
   mobNotify('left');
 }
 function chooseAdjust(ai){
+  saveSnapshot();
   const a=SCRIPT.adjust[ai];
   if(S.meter&&S.meter.active)meterCount('click');
   // replace grid cell (Animate Cafe = row 6)
@@ -1870,8 +1990,7 @@ document.addEventListener('click',e=>{
   }
 },true);
 
-resetAll('side');
-initCalPinch();
+resetAll('side');initCalPinch();
 </script>
 </body>
 </html>
