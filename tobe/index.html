@@ -544,7 +544,7 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
 .ev-backdrop.open{display:block}
 .ev-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:410;background:var(--surface);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden}
 .ev-modal.open{transform:translateY(0)}
-@media(min-width:769px){.ev-modal{left:auto;width:420px;border-left:1px solid var(--line);transform:translateX(100%)}.ev-modal.open{transform:translateX(0)}}
+@media(min-width:769px){.ev-backdrop{background:rgba(0,0,0,.15)}.ev-modal{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:440px;max-height:80vh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.18);opacity:0;transition:transform .22s cubic-bezier(.4,0,.2,1),opacity .22s}.ev-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .ev-modal-head{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex:none;gap:8px}
 .ev-modal-head button{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px}
 .ev-modal-head .ev-spacer{flex:1}
@@ -1460,13 +1460,7 @@ function chooseAdjust(ai){
 
 /* ================= CELL DETAIL EXPAND ================= */
 function toggleCell(ri,ci){
-  // mobile or day view: open detail modal
-  if(window.innerWidth<=768 || calView==='day'){
-    openEvModal(ri,ci);return;
-  }
-  const key=ri+'-'+ci;
-  S._openCell=(S._openCell===key)?null:key;
-  renderAll();
+  openEvModal(ri,ci);
 }
 /* 조정안 hover 시 일정표 칸 미리보기 */
 function previewAdjust(ai){
