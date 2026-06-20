@@ -902,7 +902,7 @@ function md(t){let h=esc(t);
   h=h.replace(/<br>(<div class="(li|mdh)">)/g,'$1').replace(/(<\/div>)<br>/g,'$1');
   return h;}
 function autoGrow(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,120)+'px';}
-function delay(){return 420+Math.random()*260;}
+function delay(){return 800+Math.random()*600;}
 
 /* ================= REPLAN METER ================= */
 function meterStart(){
@@ -1179,7 +1179,7 @@ function renderSuggest(){
 function renderAll(){renderLeft();renderMid();renderRight();renderGuide();renderSuggest();
   document.getElementById('mainSend').disabled=!!S.busy;}
 
-/* ================= AI API ================= */
+/* ================= UTIL (simulated AI context) ================= */
 function buildSystemPrompt(){
   const gridSummary=DAYS.map((d,di)=>{
     return d.d+' ('+d.date+'): '+ROWS.map((r,ri)=>{
@@ -1214,7 +1214,7 @@ badge: 항공, 교통, 예약 등 (선택)
 meta: 태그 배열 (선택)
 detail: 상세 설명 (선택)
 
-일정 생성 시 4일치 전체(36칸)를 출력하세요. 수정 시 변경되는 칸만 출력하세요. 단순 질문에는 JSON을 출력하지 마세요.`;
+일정 생성 시 루틴(조식,취침)을 제외한 주요 활동만 출력하세요 (약 20-28칸). 수정 시 변경 칸만 출력하세요. 단순 질문에는 JSON 없이 텍스트만. JSON은 반드시 유효한 형식이어야 합니다.`;
 }
 
 function getChatHistory(){
@@ -1222,46 +1222,6 @@ function getChatHistory(){
     role:m.role==='user'?'user':'assistant',
     content:m.text||''
   }));
-}
-
-async function callAI(userText){
-  const msgs=[{role:'system',content:buildSystemPrompt()},...getChatHistory()];
-  try{
-    const res=await fetch('/api/chat',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({messages:msgs})
-    });
-    if(!res.ok){const e=await res.text();return `(오류: ${res.status})`;}
-    const data=await res.json();
-    return data.choices?.[0]?.message?.content||'(응답 없음)';
-  }catch(e){return `(네트워크 오류: ${e.message})`;}
-}
-
-/* ================= GRID UPDATE PARSER ================= */
-function parseGridUpdates(text){
-  const jsonMatch=text.match(/```json\s*([\s\S]*?)```/);
-  if(!jsonMatch)return{cleanText:text,updates:null};
-  try{
-    const obj=JSON.parse(jsonMatch[1]);
-    const cleanText=text.replace(/```json\s*[\s\S]*?```/,'').trim();
-    return{cleanText,updates:obj.grid_updates||[]};
-  }catch(e){return{cleanText:text,updates:null};}
-}
-function applyGridUpdates(updates){
-  updates.forEach(u=>{
-    const r=u.row,d=u.day;
-    if(r<0||r>8||d<0||d>3)return;
-    S.grid[r][d]={
-      t:u.t||'act',
-      txt:u.txt||'',
-      sub:u.sub||'',
-      meta:u.meta||[],
-      detail:u.detail||'',
-      badge:u.badge||null,
-      changed:S.drafted // mark as changed if grid already existed
-    };
-  });
 }
 
 /* ================= MAIN SEND ================= */
@@ -1276,25 +1236,7 @@ function onMainSend(){
   const q=S.quote; S.quote=null; renderQuote();
   S.msgs.push({role:'user',text,quote:q});
   S.msgs.push({role:'typing'});S.busy=true;renderAll();
-  // 일정 생성/변경 키워드 감지 → 그리드 업데이트 + AI 응답
-  const needsGrid=!S.drafted&&/일정|초안|짜줘|계획/.test(text);
-  const needsDelay=/지연|늦|취소/.test(text)&&S.drafted;
-  const needsFinalize=/최종|반영|확정/.test(text)&&S.drafted;
-  callAI(text).then(reply=>{
-    S.msgs.pop();S.busy=false;
-    // parse JSON grid updates from reply
-    const {cleanText,updates}=parseGridUpdates(reply);
-    const hasUpdates=updates&&updates.length>0;
-    if(hasUpdates){
-      applyGridUpdates(updates);
-      if(!S.drafted)S.drafted=true;
-      S.msgs.push({role:'assistant',text:cleanText,itinCard:true});
-      mobNotify('left');
-    }else{
-      S.msgs.push({role:'assistant',text:cleanText});
-    }
-    renderAll();
-  });
+  setTimeout(()=>{ S.msgs.pop(); S.busy=false; routeMain(text); }, delay());
 }
 
 /* landing → chat */
