@@ -456,9 +456,9 @@ body{display:block!important}
   .cal-wk-hdr .cal-dh small{display:block;font-size:9px;font-weight:400;color:var(--faint)}
   .cal-wk-hdr .cal-dh:active{background:var(--accent-bg)}
   .cal-wk-body{display:flex;position:relative}
-  .cal-gutter{width:42px;flex:none;position:relative;z-index:2;background:var(--paper)}
+  .cal-gutter{display:none}
   .cal-hr-label{position:absolute;left:2px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--faint);transform:translateY(-50%);line-height:1}
-  .cal-hr-line{position:absolute;left:42px;right:0;border-top:1px solid var(--line);pointer-events:none}
+  .cal-hr-line{display:none}
   .cal-wk-col{flex:1;position:relative;border-left:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
   .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 3px;overflow:hidden;font-size:8px;font-weight:600;line-height:1.15;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
   .cal-ev.act{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
@@ -467,13 +467,13 @@ body{display:block!important}
   .cal-ev.broken{background:var(--warn-bg);color:var(--warn);border:1.5px dashed var(--warn-line);animation:pulse 1.4s ease-in-out infinite}
   .cal-ev.changed{background:var(--accent-bg);color:var(--accent-deep);border:1px solid var(--accent)}
   .cal-ev-txt{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .cal-ev-sub{font-weight:400;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:8px;margin-top:1px}
+  .cal-ev-sub{font-weight:400;opacity:.85;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:7.5px;margin-top:1px;font-family:var(--mono)}
 
   /* day view */
   .cal-dy{position:relative}
   .cal-dy-body{display:flex;position:relative}
-  .cal-dy .cal-gutter{width:48px}
-  .cal-dy .cal-hr-label{font-size:12px;font-weight:600}
+  .cal-dy .cal-gutter{display:none}
+  .cal-dy .cal-hr-line{display:none}
   .cal-dy .cal-hr-line{left:48px}
   .cal-dy-lane{flex:1;position:relative;min-height:0}
   .cal-ev-full{position:absolute;left:4px;right:4px;border-radius:8px;padding:8px 10px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1;transition:.12s}
@@ -1167,7 +1167,7 @@ function renderLeft(){
         const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
         let cls='cal-ev '+c.t;
         if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
+        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=30?`<div class="cal-ev-sub">${ROWS[ri]} ${esc(c.sub||'')}</div>`:''}</div>`;
       });
       h+=`</div>`;
     });
