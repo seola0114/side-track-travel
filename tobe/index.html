@@ -1087,10 +1087,10 @@ function renderMid(){
       // inline itinerary card
       if(m.itinCard)h+=buildItinCard();
       if(m.diffCard)h+=buildDiffCard(m.diffCard);
-      if(m.choices&&S.showChoices&&S.mode==='side'&&window.innerWidth>768){
+      if(m.choices&&S.showChoices&&S.mode==='side'){
         h+=`<div class="choices">`;
         S.choices.forEach(c=>{
-          h+=`<button class="choice ${c.done?'done':''}" ${c.done?'disabled':''} onclick="openSideFromChoice('${c.id}')"><span class="q">${c.q}</span>${c.done?'✓ '+esc(c.label):esc(c.label)}</button>`;
+          h+=`<button class="choice ${c.done?'done':''}" ${c.done?'disabled':''} onclick="pickChoice('${c.id}')"><span class="q">${c.q}</span>${c.done?'✓ '+esc(c.label):esc(c.label)}</button>`;
         });
         h+=`</div>`;
       }
@@ -1224,6 +1224,15 @@ function getChatHistory(){
   }));
 }
 
+/* ================= CHOICE PICK (inline) ================= */
+function pickChoice(id){
+  if(S.busy)return;
+  const ch=S.choices.find(c=>c.id===id);if(!ch||ch.done)return;
+  const text=id==='transit'?'그런데 JR패스가 뭐야?':'eSIM은 뭐야? 우린 뭐가 나아?';
+  document.getElementById('mainIn').value=text;
+  onMainSend();
+}
+
 /* ================= MAIN SEND ================= */
 function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=t;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
@@ -1319,12 +1328,15 @@ function routeMobile(text){
     S.msgs.push({role:'assistant',text:SCRIPT.side.transit[1]});
     if(!S.ledger.some(d=>d.topic==='transit'))
       S.ledger.push({txt:'교통: JR패스 ✕, 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
+    const tc=S.choices.find(c=>c.id==='transit');if(tc)tc.done=true;
     mobNotify('left');
     S.step=4;
   }else if(S.step===4){
     S.msgs.push({role:'assistant',text:SCRIPT.side.comms[0]+'\n\n'+SCRIPT.side.comms[1]});
     if(!S.ledger.some(d=>d.topic==='comms'))
       S.ledger.push({txt:'통신: 포켓와이파이 ✕, 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
+    const cc=S.choices.find(c=>c.id==='comms');if(cc)cc.done=true;
+    S.showChoices=false;
     mobNotify('left');
     S.step=5;
   }else if(S.step===5||/최종|반영|확정/.test(text)){
