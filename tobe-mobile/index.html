@@ -1205,15 +1205,15 @@ function renderSuggest(){
   if(!S.drafted){
     chips=['11월 도쿄 3박 4일 일정 짜줘'];
   }else if(S.step===2){
-    chips=['그런데 JR패스가 뭐야?','eSIM은 뭐야?'];
+    chips=['1. 교통','2. 통신'];
   }else if(S.step===3){
-    chips=['우리 일정엔 JR패스가 이득이야?'];
+    chips=['스이카로 확정'];
   }else if(S.step===4){
-    chips=['eSIM은 뭐야? 우린 뭐가 나아?'];
+    chips=['각자 eSIM으로 확정'];
   }else if(S.step===5){
-    chips=['정한 교통/통신 결정 반영해서 최종 일정 줘'];
+    chips=['최종 일정 반영'];
   }else if(S.step===6){
-    chips=['도착 항공편이 3시간 지연됐어'];
+    chips=['항공편 3시간 지연'];
   }
   w.innerHTML=chips.length?`<span class="lbl">제안</span>`+chips.map(c=>`<button class="schip" onclick="sendSuggest(\`${esc(c)}\`)">${esc(c)}</button>`).join(''):'';
 }
@@ -1276,7 +1276,8 @@ function pickChoice(id){
 }
 
 /* ================= MAIN SEND ================= */
-function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=t;onMainSend();}
+const CHIP_MAP={'1. 교통':'그런데 JR패스가 뭐야?','2. 통신':'eSIM은 뭐야? 우린 뭐가 나아?','스이카로 확정':'우리 일정엔 JR패스가 이득이야?','각자 eSIM으로 확정':'eSIM은 뭐야? 우린 뭐가 나아?','최종 일정 반영':'정한 교통/통신 결정 반영해서 최종 일정 줘','항공편 3시간 지연':'도착 항공편이 3시간 지연됐어'};
+function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=CHIP_MAP[t]||t;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
 
 function onMainSend(){
