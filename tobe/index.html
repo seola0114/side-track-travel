@@ -1215,7 +1215,11 @@ async function callAI(userText){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({messages:msgs})
     });
-    if(!res.ok){const e=await res.text();return `(오류: ${res.status})`;}
+    if(!res.ok){
+      let msg;try{msg=(await res.json()).error;}catch{msg=null;}
+      if(res.status===429)return msg||'요청이 많아 잠시 후 다시 시도해주세요. 🙏';
+      return msg?`(오류: ${msg})`:`(오류: ${res.status})`;
+    }
     const data=await res.json();
     return data.choices?.[0]?.message?.content||'(응답 없음)';
   }catch(e){return `(네트워크 오류: ${e.message})`;}
