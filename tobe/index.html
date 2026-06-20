@@ -402,7 +402,14 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
   .cal-back{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:4px;-webkit-tap-highlight-color:transparent}
   .cal-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
   .cal-title small{font-weight:400;color:var(--faint);margin-left:4px}
-  .cal-view-btn{font-family:var(--mono);font-size:9px;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:6px;padding:3px 8px;cursor:pointer}
+  .cal-view-btn{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--accent);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:6px;padding:3px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cal-day-btns{display:flex;gap:3px;margin-left:auto}
+  .cal-dbtn{font-family:var(--sans);font-size:10px;font-weight:600;color:var(--muted);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cal-dbtn:active{background:var(--accent-bg);color:var(--accent);border-color:var(--accent-line)}
+  .cal-day-nav{display:flex;gap:2px;margin-left:auto}
+  .cal-nav-btn{background:none;border:1px solid var(--line);border-radius:6px;width:28px;height:28px;display:grid;place-items:center;font-size:14px;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .cal-nav-btn:active{background:var(--accent-bg)}
+  .cal-nav-btn:disabled{opacity:.3;cursor:default}
 
   /* week view */
   .cal-wk{position:relative}
@@ -986,7 +993,7 @@ function renderLeft(){
   const totalH=(22-7)*CAL_PX;
   function hourLines(gutterW){let l='';for(let hr=7;hr<=22;hr++){const y=(hr-7)*CAL_PX;l+=`<div class="cal-hr-label" style="top:${y}px">${String(hr).padStart(2,'0')}</div>`;l+=`<div class="cal-hr-line" style="top:${y}px"></div>`;}return l;}
   if(calView==='week'){
-    h+=`<div class="cal-head"><span class="cal-title">도쿄 3박 4일</span></div>`;
+    h+=`<div class="cal-head"><span class="cal-title">이케부쿠로 3박 4일</span><div class="cal-day-btns">${DAYS.map((d,i)=>`<button class="cal-dbtn" onclick="event.stopPropagation();calDrill(${i})">${d.d.replace('Day ','D')}</button>`).join('')}</div></div>`;
     h+=`<div class="cal-wk"><div class="cal-wk-hdr"><div class="cal-gutter"></div>`;
     DAYS.forEach((d,di)=>{h+=`<div class="cal-dh" onclick="calDrill(${di})">${d.d}<small>${d.date}</small></div>`;});
     h+=`</div><div class="cal-wk-body" style="height:${totalH}px"><div class="cal-gutter">${hourLines()}</div>`;
@@ -1004,7 +1011,7 @@ function renderLeft(){
     h+=`</div></div>`;
   }else{
     const d=DAYS[calDay];
-    h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()">‹</button><span class="cal-title">${d.d} · ${d.date}</span><button class="cal-view-btn" onclick="calBack()">주간</button></div>`;
+    h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()">‹</button><span class="cal-title">${d.d} · ${d.date}</span><div class="cal-day-nav"><button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''}>‹</button><button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''}>›</button></div><button class="cal-view-btn" onclick="calBack()">전체</button></div>`;
     h+=`<div class="cal-dy"><div class="cal-dy-body" style="height:${totalH}px"><div class="cal-gutter">${hourLines()}</div><div class="cal-dy-lane">`;
     ROWS.forEach((rl,ri)=>{
       const c=S.grid[ri][calDay],sl=SLOT_T[ri];
@@ -1618,6 +1625,7 @@ let CAL_PX=30;// px per hour, adjustable by pinch zoom
 let calScale=1;
 function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;renderLeft();}
 function calBack(){calView='week';CAL_PX=30;calScale=1;renderLeft();}
+function calDayNav(dir){calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));renderLeft();}
 function initCalPinch(){
   const el=document.getElementById('leftScroll');if(!el)return;
   let startDist=0,startPx=0;
