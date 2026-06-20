@@ -693,14 +693,6 @@ textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize
         <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Calendar에서</button>
         <button class="land-feat"><svg class="fi" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> Gmail에서</button>
       </div>
-      <div class="api-setting">
-        <button class="api-toggle" onclick="document.getElementById('apiForm').classList.toggle('show')">API 설정</button>
-        <div class="api-form" id="apiForm">
-          <label>NVIDIA API Key</label>
-          <input type="password" id="apiKeyInput" placeholder="nvapi-..." oninput="setApiKey(this.value);updateApiStatus()">
-          <div class="api-status" id="apiStatus"></div>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1188,11 +1180,6 @@ function renderAll(){renderLeft();renderMid();renderRight();renderGuide();render
   document.getElementById('mainSend').disabled=!!S.busy;}
 
 /* ================= AI API ================= */
-const AI_MODEL='meta/llama-3.3-70b-instruct';
-const AI_URL='https://integrate.api.nvidia.com/v1/chat/completions';
-function getApiKey(){return localStorage.getItem('nv_api_key')||'';}
-function setApiKey(k){localStorage.setItem('nv_api_key',k);}
-
 function buildSystemPrompt(){
   const gridSummary=DAYS.map((d,di)=>{
     return d.d+' ('+d.date+'): '+ROWS.map((r,ri)=>{
@@ -1221,16 +1208,14 @@ function getChatHistory(){
 }
 
 async function callAI(userText){
-  const key=getApiKey();
-  if(!key){return '(API 키가 설정되지 않았어요. 페이지 하단 설정에서 NVIDIA API 키를 입력해주세요.)';}
   const msgs=[{role:'system',content:buildSystemPrompt()},...getChatHistory()];
   try{
-    const res=await fetch(AI_URL,{
+    const res=await fetch('/api/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
-      body:JSON.stringify({model:AI_MODEL,messages:msgs,temperature:0.7,max_tokens:1024,stream:false})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({messages:msgs})
     });
-    if(!res.ok){const e=await res.text();return `(API 오류: ${res.status}) ${e.slice(0,100)}`;}
+    if(!res.ok){const e=await res.text();return `(오류: ${res.status})`;}
     const data=await res.json();
     return data.choices?.[0]?.message?.content||'(응답 없음)';
   }catch(e){return `(네트워크 오류: ${e.message})`;}
@@ -1788,16 +1773,6 @@ document.addEventListener('click',e=>{
 
 resetAll('side');
 initCalPinch();
-// API key init
-function updateApiStatus(){
-  const el=document.getElementById('apiStatus');
-  const inp=document.getElementById('apiKeyInput');
-  if(!el)return;
-  const k=getApiKey();
-  if(k){el.textContent='API 키 설정됨';el.className='api-status ok';if(inp)inp.value=k;}
-  else{el.textContent='키를 입력하면 실제 AI 대화가 가능합니다';el.className='api-status no';}
-}
-updateApiStatus();
 </script>
 </body>
 </html>
