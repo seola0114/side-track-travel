@@ -1215,14 +1215,22 @@ async function callAI(userText){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({messages:msgs})
     });
-    if(!res.ok){
-      let msg;try{msg=(await res.json()).error;}catch{msg=null;}
-      if(res.status===429)return msg||'요청이 많아 잠시 후 다시 시도해주세요. 🙏';
-      return msg?`(오류: ${msg})`:`(오류: ${res.status})`;
-    }
+    if(!res.ok)return {ok:false,status:res.status};
     const data=await res.json();
-    return data.choices?.[0]?.message?.content||'(응답 없음)';
-  }catch(e){return `(네트워크 오류: ${e.message})`;}
+    const text=data.choices?.[0]?.message?.content;
+    return text?{ok:true,text}:{ok:false};
+  }catch(e){return {ok:false,error:e.message};}
+}
+
+/* API 사용 불가(429·네트워크 등) 시 고정 가상 시나리오 답변으로 대체 */
+function scenarioFallback(ctx){
+  if(ctx.needsGrid)return SCRIPT.draft;
+  if(ctx.needsFinalize)return SCRIPT.finalize;
+  if(ctx.needsDelay)return SCRIPT.delayReply;
+  const t=ctx.text||'';
+  if(/jr|패스|교통|스이카|suica|신칸센/i.test(t))return SCRIPT.side.transit[0]+'\n\n'+SCRIPT.side.transit[1];
+  if(/esim|이심|통신|와이파이|유심|데이터|로밍/i.test(t))return SCRIPT.side.comms[0]+'\n\n'+SCRIPT.side.comms[1];
+  return 'AI 응답을 잠시 불러올 수 없어 고정 시나리오로 진행 중이에요. 아래 제안 칩으로 다음 단계(교통·통신 결정 → 최종 반영 → 지연 대응)를 이어가 보세요.';
 }
 
 /* ================= MAIN SEND ================= */
@@ -1241,8 +1249,9 @@ function onMainSend(){
   const needsGrid=!S.drafted&&/일정|초안|짜줘|계획/.test(text);
   const needsDelay=/지연|늦|취소/.test(text)&&S.drafted;
   const needsFinalize=/최종|반영|확정/.test(text)&&S.drafted;
-  callAI(text).then(reply=>{
+  callAI(text).then(result=>{
     S.msgs.pop();S.busy=false;
+    const reply=result.ok?result.text:scenarioFallback({needsGrid,needsFinalize,needsDelay,text});
     if(needsGrid&&!S.drafted){
       S.drafted=true;
       S.msgs.push({role:'assistant',text:reply,itinCard:true});

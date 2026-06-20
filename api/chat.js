@@ -32,7 +32,9 @@ export default async function handler(req, res) {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   // Gemini 무료 등급은 분당 요청 제한(429)이 있어 일시적인 429/503은 재시도로 대부분 해소됨
   const RETRYABLE = new Set([429, 503]);
-  const MAX_RETRIES = 3;
+  // 빠른 폴백을 위해 짧게만 재시도 (1s, 2s). 한도가 완전히 소진된 경우
+  // 프론트엔드가 고정 가상 시나리오로 대체하므로 오래 기다리지 않음
+  const MAX_RETRIES = 2;
 
   try {
     let response, data;
