@@ -1197,7 +1197,24 @@ ${gridSummary}
 - 간결하게 (3-5문장)
 - 일정 변경 요청이면 무엇을 어떻게 바꿀지 명확히
 - 여행 관련 질문에 실용적으로 답변
-- 마크다운 사용 가능 (볼드, 리스트)`;
+- 마크다운 사용 가능 (볼드, 리스트)
+
+중요: 일정을 생성하거나 수정할 때, 반드시 텍스트 응답 끝에 아래 형식의 JSON 블록을 추가하세요. 코드블록으로 감싸세요.
+
+\`\`\`json
+{"grid_updates":[
+{"row":1,"day":0,"txt":"하네다 도착","sub":"12:30 착륙","t":"dec","badge":"항공","meta":["비행"],"detail":"설명"}
+]}
+\`\`\`
+
+row: 0=07:00기상, 1=09:00오전1, 2=10:30오전2, 3=12:00점심, 4=13:30오후1, 5=15:00오후2, 6=17:00저녁준비, 7=19:00저녁, 8=21:00밤
+day: 0=Day1, 1=Day2, 2=Day3, 3=Day4
+t: "routine"(루틴), "act"(활동), "dec"(결정/예약)
+badge: 항공, 교통, 예약 등 (선택)
+meta: 태그 배열 (선택)
+detail: 상세 설명 (선택)
+
+일정 생성 시 4일치 전체(36칸)를 출력하세요. 수정 시 변경되는 칸만 출력하세요. 단순 질문에는 JSON을 출력하지 마세요.`;
 }
 
 function getChatHistory(){
@@ -1221,6 +1238,32 @@ async function callAI(userText){
   }catch(e){return `(네트워크 오류: ${e.message})`;}
 }
 
+/* ================= GRID UPDATE PARSER ================= */
+function parseGridUpdates(text){
+  const jsonMatch=text.match(/```json\s*([\s\S]*?)```/);
+  if(!jsonMatch)return{cleanText:text,updates:null};
+  try{
+    const obj=JSON.parse(jsonMatch[1]);
+    const cleanText=text.replace(/```json\s*[\s\S]*?```/,'').trim();
+    return{cleanText,updates:obj.grid_updates||[]};
+  }catch(e){return{cleanText:text,updates:null};}
+}
+function applyGridUpdates(updates){
+  updates.forEach(u=>{
+    const r=u.row,d=u.day;
+    if(r<0||r>8||d<0||d>3)return;
+    S.grid[r][d]={
+      t:u.t||'act',
+      txt:u.txt||'',
+      sub:u.sub||'',
+      meta:u.meta||[],
+      detail:u.detail||'',
+      badge:u.badge||null,
+      changed:S.drafted // mark as changed if grid already existed
+    };
+  });
+}
+
 /* ================= MAIN SEND ================= */
 function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=t;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
@@ -1239,20 +1282,16 @@ function onMainSend(){
   const needsFinalize=/최종|반영|확정/.test(text)&&S.drafted;
   callAI(text).then(reply=>{
     S.msgs.pop();S.busy=false;
-    if(needsGrid&&!S.drafted){
-      S.drafted=true;
-      S.msgs.push({role:'assistant',text:reply,itinCard:true});
-      mobNotify('left');
-    }else if(needsFinalize){
-      applyFinalize();
-      S.msgs.push({role:'assistant',text:reply,itinCard:true});
-      mobNotify('left');
-    }else if(needsDelay){
-      applyDelay();
-      S.msgs.push({role:'assistant',text:reply,adjust:true});
+    // parse JSON grid updates from reply
+    const {cleanText,updates}=parseGridUpdates(reply);
+    const hasUpdates=updates&&updates.length>0;
+    if(hasUpdates){
+      applyGridUpdates(updates);
+      if(!S.drafted)S.drafted=true;
+      S.msgs.push({role:'assistant',text:cleanText,itinCard:true});
       mobNotify('left');
     }else{
-      S.msgs.push({role:'assistant',text:reply});
+      S.msgs.push({role:'assistant',text:cleanText});
     }
     renderAll();
   });
