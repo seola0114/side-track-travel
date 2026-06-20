@@ -96,7 +96,7 @@ body.sbhide .bar{padding-left:52px}
 table.grid{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed;min-width:520px}
 table.grid th{font-size:11px;font-weight:600;color:var(--muted);padding:3px 0 5px;text-align:center}
 table.grid th .sub{display:block;font-weight:400;color:var(--faint);font-size:10px}
-table.grid td.tm{width:38px;font-family:var(--mono);font-size:9px;color:var(--faint);text-align:right;padding-right:6px;vertical-align:top;line-height:1.3}
+table.grid td.tm{width:52px;font-family:var(--mono);font-size:10px;color:var(--faint);text-align:right;padding-right:8px;vertical-align:top;line-height:1.3}
 table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;color:var(--routine-ink);margin-top:1px}
 .cell{border-radius:var(--radius-s);padding:6px 7px;font-size:10.5px;line-height:1.3;vertical-align:top;min-height:38px;transition:.14s}
 .cell .ctop{display:flex;align-items:center;gap:3px;flex-wrap:wrap;margin-bottom:2px}
@@ -959,7 +959,7 @@ function renderLeft(){
     return;
   }
   // itinerary grid
-  h+=`<div class="panel"><div class="panel-h"><span class="ic">▦</span> 일정표 · 이케부쿠로 3박 4일</div><div class="gridwrap"><table class="grid"><thead><tr><th></th>`;
+  h+=`<div class="panel"><div class="gridwrap"><table class="grid"><thead><tr><th></th>`;
   DAYS.forEach(d=>h+=`<th>${d.d}<span class="sub">${d.date}</span></th>`);
   h+=`</tr></thead><tbody>`;
   ROWS.forEach((rl,ri)=>{
@@ -996,7 +996,7 @@ function renderLeft(){
   const totalH=(22-7)*CAL_PX;
   function hourLines(gutterW){let l='';for(let hr=7;hr<=22;hr++){const y=(hr-7)*CAL_PX;l+=`<div class="cal-hr-label" style="top:${y}px">${String(hr).padStart(2,'0')}</div>`;l+=`<div class="cal-hr-line" style="top:${y}px"></div>`;}return l;}
   if(calView==='week'){
-    h+=`<div class="cal-head"><span class="cal-title">이케부쿠로 3박 4일</span><div class="cal-day-btns">${DAYS.map((d,i)=>`<button class="cal-dbtn" onclick="event.stopPropagation();calDrill(${i})">${d.d.replace('Day ','D')}</button>`).join('')}</div></div>`;
+    h+=`<div class="cal-head"><div class="cal-day-btns">${DAYS.map((d,i)=>`<button class="cal-dbtn" onclick="event.stopPropagation();calDrill(${i})">${d.d.replace('Day ','D')}</button>`).join('')}</div></div>`;
     h+=`<div class="cal-wk"><div class="cal-wk-hdr"><div class="cal-gutter"></div>`;
     DAYS.forEach((d,di)=>{h+=`<div class="cal-dh" onclick="calDrill(${di})">${d.d}<small>${d.date}</small></div>`;});
     h+=`</div><div class="cal-wk-body" style="height:${totalH}px"><div class="cal-gutter">${hourLines()}</div>`;
