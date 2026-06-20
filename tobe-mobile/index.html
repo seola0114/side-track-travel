@@ -577,6 +577,44 @@ body{display:block!important}
 .diff-row .diff-arrow{color:var(--faint);font-size:11px}
 .diff-row .diff-now{color:var(--accent-deep);font-weight:600}
 
+/* ---- ripple press effect ---- */
+.ripple-wrap{position:relative;overflow:hidden}
+.ripple-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(0,0,0,.08) 0%,transparent 60%);opacity:0;transition:opacity .15s;pointer-events:none}
+.ripple-wrap:active::after{opacity:1;transition:opacity 0s}
+button,
+.sb-item,.sb-rec,.sb-mtab,.sb-new,.sb-acct,.sb-tab-icon,
+.land-menu-btn,.land-send,.land-feat,.land-attach,.land-model,.land-mic,.land-voice,
+.schip,.choice,.sug-choice,
+.cal-dbtn,.cal-nav-btn,.cal-view-btn,.cal-back,
+.cal-ev,.cal-ev-full,.cell.expandable,
+.mob-bar-back,
+.send{
+  position:relative;overflow:hidden;-webkit-tap-highlight-color:transparent
+}
+button::after,
+.sb-item::after,.sb-rec::after,.sb-mtab::after,.sb-new::after,.sb-acct::after,
+.land-menu-btn::after,.land-send::after,.land-feat::after,
+.schip::after,.choice::after,.sug-choice::after,
+.cal-dbtn::after,.cal-nav-btn::after,.cal-view-btn::after,
+.cal-ev-full::after,.cell.expandable::after,
+.mob-bar-back::after,
+.send::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(0,0,0,.1) 0%,transparent 70%);
+  transform:scale(0);opacity:0;border-radius:inherit;pointer-events:none;
+  transition:transform .4s cubic-bezier(.2,.8,.2,1),opacity .4s
+}
+button:active::after,
+.sb-item:active::after,.sb-rec:active::after,.sb-mtab:active::after,.sb-new:active::after,.sb-acct:active::after,
+.land-menu-btn:active::after,.land-send:active::after,.land-feat:active::after,
+.schip:active::after,.choice:active::after,.sug-choice:active::after,
+.cal-dbtn:active::after,.cal-nav-btn:active::after,.cal-view-btn:active::after,
+.cal-ev-full:active::after,.cell.expandable:active::after,
+.mob-bar-back:active::after,
+.send:active::after{
+  transform:scale(2.5);opacity:1;transition:transform 0s,opacity 0s
+}
+
 /* ---- streaming cursor ---- */
 .bubble.streaming::after{content:'';display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:1px;vertical-align:text-bottom;animation:blinkcursor .6s step-end infinite}
 @keyframes blinkcursor{0%,100%{opacity:1}50%{opacity:0}}
@@ -1993,6 +2031,15 @@ document.addEventListener('click',e=>{
 },true);
 
 resetAll('side');initCalPinch();
+
+// ripple: set touch position as CSS vars
+document.addEventListener('pointerdown',e=>{
+  const el=e.target.closest('button,.sb-item,.sb-rec,.sb-mtab,.sb-new,.sb-acct,.land-feat,.schip,.choice,.sug-choice,.cal-dbtn,.cal-nav-btn,.cal-view-btn,.cal-ev-full,.cell.expandable,.send');
+  if(!el)return;
+  const r=el.getBoundingClientRect();
+  el.style.setProperty('--rx',((e.clientX-r.left)/r.width*100)+'%');
+  el.style.setProperty('--ry',((e.clientY-r.top)/r.height*100)+'%');
+},{passive:true});
 </script>
 </body>
 </html>
