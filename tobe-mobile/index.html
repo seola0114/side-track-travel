@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <title>To-Be — Claude (Mobile)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -208,7 +208,7 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .schip:hover{background:#e8c9b8}
 .inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:11px 11px 11px 16px;transition:.15s}
 .inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:130px;line-height:1.5;padding:4px 0}
+textarea{flex:1;font-family:var(--sans);font-size:16px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:130px;line-height:1.5;padding:4px 0}
 .send{flex:none;width:36px;height:36px;border:0;border-radius:11px;background:var(--accent);color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s}
 .send:hover{background:var(--accent-deep)}
 .send:disabled{opacity:.35;cursor:default}
@@ -456,9 +456,9 @@ body{display:block!important}
   .cal-wk-hdr .cal-dh small{display:block;font-size:9px;font-weight:400;color:var(--faint)}
   .cal-wk-hdr .cal-dh:active{background:var(--accent-bg)}
   .cal-wk-body{display:flex;position:relative}
-  .cal-gutter{width:38px;flex:none}
-  .cal-hr-label{position:absolute;right:4px;font-family:var(--mono);font-size:10px;color:var(--faint);transform:translateY(-50%);line-height:1}
-  .cal-hr-line{position:absolute;left:38px;right:0;border-top:1px solid var(--line);pointer-events:none}
+  .cal-gutter{width:42px;flex:none}
+  .cal-hr-label{position:absolute;right:4px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--faint);transform:translateY(-50%);line-height:1}
+  .cal-hr-line{position:absolute;left:42px;right:0;border-top:1px solid var(--line);pointer-events:none}
   .cal-wk-col{flex:1;position:relative;border-left:1px solid var(--line);cursor:pointer;-webkit-tap-highlight-color:transparent;min-width:0}
   .cal-ev{position:absolute;left:2px;right:2px;border-radius:4px;padding:2px 3px;overflow:hidden;font-size:8px;font-weight:600;line-height:1.15;color:#fff;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1}
   .cal-ev.act{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
@@ -473,7 +473,7 @@ body{display:block!important}
   .cal-dy{position:relative}
   .cal-dy-body{display:flex;position:relative}
   .cal-dy .cal-gutter{width:48px}
-  .cal-dy .cal-hr-label{font-size:10px}
+  .cal-dy .cal-hr-label{font-size:12px;font-weight:600}
   .cal-dy .cal-hr-line{left:48px}
   .cal-dy-lane{flex:1;position:relative;min-height:0}
   .cal-ev-full{position:absolute;left:4px;right:4px;border-radius:8px;padding:8px 10px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1;transition:.12s}
@@ -670,7 +670,7 @@ button:active::after,
 .ev-modal-chat .ev-chat-label{font-size:11px;color:var(--faint);margin-bottom:6px}
 .ev-modal-inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 8px 8px 14px}
 .ev-modal-inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.ev-modal-inrow textarea{flex:1;font-family:var(--sans);font-size:14px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:80px;line-height:1.5;padding:4px 0}
+.ev-modal-inrow textarea{flex:1;font-family:var(--sans);font-size:16px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:80px;line-height:1.5;padding:4px 0}
 .ev-modal-inrow .send{width:32px;height:32px;border-radius:10px;background:var(--accent);color:#fff;border:none;font-size:14px;cursor:pointer;display:grid;place-items:center;flex:none}
 
 /* ---- questionnaire bottom sheet ---- */
@@ -1167,7 +1167,7 @@ function renderLeft(){
         const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
         let cls='cal-ev '+c.t;
         if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${ROWS[ri]} ${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
+        h+=`<div class="${cls}" style="top:${top}px;height:${ht}px"><div class="cal-ev-txt">${esc(c.txt)}</div>${ht>=35?`<div class="cal-ev-sub">${esc(c.sub||'')}</div>`:''}</div>`;
       });
       h+=`</div>`;
     });
