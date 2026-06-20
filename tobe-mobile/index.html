@@ -750,7 +750,6 @@ body{display:block!important}
       <div class="col-head" id="colTitle" style="display:none"></div>
       <div class="thread" id="thread"></div>
       <div class="composer">
-        <div class="suggest" id="suggest"></div>
         <div id="quoteWrap"></div>
         <div class="inrow">
           <textarea id="mainIn" rows="1" placeholder="메시지 입력…"></textarea>
@@ -1144,6 +1143,7 @@ function renderMid(){
       h+=`</div></div>`;
     }
   });
+  h+=`<div class="suggest" id="suggest"></div>`;
   t.innerHTML=h;t.scrollTop=t.scrollHeight;
 }
 
