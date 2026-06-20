@@ -354,7 +354,10 @@ body{display:block!important}
 
 /* split: top calendar + bottom chat */
 .app.chatting .stage{display:flex!important;flex-direction:column;grid-template-columns:none!important}
-.app.chatting .left-col{display:flex!important;flex:none;height:var(--split-top,38%);min-height:120px;max-height:70%;border-bottom:none;border-right:none;overflow:hidden}
+.app.chatting .left-col{display:none!important;flex:none;height:var(--split-top,38%);min-height:120px;max-height:70%;border-bottom:none;border-right:none;overflow:hidden}
+.app.chatting.has-itin .left-col{display:flex!important}
+.app.chatting .split-handle{display:none}
+.app.chatting.has-itin .split-handle{display:flex}
 .app.chatting .left-col .left-scroll{overflow-y:auto;padding:0}
 .app.chatting .mid-col{display:flex!important;flex:1;min-height:0;border-right:none}
 
@@ -1346,9 +1349,9 @@ function routeMobile(text){
     renderAll();
     const draftMob='Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요.\n\n**일정 탭**에서 Day별 일정표를 확인할 수 있어요. 협력 카페/예약이 실린 칸은 배지로, 루틴은 흐리게 표시됩니다. 칸을 누르면 상세 설명이 펼쳐져요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.';
     setTimeout(()=>openQs(()=>{
-      S.msgs.push({role:'assistant',text:draftMob,itinCard:true});
+      S.msgs.push({role:'assistant',text:draftMob});
       S.drafted=true; S.step=2;
-      mobNotify('left');
+      document.getElementById('app').classList.add('has-itin');
       renderAll();
     }),600);
     return;
