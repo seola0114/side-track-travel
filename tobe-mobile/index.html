@@ -2092,8 +2092,8 @@ function setMode(mode){
     const dy=t.clientY-startY;
     const appH=appEl?appEl.offsetHeight:window.innerHeight;
     const newH=Math.max(120,Math.min(appH*0.7,startH+dy));
-    const pct=Math.round(newH/appH*100);
-    document.documentElement.style.setProperty('--split-top',pct+'%');
+    const leftCol=document.querySelector('.left-col');
+    if(leftCol) leftCol.style.maxHeight=newH+'px';
   }
   function onEnd(){
     document.removeEventListener('touchmove',onMove);
