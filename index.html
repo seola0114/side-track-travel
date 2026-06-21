@@ -10,6 +10,12 @@
 html,body{height:100%;background:#FAF9F5;color:#23211E;font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;-webkit-font-smoothing:antialiased}
 body{display:flex;align-items:center;justify-content:center;padding:24px;min-height:100vh}
 .wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:20px}
+.divider{border:none;border-top:1px solid #E0DCD2;margin:4px 0}
+.section-label{font-size:11px;color:#8A867E;letter-spacing:.06em;font-weight:600;text-align:center}
+.card-archive{background:#F7F6F2;border:1px solid #E0DCD2}
+.card-archive:hover{border-color:#8A867E;box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.card-archive .label{color:#8A867E}
+.card-archive .tag{background:#ECE9E1;color:#56534D}
 .header{text-align:center}
 .header .dot{width:10px;height:10px;border-radius:50%;background:#C96442;display:inline-block;vertical-align:middle;margin-right:6px;box-shadow:0 0 0 3px #F6E9E3}
 .header h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:10px}
@@ -76,6 +82,23 @@ body{display:flex;align-items:center;justify-content:center;padding:24px;min-hei
       <span class="tag">인라인 카드</span>
       <span class="tag">핀치 줌</span>
     </div>
+  </a>
+
+  <hr class="divider">
+  <div class="section-label">이전 버전</div>
+
+  <a class="card card-archive" href="/archive/week2/">
+    <div class="label">Week 2</div>
+    <h2>2주차 버전</h2>
+    <span class="arrow">→</span>
+    <div class="desc">2주차 시점의 프로토타입입니다.</div>
+  </a>
+
+  <a class="card card-archive" href="/archive/week1/">
+    <div class="label">Week 1</div>
+    <h2>1주차 버전</h2>
+    <span class="arrow">→</span>
+    <div class="desc">1주차 시점의 프로토타입입니다.</div>
   </a>
 
   <div class="foot">
