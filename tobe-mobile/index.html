@@ -1686,7 +1686,7 @@ function routeMobile(text){
     S.step=3;
   }else if(S.step===3){
     // comms decision
-    S.msgs.push({role:'assistant',text:'좋아요! **각자 eSIM 하나씩**이 깔끔해요.\n- 4일에 1만 원 안팎\n- 각자 구글맵/번역 자유\n- 반납 신경 안 써도 됨\n\n교통은 스이카, 통신은 eSIM으로 확정하고 일정에 반영했어요.\n\n혹시 여행 중에 변수가 생기면 알려주세요. 예를 들어 항공편 지연 같은 상황이요.',inlineChoices:[{label:'항공편 3시간 지연됐어',value:'delay'}]});
+    S.msgs.push({role:'assistant',text:'좋아요! **각자 eSIM 하나씩**이 깔끔해요.\n- 4일에 1만 원 안팎\n- 각자 구글맵/번역 자유\n- 반납 신경 안 써도 됨\n\n교통은 스이카, 통신은 eSIM으로 확정하고 일정에 반영했어요.\n\n혹시 여행 중에 변수가 생기면 알려주세요. 예를 들어 항공편 지연 같은 상황이요.',prefill:'항공편 3시간 지연됐어'});
     if(!S.ledger.some(d=>d.topic==='comms'))
       S.ledger.push({txt:'통신: 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
     applyFinalize();
