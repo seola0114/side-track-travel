@@ -1509,8 +1509,14 @@ function routeMobile(text){
   if(S.step===1){
     S.msgs.push({role:'assistant',text:'11월 도쿄 3박 4일 초안을 짜봤어요! 두 분의 취향에 딱 맞는 일정을 완성하기 위해, 핵심 포인트 4가지를 확인할게요.'});
     renderAll();
-    const draftMob='답변을 바탕으로 맞춤 일정을 만들었어요. 위에서 일정표를 확인할 수 있어요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래에서 하나씩 정리해 봐요.';
     setTimeout(()=>openQs(()=>{
+      // build personalized response from answers
+      const purposeMap=['**쇼핑/트렌드** 중심으로, 편집숍과 디자인 소품샵 위주로 동선을 짰어요.','**미식/힐링** 중심으로, 맛집과 공원 산책 위주로 동선을 짰어요.','**랜드마크/인증샷** 중심으로, 대표 포토스팟 위주로 동선을 짰어요.'];
+      const disneyMap=['디즈니는 빠진 알찬 3박 4일이에요.','**디즈니랜드**를 하루 넣었어요. 해당 날은 파크에 올인합니다!','**디즈니씨**를 하루 넣었어요. 해당 날은 파크에 올인합니다!','디즈니는 일단 빼두었어요. 나중에 넣고 싶으면 말씀해 주세요.'];
+      const flightMap=['오전 도착/밤 출발이라 첫날부터 마지막 날까지 풀로 일정을 넣었어요.','오후 도착/오후 출발이라 첫날과 마지막 날은 여유롭게 잡았어요.','항공편은 미정이니 일단 오전 도착/밤 출발 기준으로 짰어요.'];
+      const hotelMap=['**시부야/신주쿠** 베이스로 출발/복귀 동선을 최적화했어요.','**이케부쿠로** 베이스로 출발/복귀 동선을 최적화했어요.','**긴자/도쿄역** 베이스로 출발/복귀 동선을 최적화했어요.','숙소는 미정이니 신주쿠 기준으로 짰어요. 확정되면 조정할게요.'];
+      const a=qsAnswers;
+      const draftMob=`선택하신 내용을 반영해서 맞춤 일정을 만들었어요.\n\n- ${purposeMap[a[0]]||purposeMap[0]}\n- ${disneyMap[a[1]]||disneyMap[0]}\n- ${flightMap[a[2]]||flightMap[0]}\n- ${hotelMap[a[3]]||hotelMap[0]}\n\n위에서 일정표를 확인해 보세요. 출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래에서 하나씩 정리해 봐요.`;
       S.msgs.push({role:'assistant',text:draftMob,choices:true});
       S.showChoices=true; S.drafted=true; S.step=2;
       document.getElementById('app').classList.add('has-itin');
