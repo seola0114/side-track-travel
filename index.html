@@ -12,7 +12,8 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;background:var(--color-ivory-canvas);color:var(--color-ink-black);font-family:'Inter','Pretendard',ui-sans-serif,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"liga"}
 body{display:flex;align-items:center;justify-content:center;padding:24px;min-height:100vh}
-.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px}
+.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px}
+.tobe-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 
 .header{text-align:center}
 .header .brandmark{font-family:'Source Serif 4',ui-serif,Georgia,serif;font-size:15px;font-weight:var(--font-weight-regular);color:var(--color-charcoal);letter-spacing:.02em}
@@ -49,29 +50,31 @@ body{display:flex;align-items:center;justify-content:center;padding:24px;min-hei
     <h1>여행 일정 관리, 어떻게 다를까?</h1>
   </div>
 
-  <a class="card card-tobe" href="/tobe/">
-    <div class="label">To-Be · PC</div>
-    <h2>Claude 일정 관리 (데스크톱)</h2>
-    <span class="arrow">→</span>
-    <div class="desc">사이드바 + 일정표/대화 2컬럼 레이아웃. 일정 클릭 시 상세 모달.</div>
-    <div class="tags">
-      <span class="tag">2컬럼</span>
-      <span class="tag">캘린더 뷰</span>
-      <span class="tag">상세 모달</span>
-    </div>
-  </a>
+  <div class="tobe-row">
+    <a class="card card-tobe" href="/tobe/">
+      <div class="label">To-Be · PC</div>
+      <h2>Claude 일정 관리 (데스크톱)</h2>
+      <span class="arrow">→</span>
+      <div class="desc">사이드바 + 일정표/대화 2컬럼 레이아웃. 일정 클릭 시 상세 모달.</div>
+      <div class="tags">
+        <span class="tag">2컬럼</span>
+        <span class="tag">캘린더 뷰</span>
+        <span class="tag">상세 모달</span>
+      </div>
+    </a>
 
-  <a class="card card-tobe" href="/tobe-mobile/">
-    <div class="label">To-Be · Mobile</div>
-    <h2>Claude 일정 관리 (모바일)</h2>
-    <span class="arrow">→</span>
-    <div class="desc">하단 탭 바로 일정/대화 전환. 인라인 카드로 탭 전환 없이 일정 확인.</div>
-    <div class="tags">
-      <span class="tag">탭 바</span>
-      <span class="tag">인라인 카드</span>
-      <span class="tag">핀치 줌</span>
-    </div>
-  </a>
+    <a class="card card-tobe" href="/tobe-mobile/">
+      <div class="label">To-Be · Mobile</div>
+      <h2>Claude 일정 관리 (모바일)</h2>
+      <span class="arrow">→</span>
+      <div class="desc">하단 탭 바로 일정/대화 전환. 인라인 카드로 탭 전환 없이 일정 확인.</div>
+      <div class="tags">
+        <span class="tag">탭 바</span>
+        <span class="tag">인라인 카드</span>
+        <span class="tag">핀치 줌</span>
+      </div>
+    </a>
+  </div>
 
   <a class="card card-asis" href="/asis/">
     <div class="label">As-Is</div>
