@@ -1093,7 +1093,7 @@ const SCRIPT={
   finalize:`정한 교통·통신 결정을 일정에 반영했어요. 확정본은 여기 다시 길게 출력하지 않고 — **왼쪽 일정표가 제자리에서 갱신**되고, 두 결정이 결정 기록에 한 줄씩 남았습니다. 이게 핵심이에요: 결정이 대화 로그가 아니라 다시 꺼내 쓸 단위로 보존됩니다.\n\n이제 여행 중에 변수가 생겨도, 흩어진 기록을 뒤질 필요가 없어요.`,
   delayReply:`3시간 지연을 일정에 반영했어요. 현재 스케줄 기준으로 영향받는 항목을 정리했습니다.\n\n**즉시 조치 필요:**\n- **Animate Cafe 예약** — 17:00 예약인데 도착이 17:20 예상이라 시간 안 맞아요. 취소하거나 늦은 타임으로 변경해야 해요.\n- **호텔 체크인** — 도착 예상 17:20. 호텔에 늦는다고 미리 연락하세요.\n\n**자동 조정됨:**\n- 하네다 도착: 12:30 → **15:30**\n- 시내 도착: 14:00 → **17:20**\n- 선샤인시티 탐방: **시간 부족으로 생략** (Day 2~3으로 이동 가능)\n- 체크인/휴식: **체크인만** 하고 바로 저녁으로\n\n**영향 없음:** 교통(스이카), 통신(eSIM), Day 2~4 일정\n\nAnimate Cafe를 어떻게 할까요?`,
   adjust:[
-    {h:'카페 취소 + 가지치기',tl:'첫날은 체크인→짐 풀기→호텔 근처 저녁으로 단순화. 못 본 카페는 2~3일차로.',pro:'체력 보존, 노쇼 패널티 방지',con:'Animate Cafe 포기',pin:'Day 1: 카페 취소, 호텔 근처 가벼운 저녁 (지연 대응)',
+    {h:'카페 취소',tl:'첫날은 체크인→짐 풀기→호텔 근처 저녁으로 단순화. 못 본 카페는 2~3일차로.',pro:'체력 보존, 노쇼 패널티 방지',con:'Animate Cafe 포기',pin:'Day 1: 카페 취소, 호텔 근처 가벼운 저녁 (지연 대응)',
      was:'Animate Cafe 저녁',now:'호텔 근처 가벼운 저녁',shift:'체크인→짐 풀기→동네 산책→저녁',
      cell:{txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',meta:['🍜 저녁']}},
     {h:'카페 늦은 타임으로 변경',tl:'Animate Cafe에 예약 변경 연락. 늦은 타임이 되면 가능할 수도.',pro:'카페 유지 가능',con:'취침 늦어짐, 변경 불가 위험',rec:true,pin:'Day 1: Animate Cafe 늦은 타임 시도 (지연 대응)',
@@ -1273,18 +1273,18 @@ function renderLeft(){
     gridA[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
     gridB[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
     // Row 6 (17:00): A=호텔 근처 저녁 / B=Animate Cafe 변경
-    gridA[6][0]={t:'act',txt:adjA.cell.txt,sub:adjA.cell.sub,changed:true};
+    gridA[6][0]={t:'act',txt:'호텔 근처 저녁',sub:'동네 산책 후 가볍게',changed:true};
     gridB[6][0]={t:'dec',txt:adjB.cell.txt,sub:adjB.cell.sub,changed:true};
-    // Row 7 (19:00): A=산책 저녁 / B=늦은 저녁
-    gridA[7][0]={t:'act',txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',changed:true};
+    // Row 7 (19:00): A=비움(17시에 합침) / B=늦은 저녁
+    gridA[7][0]={...empty,changed:true};
     gridB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
 
     h+=`<div style="overflow-x:auto">`;
     h+=`<table class="diff3-tbl"><thead><tr>`;
-    h+=`<th class="diff3-th">시간</th>`;
+    h+=`<th class="diff3-th"></th>`;
     h+=`<th class="diff3-th diff3-before">변경 전</th>`;
-    h+=`<th class="diff3-th diff3-a" onclick="chooseAdjust(0)">A안: ${esc(adjA.h)}</th>`;
-    h+=`<th class="diff3-th diff3-b" onclick="chooseAdjust(1)">B안: ${esc(adjB.h)}</th>`;
+    h+=`<th class="diff3-th diff3-a">A안</th>`;
+    h+=`<th class="diff3-th diff3-b">B안</th>`;
     h+=`</tr></thead><tbody>`;
     ROWS.forEach((rl,ri)=>{
       if(ri===8) return; // 호텔·취침 행 제외
@@ -1880,9 +1880,9 @@ function openAdjModal(){
   gB[4][0]={t:'dec',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
   gA[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
   gB[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
-  gA[6][0]={t:'act',txt:adjA.cell.txt,sub:adjA.cell.sub,changed:true};
+  gA[6][0]={t:'act',txt:'호텔 근처 저녁',sub:'동네 산책 후 가볍게',changed:true};
   gB[6][0]={t:'dec',txt:adjB.cell.txt,sub:adjB.cell.sub,changed:true};
-  gA[7][0]={t:'act',txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',changed:true};
+  gA[7][0]={...empty,changed:true};
   gB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
 
   let h='';
@@ -1890,7 +1890,7 @@ function openAdjModal(){
   // diff3 table
   h+=`<div style="overflow-x:auto;margin-bottom:14px">`;
   h+=`<table class="diff3-tbl"><thead><tr>`;
-  h+=`<th class="diff3-th">시간</th><th class="diff3-th diff3-before">변경 전</th>`;
+  h+=`<th class="diff3-th"></th><th class="diff3-th diff3-before">변경 전</th>`;
   h+=`<th class="diff3-th diff3-a">A안</th><th class="diff3-th diff3-b">B안</th>`;
   h+=`</tr></thead><tbody>`;
   ROWS.forEach((rl,ri)=>{
