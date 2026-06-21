@@ -385,7 +385,13 @@ textarea{flex:1;font-family:var(--sans);font-size:16px;border:0;outline:0;resize
 .cal-td-ev.changed{background:var(--keep-bg);color:var(--keep)}
 .cal-ev-txt{font-size:10px;font-weight:700;line-height:1.1}
 .cal-ev-sub{font-size:8.5px;font-weight:400;color:inherit;opacity:.7;margin-top:1px}
-.cal-dy{position:relative}
+.cal-dy{position:relative;overflow:hidden}
+@keyframes cal-slide-left-out{from{transform:translateX(0);opacity:1}to{transform:translateX(-100%);opacity:0}}
+@keyframes cal-slide-left-in{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes cal-slide-right-out{from{transform:translateX(0);opacity:1}to{transform:translateX(100%);opacity:0}}
+@keyframes cal-slide-right-in{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.cal-dy.slide-left{animation:cal-slide-left-in .2s ease-out both}
+.cal-dy.slide-right{animation:cal-slide-right-in .2s ease-out both}
 .cal-tbl-day .cal-td-ev{padding:10px 12px;font-size:14px}
 .cal-tbl-day .cal-ev-txt{font-size:14px;font-weight:600}
 .cal-tbl-day .cal-ev-sub{font-size:12px}
@@ -2143,7 +2149,20 @@ let CAL_PX=30;// px per hour, adjustable by pinch zoom
 let calScale=1;
 function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;calCollapsed=false;renderLeft();}
 function calBack(){calView='week';CAL_PX=30;calScale=1;calCollapsed=false;renderLeft();}
-function calDayNav(dir){calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));renderLeft();}
+function calDayNav(dir){
+  const prev=calDay;
+  calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));
+  if(calDay===prev)return;
+  renderLeft();
+  const dy=document.querySelector('.cal-dy');
+  if(dy){
+    const cls=dir>0?'slide-left':'slide-right';
+    dy.classList.remove('slide-left','slide-right');
+    void dy.offsetWidth;// force reflow to restart animation
+    dy.classList.add(cls);
+    dy.addEventListener('animationend',()=>{dy.classList.remove(cls);},{once:true});
+  }
+}
 function toggleCalCollapse(){calCollapsed=!calCollapsed;renderLeft();}
 function initCalSwipe(){
   if(calView!=='day')return;
@@ -2154,8 +2173,8 @@ function initCalSwipe(){
   body.addEventListener('touchend',e=>{
     const dx=e.changedTouches[0].clientX-sx;
     if(Math.abs(dx)>50){
-      if(dx<0&&calDay<DAYS.length-1){calDay++;renderLeft();}
-      else if(dx>0&&calDay>0){calDay--;renderLeft();}
+      if(dx<0&&calDay<DAYS.length-1){calDayNav(1);}
+      else if(dx>0&&calDay>0){calDayNav(-1);}
     }
   },{passive:true});
 }
