@@ -1266,57 +1266,6 @@ function renderLeft(){
   h+=`<button class="cal-collapse-btn${calCollapsed?' collapsed':''}" onclick="toggleCalCollapse()" aria-label="달력 접기/펼기">▲</button>`;
   h+=`</div>`;
   h+=`<div class="cal-body${calCollapsed?' collapsed':''}" id="calBody" style="max-height:${calMaxH}px">`;
-  if(gridSnapshot&&calView==='week'&&!S.adjustChosen){
-    const di=0; // Day 1 is the affected day
-    // build A/B grids — 3h delay shifts events down
-    const gridA=gridSnapshot.map(row=>row.map(c=>({...c})));
-    const gridB=gridSnapshot.map(row=>row.map(c=>({...c})));
-    const adjA=SCRIPT.adjust[0],adjB=SCRIPT.adjust[1];
-    const empty={t:'routine',txt:'',sub:''};
-    // Row 1,2 (09:00,10:30): 지연으로 비어있음
-    gridA[1][0]={...empty,changed:true};
-    gridA[2][0]={...empty,changed:true};
-    gridB[1][0]={...empty,changed:true};
-    gridB[2][0]={...empty,changed:true};
-    // Row 3 (12:00): 하네다 도착 (지연)
-    gridA[3][0]={t:'dec',badge:'항공',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
-    gridB[3][0]={t:'dec',badge:'항공',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
-    // Row 4 (13:30): 이케부쿠로 이동
-    gridA[4][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
-    gridB[4][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
-    // Row 5 (15:00): 도착·체크인
-    gridA[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
-    gridB[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
-    // Row 6 (17:00): A=호텔 근처 저녁 / B=Animate Cafe 변경
-    gridA[6][0]={t:'act',txt:'호텔 근처 저녁',sub:'동네 산책 후 가볍게',changed:true};
-    gridB[6][0]={t:'dec',txt:adjB.cell.txt,sub:adjB.cell.sub,changed:true};
-    // Row 7 (19:00): A=비움(17시에 합침) / B=늦은 저녁
-    gridA[7][0]={...empty,changed:true};
-    gridB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
-
-    h+=`<div style="overflow-x:auto">`;
-    h+=`<table class="diff3-tbl"><thead><tr>`;
-    h+=`<th class="diff3-th"></th>`;
-    h+=`<th class="diff3-th diff3-before">변경 전</th>`;
-    h+=`<th class="diff3-th diff3-a">A안</th>`;
-    h+=`<th class="diff3-th diff3-b">B안</th>`;
-    h+=`</tr></thead><tbody>`;
-    ROWS.forEach((rl,ri)=>{
-      if(ri===8) return; // 호텔·취침 행 제외
-      const before=gridSnapshot[ri][di];
-      const a=gridA[ri][di];
-      const b=gridB[ri][di];
-      const isChanged=a.changed||a.broken||b.changed||b.broken;
-      h+=`<tr class="${isChanged?'diff3-highlight':''}">`;
-      h+=`<td class="diff3-time">${rl}</td>`;
-      h+=`<td class="diff3-cell diff3-before-cell${before!==a?' diff3-old':''}">${esc(before.txt)}<br><span class="diff3-sub">${esc(before.sub||'')}</span></td>`;
-      h+=`<td class="diff3-cell diff3-a-cell${!a.txt?' diff3-empty':a.changed?' diff3-changed':a.broken?' diff3-broken':' diff3-unchanged'}">${esc(a.txt)}${a.txt?'<br><span class="diff3-sub">'+esc(a.sub||'')+'</span>':''}</td>`;
-      h+=`<td class="diff3-cell diff3-b-cell${!b.txt?' diff3-empty':b.changed?' diff3-changed':b.broken?' diff3-broken':' diff3-unchanged'}">${esc(b.txt)}${b.txt?'<br><span class="diff3-sub">'+esc(b.sub||'')+'</span>':''}</td>`;
-      h+=`</tr>`;
-    });
-    h+=`</tbody></table>`;
-    h+=`</div>`;
-  }
   if(calView==='week'){
     // day buttons removed — table header handles navigation
     // table-style: time | day1 | day2 | day3 | day4
