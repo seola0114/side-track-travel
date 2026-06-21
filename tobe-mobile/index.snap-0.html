@@ -16,13 +16,12 @@
   --dec:#B0792E; --dec-bg:#F6EEDD; --dec-line:#ECD8BB;
   --warn:#B23B2E; --warn-bg:#F6E4E1; --warn-line:#E6BCB4;
   --keep:#2E7D4F; --keep-bg:#E7F2EA;
-  --routine:#F2EFE8; --routine-ink:#807B73;
+  --routine:#F2EFE8; --routine-ink:#A8A299;
   --radius:14px; --radius-s:9px;
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --sans:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
 html,body{height:100%}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;display:flex;height:100dvh;overflow:hidden}
 ::selection{background:var(--accent);color:#fff}
@@ -201,7 +200,7 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .suggest:has(.schip){flex-direction:row;flex-wrap:wrap;align-items:center}
 .suggest .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-right:2px}
 .schip{font-family:var(--sans);font-size:12.5px;font-weight:500;border:1px solid var(--accent-line);background:var(--accent-bg);color:var(--accent-deep);border-radius:20px;padding:6px 13px;cursor:pointer;text-align:left;transition:.15s}
-.sug-choice{display:flex;align-items:center;justify-content:space-between;width:100%;font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--dec-line);background:var(--dec-bg);color:var(--dec);border-radius:10px;padding:14px 16px;min-height:48px;cursor:pointer;text-align:left;transition:.15s;-webkit-tap-highlight-color:transparent}
+.sug-choice{display:flex;align-items:center;justify-content:space-between;width:100%;font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--dec-line);background:var(--dec-bg);color:var(--dec);border-radius:10px;padding:12px 14px;cursor:pointer;text-align:left;transition:.15s;-webkit-tap-highlight-color:transparent}
 .sug-choice:active{background:#f0e3c8;transform:scale(.98)}
 .sug-choice+.sug-choice{margin-top:6px}
 .sug-choice .sug-q{font-weight:600;color:var(--ink)}
@@ -357,9 +356,9 @@ body{display:block!important}
 /* top bar */
 .mob-bar{display:none;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--paper);flex:none;z-index:10}
 .app.chatting .mob-bar{display:flex}
-.mob-bar-back{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;-webkit-tap-highlight-color:transparent}
+.mob-bar-back{background:none;border:none;font-size:18px;color:var(--muted);cursor:pointer;padding:4px 8px;-webkit-tap-highlight-color:transparent}
 .mob-bar-title{font-size:14px;font-weight:600;color:var(--ink);flex:1}
-.mob-bar-avatar{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}
+.mob-bar-avatar{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}
 
 /* split: top calendar + bottom chat */
 .app.chatting .stage{display:flex!important;flex-direction:column;grid-template-columns:none!important}
@@ -467,13 +466,17 @@ body{display:block!important}
   .cal-ev-txt{font-size:9px;font-weight:600;line-height:1.3}
   .cal-ev-sub{font-size:8px;font-weight:400;opacity:.7}
 
-  /* day view — table style */
+  /* day view — google calendar style */
   .cal-dy{position:relative}
-  .cal-tbl-day .cal-td-ev{padding:10px 12px;font-size:14px}
-  .cal-tbl-day .cal-ev-txt{font-size:14px;font-weight:600}
-  .cal-tbl-day .cal-ev-sub{font-size:12px}
-  .cal-tbl-day .cal-td-time{font-size:12px;padding:8px 8px;width:52px}
-  .cal-tbl-day .bdg{font-family:var(--mono);font-size:9px;font-weight:600;opacity:.8}
+  .cal-dy-body{display:flex;position:relative}
+  .cal-dy .cal-gutter{width:52px}
+  .cal-dy .cal-hr-label{font-size:11px}
+  .cal-dy .cal-hr-line{left:52px}
+  .cal-dy-lane{flex:1;position:relative;min-height:0}
+  .cal-ev-full{position:absolute;left:2px;right:2px;border-radius:6px;padding:6px 8px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;z-index:1;transition:.12s;border-left:4px solid}
+  .cal-ev-full:active{transform:scale(.98)}
+  .cal-ev-full.act{background:#D2E3FC;color:#1967D2;border-color:#1967D2}
+  .cal-ev-full.routine{background:#E8EAED;color:#5F6368;border-color:#9AA0A6}
   .cal-ev-full.dec{background:#FCE8B2;color:#B06000;border-color:#E37400}
   .cal-ev-full.broken{background:#FAD2CF;color:#C5221F;border-color:#C5221F;animation:pulse 1.4s ease-in-out infinite}
   .cal-ev-full.changed{background:#CEEAD6;color:#137333;border-color:#34A853}
@@ -810,7 +813,7 @@ button:active::after,
     <!-- MIDDLE: conversation -->
     <section class="col mid-col">
       <div class="col-head" id="colTitle" style="display:none"></div>
-      <div class="thread" id="thread" aria-live="polite"></div>
+      <div class="thread" id="thread"></div>
       <div class="composer">
         <div id="quoteWrap"></div>
         <div class="inrow">
@@ -1165,16 +1168,23 @@ function renderLeft(){
     h+=`</tbody></table></div>`;
   }else{
     const d=DAYS[calDay];
-    h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()" aria-label="주간 뷰로 돌아가기">&#8249;</button><span class="cal-title">${d.d} &middot; ${d.date}</span><div class="cal-day-nav"><button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''} aria-label="이전 날">&#8249;</button><button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''} aria-label="다음 날">&#8250;</button></div><button class="cal-view-btn" onclick="calBack()">전체</button></div>`;
-    h+=`<div class="cal-dy"><table class="cal-tbl cal-tbl-day"><tbody>`;
+    h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()">‹</button><span class="cal-title">${d.d} · ${d.date}</span><div class="cal-day-nav"><button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''}>‹</button><button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''}>›</button></div><button class="cal-view-btn" onclick="calBack()">전체</button></div>`;
+    h+=`<div class="cal-dy"><div class="cal-dy-body" style="height:${totalH}px"><div class="cal-gutter">${hourLines()}</div><div class="cal-dy-lane">`;
     ROWS.forEach((rl,ri)=>{
-      const c=dg[ri][calDay];
-      let cls='cal-td-ev '+c.t;
+      const c=dg[ri][calDay],sl=SLOT_T[ri];
+      const top=(sl.s-7)*CAL_PX,ht=(sl.e-sl.s)*CAL_PX;
+      let cls='cal-ev-full '+c.t;
       if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-      const bdg=c.badge?`<span class="bdg">${esc(c.badge)}</span> `:'';
-      h+=`<tr><td class="cal-td-time">${rl}</td><td class="${cls}" onclick="toggleCell(${ri},${calDay})">${bdg}<span class="cal-ev-txt">${esc(c.txt)}</span> <span class="cal-ev-sub">${esc(c.sub||'')}</span></td></tr>`;
+      const open=(S._openCell===ri+'-'+calDay);if(open)cls+=' open';
+      const bdg=c.badge?`<span class="bdg">${esc(c.badge)}</span>`:'';
+      const meta=(c.meta&&c.meta.length)?c.meta.map(m=>`<span class="ctag">${esc(m)}</span>`).join(''):'';
+      const detail=c.detail?`<div class="ev-detail">${esc(c.detail)}</div>`:'';
+      const minH=Math.max(ht,CAL_PX*0.8);
+      const showSub=ht>=CAL_PX*0.7;
+      const timeLabel=ROWS[ri];
+      h+=`<div class="${cls}" style="top:${top}px;height:${minH}px" onclick="toggleCell(${ri},${calDay})"><div class="ev-top"><span class="ev-time">${timeLabel}</span>${bdg}${meta}</div><div class="ev-title">${esc(c.txt)}</div>${showSub?`<div class="ev-sub">${esc(c.sub||'')}</div>`:''}${detail}</div>`;
     });
-    h+=`</tbody></table></div>`;
+    h+=`</div></div></div>`;
   }
   h+=`</div>`;
   h+=`</div>`;
@@ -2015,7 +2025,6 @@ document.addEventListener('click',e=>{
 },true);
 
 resetAll('side');initCalPinch();
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEvModal();closeQs();closeSidebar();}});
 
 // ripple: set touch position as CSS vars
 document.addEventListener('pointerdown',e=>{
