@@ -931,6 +931,85 @@ function baseGrid(){return [
     {t:'routine',txt:'귀가',sub:'',detail:'집 도착. 여행 끝!'} ],
 ];}
 
+/* ================= GRID CUSTOMIZATION BY ANSWERS ================= */
+function applyAnswersToGrid(grid,answers){
+  const a0=answers[0],a1=answers[1],a2=answers[2],a3=answers[3];
+  // hotel name based on a3
+  const hotelNames=['신주쿠 호텔','이케부쿠로 호텔','긴자 호텔','신주쿠 호텔'];
+  const hotelArea=['신주쿠','이케부쿠로','긴자','신주쿠'];
+  const hn=hotelNames[a3]||hotelNames[0], ha=hotelArea[a3]||hotelArea[0];
+  // Day 1 row 0,8: hotel references
+  grid[0][1]={t:'routine',txt:'기상·조식',sub:hn+' 조식'};
+  grid[0][2]={t:'routine',txt:'기상·조식',sub:hn+' 조식'};
+  grid[8][0]={t:'routine',txt:'호텔·취침',sub:hn};
+  grid[8][1]={t:'routine',txt:'호텔·취침',sub:hn};
+  // arrival/hotel
+  grid[2][0].sub=ha+'행 리무진 약 80분';
+  grid[3][0]={t:'act',txt:ha+' 도착',sub:'호텔 짐 맡기기',detail:hn+' 체크인 15:00. 짐은 프런트에 맡기고 출발.'};
+  grid[5][0]={t:'act',txt:'체크인·휴식',sub:hn+' 정리·시차 적응',detail:hn+' 체크인. 대욕장 이용 가능.'};
+  grid[7][0]={t:'act',txt:ha+' 저녁',sub:ha+' 근처 식당',key:'d1eve',meta:['🍜 맛집']};
+  grid[4][3].sub=ha+'에서 리무진 약 80분';
+  // purpose (a0): modify Day 2 afternoon + Day 3 afternoon
+  if(a0===0){// shopping/trend
+    grid[4][1]={t:'act',txt:'오모테산도 힐즈',sub:'편집숍·디자인 소품',meta:['🛍 쇼핑'],detail:'오모테산도 힐즈, 츠타야 서점, 스트리트 브랜드 편집숍.'};
+    grid[5][1]={t:'act',txt:'하라주쿠 산책',sub:'캣스트리트·라포레',meta:['🛍 쇼핑'],detail:'캣스트리트 → 라포레 하라주쿠. 트렌드 편집숍 밀집.'};
+    grid[4][2]={t:'act',txt:'나카메구로',sub:'디자인 카페·숍',meta:['🛍 쇼핑'],detail:'나카메구로 강변 편집숍, 츠타야 T-SITE, 디자인 소품샵.'};
+    grid[5][2]={t:'act',txt:'다이칸야마',sub:'힙한 편집숍 거리',meta:['🛍 쇼핑'],detail:'다이칸야마 T-SITE, 독립 서점, 빈티지숍.'};
+  }else if(a0===1){// food/healing
+    grid[4][1]={t:'dec',badge:'예약',txt:'오마카세 점심',sub:'미슐랭 스시 코스',meta:['🍜 맛집','🔖 예약'],detail:'런치 오마카세 ¥5,000-8,000. 예약 필수.'};
+    grid[5][1]={t:'act',txt:'신주쿠 교엔',sub:'공원 산책·힐링',meta:['🌿 힐링'],detail:'신주쿠 교엔 단풍 산책. 입장료 ¥500. 11월 단풍 시즌.'};
+    grid[4][2]={t:'dec',badge:'예약',txt:'야키니쿠 저녁',sub:'와규 맛집',meta:['🍜 맛집','🔖 예약'],detail:'야키니쿠 와규 코스. ¥5,000-10,000/인. 예약 추천.'};
+    grid[5][2]={t:'act',txt:'우에노 공원',sub:'미술관·호수 산책',meta:['🌿 힐링'],detail:'우에노 공원 → 국립서양미술관 → 시노바즈노이케 호수.'};
+  }else{// landmark/photo
+    grid[4][1]={t:'dec',badge:'예약',txt:'시부야 스카이',sub:'전망대 예약',meta:['📷 인증샷','🔖 예약'],detail:'시부야 스카이 전망대. 시간 지정 예약 필수. 옥상 SKY STAGE.'};
+    grid[5][1]={t:'act',txt:'스크램블 교차로',sub:'하치코·시부야 거리',meta:['📷 인증샷'],detail:'시부야 스크램블 교차로 횡단. 하치코상 기념사진.'};
+    grid[4][2]={t:'act',txt:'도쿄타워',sub:'야경 포토스팟',meta:['📷 인증샷'],detail:'도쿄타워 전망대. 일몰 시간 맞춰 방문 추천.'};
+    grid[5][2]={t:'act',txt:'오다이바 해변',sub:'레인보우브리지·건담',meta:['📷 인증샷'],detail:'오다이바 해변공원 → 자유의 여신상 → 건담 유니콘 실물대.'};
+  }
+  // disney (a1): replace Day 2 entirely
+  if(a1===1){// disneyland
+    grid[0][1]={t:'routine',txt:'기상·이동',sub:'디즈니랜드행'};
+    grid[1][1]={t:'dec',badge:'예약',txt:'디즈니랜드',sub:'개장 입장',meta:['🎢 테마파크'],detail:'도쿄 디즈니랜드. 08:00 개장. 1데이 패스포트.'};
+    grid[2][1]={t:'act',txt:'어트랙션',sub:'빅썬더 마운틴 등',meta:['🎢 테마파크']};
+    grid[3][1]={t:'act',txt:'파크 내 점심',sub:'레스토랑 예약 추천',meta:['🍜 맛집']};
+    grid[4][1]={t:'act',txt:'퍼레이드·쇼',sub:'오후 퍼레이드',meta:['🎢 테마파크']};
+    grid[5][1]={t:'act',txt:'어트랙션 추가',sub:'스탠바이패스 활용',meta:['🎢 테마파크']};
+    grid[6][1]={t:'act',txt:'야간 쇼 대기',sub:'일렉트리컬 퍼레이드',meta:['🎢 테마파크']};
+    grid[7][1]={t:'act',txt:'디즈니 나이트',sub:'야경·기념품',meta:['🎢 테마파크']};
+    grid[8][1]={t:'routine',txt:'호텔 복귀',sub:'디즈니 셔틀'};
+  }else if(a1===2){// disneysea
+    grid[0][1]={t:'routine',txt:'기상·이동',sub:'디즈니씨행'};
+    grid[1][1]={t:'dec',badge:'예약',txt:'디즈니씨',sub:'개장 입장',meta:['🎢 테마파크'],detail:'도쿄 디즈니씨. 08:00 개장. 1데이 패스포트.'};
+    grid[2][1]={t:'act',txt:'어트랙션',sub:'소어링·센터 오브 디 어스',meta:['🎢 테마파크']};
+    grid[3][1]={t:'act',txt:'파크 내 점심',sub:'레스토랑 예약 추천',meta:['🍜 맛집']};
+    grid[4][1]={t:'act',txt:'판타지 스프링스',sub:'신규 에리어',meta:['🎢 테마파크']};
+    grid[5][1]={t:'act',txt:'포토스팟',sub:'메디테레이니언 하버',meta:['📷 인증샷']};
+    grid[6][1]={t:'act',txt:'야간 쇼 대기',sub:'빌리브! 시 오브 드림스',meta:['🎢 테마파크']};
+    grid[7][1]={t:'act',txt:'디즈니씨 나이트',sub:'야경·기념품',meta:['🎢 테마파크']};
+    grid[8][1]={t:'routine',txt:'호텔 복귀',sub:'디즈니 셔틀'};
+  }
+  // flight (a2): afternoon arrival / afternoon departure
+  if(a2===1){
+    grid[0][0]={t:'routine',txt:'출발 준비',sub:'오후 비행'};
+    grid[1][0]={t:'routine',txt:'공항 이동',sub:'인천공항 출발',meta:['✈ 비행']};
+    grid[2][0]={t:'dec',badge:'항공',txt:'하네다 도착',sub:'오후 착륙',key:'arrive',meta:['✈ 도착']};
+    grid[3][0]={t:'act',txt:ha+' 이동',sub:'리무진 약 80분',meta:['🚌 리무진']};
+    grid[4][0]={t:'act',txt:'체크인',sub:hn+' 짐 맡기기'};
+    grid[5][0]={t:'act',txt:ha+' 산책',sub:'주변 둘러보기'};
+    // Day 4: early departure
+    grid[0][3]={t:'routine',txt:'기상·체크아웃',sub:'짐 챙기기'};
+    grid[1][3]={t:'act',txt:'마지막 쇼핑',sub:ha+' 근처',meta:['🛍 쇼핑']};
+    grid[2][3]={t:'dec',badge:'교통',txt:'공항 이동',sub:'리무진 약 80분',key:'depart',meta:['🚌 리무진']};
+    grid[3][3]={t:'dec',badge:'항공',txt:'출국 수속',sub:'면세 쇼핑',meta:['✈ 비행']};
+    grid[4][3]={t:'dec',badge:'항공',txt:'하네다 출발',sub:'오후 이륙',meta:['✈ 비행']};
+    grid[5][3]={t:'act',txt:'기내',sub:'인천행',meta:['✈ 비행']};
+    grid[6][3]={t:'act',txt:'인천 도착',sub:'착륙·귀가',meta:['✈ 도착']};
+    grid[7][3]={t:'routine',txt:'귀가',sub:''};
+    grid[8][3]={t:'routine',txt:'',sub:''};
+  }
+  return grid;
+}
+
 /* ================= SCRIPTED CONTENT ================= */
 const SCRIPT={
   draft:`11월 초, 이케부쿠로 베이스로 팝업/굿즈/캐릭터 카페 중심의 일정을 만들었어요.\n\n왼쪽 패널에 Day별 일정표가 생성됐어요. **협력 카페/예약**이 실린 칸은 배지로, 매일 반복되는 조식/취침 같은 루틴은 흐리게 표시돼요. 칸을 누르면 상세 설명이 펼쳐집니다.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.`,
@@ -1116,7 +1195,7 @@ function renderLeft(){
       }
     }
     if(changedDays.length){
-      h+=`<div style="padding:6px 8px;border-bottom:1px solid var(--line)"><span style="font-size:11px;font-weight:600;color:var(--accent-deep)">일정 변경 비교</span></div>`;
+      // diff header removed
       changedDays.forEach(di=>{
         h+=`<div class="diff-header"><span class="diff-header-label before">변경 전</span><span class="diff-header-label after">변경 후</span></div>`;
         h+=`<div style="display:flex;border-bottom:1px solid var(--line)">`;
@@ -1517,6 +1596,7 @@ function routeMobile(text){
       const hotelMap=['**시부야/신주쿠** 베이스로 출발/복귀 동선을 최적화했어요.','**이케부쿠로** 베이스로 출발/복귀 동선을 최적화했어요.','**긴자/도쿄역** 베이스로 출발/복귀 동선을 최적화했어요.','숙소는 미정이니 신주쿠 기준으로 짰어요. 확정되면 조정할게요.'];
       const a=qsAnswers;
       const draftMob=`선택하신 내용을 반영해서 맞춤 일정을 만들었어요.\n\n- ${purposeMap[a[0]]||purposeMap[0]}\n- ${disneyMap[a[1]]||disneyMap[0]}\n- ${flightMap[a[2]]||flightMap[0]}\n- ${hotelMap[a[3]]||hotelMap[0]}\n\n위에서 일정표를 확인해 보세요. 출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래에서 하나씩 정리해 봐요.`;
+      S.grid=applyAnswersToGrid(S.grid,qsAnswers);
       S.msgs.push({role:'assistant',text:draftMob,choices:true});
       S.showChoices=true; S.drafted=true; S.step=2;
       document.getElementById('app').classList.add('has-itin');
