@@ -1427,6 +1427,12 @@ function renderMid(){
   t.innerHTML=h;t.scrollTop=t.scrollHeight;
   // start streaming if needed
   if(document.querySelector('.bubble.streaming'))streamLastMessage();
+  // prefill input if last message has prefill text
+  const lastMsg=S.msgs[S.msgs.length-1];
+  if(lastMsg&&lastMsg.prefill&&lastMsg.role==='assistant'){
+    const inp=document.getElementById('mainIn');
+    if(inp){inp.value=lastMsg.prefill;autoGrow(inp);inp.focus();}
+  }
 }
 
 /* ================= RENDER: RIGHT ================= */
@@ -1653,7 +1659,7 @@ function routeMobile(text){
       const draftMob=`선택하신 내용을 반영해서 맞춤 일정을 만들었어요.\n\n- ${purposeMap[a[0]]||purposeMap[0]}\n- ${disneyMap[a[1]]||disneyMap[0]}\n- ${flightMap[a[2]]||flightMap[0]}\n- ${hotelMap[a[3]]||hotelMap[0]}`;
       S.grid=applyAnswersToGrid(S.grid,qsAnswers);
       S.msgs.push({role:'assistant',text:draftMob});
-      S.msgs.push({role:'assistant',text:'그런데 교통은 어떻게 할 생각이에요? **JR패스**를 사면 JR 노선을 무제한으로 탈 수 있긴 한데, 7일권이 약 5만 엔이라 시내만 도는 우리 일정에는 좀 비싸거든요.',inlineChoices:[{label:'스이카가 나을듯',value:'transit_no'}]});
+      S.msgs.push({role:'assistant',text:'그런데 교통은 어떻게 할 생각이에요? **JR패스**를 사면 JR 노선을 무제한으로 탈 수 있긴 한데, 7일권이 약 5만 엔이라 시내만 도는 우리 일정에는 좀 비싸거든요.',prefill:'스이카가 나을듯'});
       S.drafted=true; S.step=2;
       document.getElementById('app').classList.add('has-itin');
       renderAll();
@@ -1661,7 +1667,7 @@ function routeMobile(text){
     return;
   }else if(S.step===2){
     // transit decision
-    S.msgs.push({role:'assistant',text:'맞아요! 이번 일정은 **도쿄 시내만** 돌기 때문에 JR패스는 안 사는 게 이득이에요. **스이카** 충전식으로 탄 만큼만 쓰는 게 낫습니다.\n\n공항에서 발급하고, 지하철/버스/편의점까지 한 장으로 다 돼요.\n\n그러면 통신은요? **eSIM**이면 유심칩 없이 QR로 바로 설치할 수 있어요. 포켓와이파이는 둘이 떨어지면 한 명이 끊기거든요.',inlineChoices:[{label:'각자 eSIM으로',value:'esim'}]});
+    S.msgs.push({role:'assistant',text:'맞아요! 이번 일정은 **도쿄 시내만** 돌기 때문에 JR패스는 안 사는 게 이득이에요. **스이카** 충전식으로 탄 만큼만 쓰는 게 낫습니다.\n\n공항에서 발급하고, 지하철/버스/편의점까지 한 장으로 다 돼요.\n\n그러면 통신은요? **eSIM**이면 유심칩 없이 QR로 바로 설치할 수 있어요. 포켓와이파이는 둘이 떨어지면 한 명이 끊기거든요.',prefill:'각자 eSIM으로'});
     if(!S.ledger.some(d=>d.topic==='transit'))
       S.ledger.push({txt:'교통: 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
     S.step=3;
