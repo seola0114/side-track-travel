@@ -6,28 +6,29 @@
 <title>To-Be — Claude (Mobile)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Source+Serif+4:wght@300;400&family=Inter:wght@400;430;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
-  --bg:#FAFAFA; --paper:#FAFAFA; --surface:#FFFFFF; --ink:#1A1A1A; --muted:#4A4A4A; --faint:#8C8C8C;
-  --line:#EEEEEE; --line2:#E0E0E0;
-  --accent:#6B6B6B; --accent-deep:#404040; --accent-bg:#F0F0F0; --accent-line:#D0D0D0;
-  --dec:#D4940A; --dec-bg:#FFF8E7; --dec-line:#F0D98A;
+  --bg:#faf9f5; --paper:#faf9f5; --surface:#ffffff; --ink:#141413; --muted:#3d3d3a; --faint:#73726c;
+  --line:#dedcd1; --line2:#dedcd1;
+  --accent:#1f1e1d; --accent-deep:#141413; --accent-bg:#f0eee6; --accent-line:#dedcd1;
+  --dec:#1f1e1d; --dec-bg:#ccdbe8; --dec-line:#b7b7b5;
   --warn:#D94B3F; --warn-bg:#FEF0EE; --warn-line:#F5C4BF;
   --keep:#34A853; --keep-bg:#E8F5E9;
-  --routine:#F5F5F5; --routine-ink:#9E9E9E;
-  --radius:16px; --radius-s:10px;
-  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
-  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);
+  --routine:#f0eee6; --routine-ink:#9c9a92;
+  --radius:16px; --radius-s:9.6px;
+  --shadow-sm:none;
+  --shadow-md:none;
   --mono:'JetBrains Mono',ui-monospace,monospace;
-  --sans:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
+  --sans:'Inter','Pretendard',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --serif:'Source Serif 4',ui-serif,Georgia,serif;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}}
 html,body{height:100%}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;display:flex;height:100dvh;overflow:hidden;max-width:430px;margin:0 auto}
-::selection{background:var(--accent);color:#fff}
+::selection{background:#ccdbe8;color:var(--ink)}
 .app{display:flex;flex-direction:column;height:100dvh;flex:1;min-width:0;position:relative}
 
 /* ---- LNB (left nav) ---- */
@@ -156,8 +157,8 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .msg.user{align-self:flex-end;align-items:flex-end}
 .who{display:none}
 .bubble{padding:2px 0;font-size:15px;line-height:1.72}
-.msg.user .bubble{background:#404040;color:#fff;border-radius:20px;border-bottom-right-radius:6px;padding:12px 16px;box-shadow:var(--shadow-sm)}
-.msg.assistant .bubble{background:var(--surface);border:none;border-radius:20px;border-bottom-left-radius:6px;padding:12px 16px;box-shadow:var(--shadow-sm)}
+.msg.user .bubble{background:#1f1e1d;color:#fff;border-radius:16px;border-bottom-right-radius:6px;padding:12px 16px}
+.msg.assistant .bubble{background:var(--surface);border:1px solid var(--line);border-radius:16px;border-bottom-left-radius:6px;padding:12px 16px}
 .bubble.selectable{cursor:text}
 .bubble .mdh{font-weight:700;color:var(--accent-deep);margin:10px 0 4px;font-size:13px}
 .bubble .mdh:first-child{margin-top:0}
@@ -209,8 +210,8 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .sug-choice .sug-q{font-weight:600;color:var(--ink)}
 .sug-choice .sug-label{font-family:var(--mono);font-size:11px;color:var(--dec);letter-spacing:.02em}
 .schip:hover{background:#e8c9b8}
-.inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1.5px solid var(--line);border-radius:24px;padding:12px 12px 12px 18px;transition:.2s;box-shadow:var(--shadow-sm)}
-.inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-bg)}
+.inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 12px 12px 18px;transition:border-color .2s}
+.inrow:focus-within{border-color:#1f1e1d}
 textarea{flex:1;font-family:var(--sans);font-size:16px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:130px;line-height:1.5;padding:4px 0}
 .send{flex:none;width:40px;height:40px;border:0;border-radius:14px;background:var(--accent);color:#fff;font-size:17px;cursor:pointer;display:grid;place-items:center;transition:.18s;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .send:hover{background:var(--accent-deep)}
@@ -357,11 +358,11 @@ body{display:block!important}
 .itin-card,.diff-card{display:none!important}
 
 /* top bar */
-.mob-bar{display:none;align-items:center;gap:8px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10;box-shadow:var(--shadow-sm)}
+.mob-bar{display:none;align-items:center;gap:8px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10}
 .app.chatting .mob-bar{display:flex}
 .mob-bar-back{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;border-radius:12px;-webkit-tap-highlight-color:transparent}
 .mob-bar-back:active{background:var(--line)}
-.mob-bar-title{font-size:16px;font-weight:700;color:var(--ink);flex:1;letter-spacing:-.02em}
+.mob-bar-title{font-family:var(--serif);font-size:17px;font-weight:400;color:var(--ink);flex:1;letter-spacing:-.01em}
 .mob-bar-avatar{width:34px;height:34px;border-radius:12px;background:#404040;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}
 
 /* split: top calendar + bottom chat */
@@ -657,8 +658,8 @@ button:active::after,
 
 /* ---- inline choices (conversation flow) ---- */
 .inline-choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.inline-choice{font-family:var(--sans);font-size:13px;font-weight:600;border:1.5px solid var(--accent-line);background:var(--accent-bg);color:var(--accent-deep);border-radius:24px;padding:10px 18px;min-height:44px;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent;box-shadow:var(--shadow-sm)}
-.inline-choice:active{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(.95);box-shadow:var(--shadow-md)}
+.inline-choice{font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:9.6px;padding:10px 18px;min-height:44px;cursor:pointer;transition:border-color .18s;-webkit-tap-highlight-color:transparent}
+.inline-choice:active{background:#1f1e1d;color:#fff;border-color:#1f1e1d;transform:scale(.95)}
 
 /* ---- streaming cursor ---- */
 .bubble.streaming::after{content:'';display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:1px;vertical-align:text-bottom;animation:blinkcursor .6s step-end infinite}
@@ -1982,14 +1983,20 @@ function chooseAdjust(ai){
   saveSnapshot();
   const a=SCRIPT.adjust[ai];
   if(S.meter&&S.meter.active)meterCount('click');
+  // 시간 밀림 반영: row 1,2 비움 → row 3부터 재배치
+  S.grid[1][0]={t:'routine',txt:'',sub:'',changed:true};
+  S.grid[2][0]={t:'routine',txt:'',sub:'',changed:true};
+  S.grid[3][0]={t:'dec',badge:'항공',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',key:'arrive',changed:true,meta:['✈ 도착']};
+  S.grid[4][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',key:'transit',changed:true,meta:['🚌 리무진']};
+  S.grid[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
   // replace grid cell (Animate Cafe = row 6)
   S.grid[6][0]=(ai===0)
-    ?{t:'act',txt:'이케부쿠로 근처 저녁',sub:'호텔 도보권',key:'d1eve',changed:true,meta:['🍜 저녁'],detail:'도착 지연으로 Animate Cafe 취소. 호텔 근처 가벼운 저녁으로 변경.'}
-    :{t:'dec',badge:'예약',txt:'Animate Cafe (늦은 타임)',sub:'예약 변경',key:'d1eve',changed:true,meta:['🔖 예약'],detail:'지연된 도착 후 Animate Cafe 늦은 타임으로 변경. 취침 늦어짐.'};
+    ?{t:'act',txt:'호텔 근처 저녁',sub:'동네 산책 후 가볍게',key:'d1eve',changed:true,meta:['🍜 저녁'],detail:'도착 지연으로 Animate Cafe 취소. 호텔 근처 가벼운 저녁으로 변경.'}
+    :{t:'dec',badge:'예약',txt:'Animate Cafe (변경)',sub:'늦은 타임 시도',key:'d1eve',changed:true,meta:['🔖 예약'],detail:'지연된 도착 후 Animate Cafe 늦은 타임으로 변경. 취침 늦어짐.'};
   // 저녁도 같이 조정
   S.grid[7][0]=(ai===0)
-    ?{t:'act',txt:'이케부쿠로 저녁',sub:'호텔 근처',changed:true,meta:['🍜 저녁'],detail:'Animate Cafe 대신 호텔 근처에서 가볍게.'}
-    :{t:'act',txt:'이케부쿠로 저녁',sub:'늦은 저녁',changed:true,meta:['🍜 저녁'],detail:'Animate Cafe 후 늦은 저녁.'};
+    ?{t:'routine',txt:'',sub:'',changed:true}
+    :{t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true,meta:['🍜 저녁'],detail:'Animate Cafe 후 늦은 저녁.'};
   // update ledger affected -> adjusted
   const idx=S.ledger.findIndex(d=>d.topic==='d1eve');
   if(idx>=0){S.ledger[idx]={txt:a.pin,pill:'adjust',pillLabel:'조정됨',src:'시스템 조정안',state:'live',topic:'d1eve'};}
