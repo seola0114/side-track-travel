@@ -1507,9 +1507,9 @@ function routeMain(text){
 
 function routeMobile(text){
   if(S.step===1){
-    S.msgs.push({role:'assistant',text:'11월 도쿄, 좋은 시즌이네요! Seola의 관심사들(코난, 앙상블 스타즈, 카페, 팝업 이벤트 등)을 고려해서 초안을 짜봤습니다. 몇 가지 확인하고 싶은 게 있어서 먼저 물어봐도 될까요?'});
+    S.msgs.push({role:'assistant',text:'11월 도쿄 3박 4일 초안을 짜봤어요! 두 분의 취향에 딱 맞는 일정을 완성하기 위해, 핵심 포인트 4가지를 확인할게요.'});
     renderAll();
-    const draftMob='Seola의 관심사(코난, 앙상블 스타즈, 캐릭터 카페)를 고려해서 11월 초 이케부쿠로 베이스 일정을 만들었어요.\n\n**일정 탭**에서 Day별 일정표를 확인할 수 있어요. 협력 카페/예약이 실린 칸은 배지로, 루틴은 흐리게 표시됩니다. 칸을 누르면 상세 설명이 펼쳐져요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래 제안을 눌러 하나씩 정리해 봐요.';
+    const draftMob='답변을 바탕으로 맞춤 일정을 만들었어요. 위에서 일정표를 확인할 수 있어요.\n\n출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래에서 하나씩 정리해 봐요.';
     setTimeout(()=>openQs(()=>{
       S.msgs.push({role:'assistant',text:draftMob,choices:true});
       S.showChoices=true; S.drafted=true; S.step=2;
@@ -1895,13 +1895,14 @@ function evChatSend(){
 
 /* ================= QUESTIONNAIRE ================= */
 const QS_DATA=[
-  {q:'11월 중 언제쯤 생각 중인가요?',opts:['11월 초 (1~10일)','11월 중순 (10~20일)','11월 말 (20~30일)']},
-  {q:'이번 여행의 포커스가 있다면?',opts:['팝업/애니 굿즈/캐릭터 카페','관광/먹방 위주','쇼핑 위주','골고루']},
-  {q:'숙소 위치 선호는?',opts:['이케부쿠로 (이전 여행처럼)','시부야/신주쿠 (번화가)','아키하바라 근처','아직 정하지 않음']},
+  {q:'여행의 주된 목적은?',opts:['쇼핑/트렌드 (편집숍, 디자인 소품, 츠타야 등)','미식/힐링 (오마카세, 야키니쿠, 공원 산책)','랜드마크/인증샷 (시부야 스카이, 도쿄타워, 야경)']},
+  {q:'디즈니랜드/디즈니씨 방문 여부',opts:['안 갈 예정','디즈니랜드 하루 방문','디즈니씨 하루 방문','아직 미정']},
+  {q:'항공편 시간',opts:['오전 도착 / 밤 출발 (풀 일정)','오후 도착 / 오후 출발 (여유 일정)','아직 미정']},
+  {q:'숙소 위치 (또는 후보지)',opts:['시부야/신주쿠','이케부쿠로','긴자/도쿄역 근처','아직 정하지 않음']},
 ];
-let qsIdx=0,qsAnswers=[-1,-1,-1],qsCallback=null;
+let qsIdx=0,qsAnswers=[-1,-1,-1,-1],qsCallback=null;
 function openQs(cb){
-  qsIdx=0;qsAnswers=[-1,-1,-1];qsCallback=cb;
+  qsIdx=0;qsAnswers=[-1,-1,-1,-1];qsCallback=cb;
   renderQs();
   document.getElementById('qsBackdrop').classList.add('open');
   document.getElementById('qsSheet').classList.add('open');
