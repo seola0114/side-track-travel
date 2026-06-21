@@ -1360,7 +1360,7 @@ function renderLeft(){
         const c=dg[ri][di];
         let cls='cal-td-ev '+c.t;
         if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
-        h+=`<td class="${cls}" onclick="toggleCell(${ri},${di})"><span class="cal-ev-txt">${esc(c.txt)}</span> <span class="cal-ev-sub">${esc(c.sub||'')}</span></td>`;
+        h+=`<td class="${cls}" onclick="toggleCell(${ri},${di})"><span class="cal-ev-txt">${esc(c.txt)}</span></td>`;
       });
       h+=`</tr>`;
     });
