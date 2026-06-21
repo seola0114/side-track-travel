@@ -1376,7 +1376,7 @@ function renderLeft(){
     h+=`</tbody></table></div>`;
   }
   h+=`</div>`; // close cal-body
-  h+=`<div class="cal-resize" id="calResize"><div class="cal-resize-bar"></div></div>`;
+  if(!calCollapsed) h+=`<div class="cal-resize" id="calResize"><div class="cal-resize-bar"></div></div>`;
   h+=`</div>`;
   h+=`</div>`;
   w.innerHTML=h;
