@@ -10,14 +10,16 @@
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
 :root{
-  --bg:#F8F8F6; --paper:#F8F8F6; --surface:#FFFFFF; --ink:#141413; --muted:#3C3C39; --faint:#72716C;
-  --line:#EDEBE2; --line2:#E6E3D8;
-  --accent:#D97757; --accent-deep:#C6613F; --accent-bg:#F6EBE5; --accent-line:#EACFC2;
-  --dec:#B0792E; --dec-bg:#F6EEDD; --dec-line:#ECD8BB;
-  --warn:#B23B2E; --warn-bg:#F6E4E1; --warn-line:#E6BCB4;
-  --keep:#2E7D4F; --keep-bg:#E7F2EA;
-  --routine:#F2EFE8; --routine-ink:#807B73;
-  --radius:14px; --radius-s:9px;
+  --bg:#FAFAFA; --paper:#FAFAFA; --surface:#FFFFFF; --ink:#1A1A1A; --muted:#4A4A4A; --faint:#8C8C8C;
+  --line:#EEEEEE; --line2:#E0E0E0;
+  --accent:#6B6B6B; --accent-deep:#404040; --accent-bg:#F0F0F0; --accent-line:#D0D0D0;
+  --dec:#D4940A; --dec-bg:#FFF8E7; --dec-line:#F0D98A;
+  --warn:#D94B3F; --warn-bg:#FEF0EE; --warn-line:#F5C4BF;
+  --keep:#34A853; --keep-bg:#E8F5E9;
+  --routine:#F5F5F5; --routine-ink:#9E9E9E;
+  --radius:16px; --radius-s:10px;
+  --shadow-sm:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:0 4px 12px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.04);
   --mono:'JetBrains Mono',ui-monospace,monospace;
   --sans:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
 }
@@ -154,8 +156,8 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .msg.user{align-self:flex-end;align-items:flex-end}
 .who{display:none}
 .bubble{padding:2px 0;font-size:15px;line-height:1.72}
-.msg.user .bubble{background:#EFECE4;color:var(--ink);border-radius:16px;border-bottom-right-radius:6px;padding:11px 15px}
-.msg.assistant .bubble{background:none;border:none}
+.msg.user .bubble{background:#404040;color:#fff;border-radius:20px;border-bottom-right-radius:6px;padding:12px 16px;box-shadow:var(--shadow-sm)}
+.msg.assistant .bubble{background:var(--surface);border:none;border-radius:20px;border-bottom-left-radius:6px;padding:12px 16px;box-shadow:var(--shadow-sm)}
 .bubble.selectable{cursor:text}
 .bubble .mdh{font-weight:700;color:var(--accent-deep);margin:10px 0 4px;font-size:13px}
 .bubble .mdh:first-child{margin-top:0}
@@ -169,7 +171,7 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .choice:disabled{opacity:.55;cursor:default;background:var(--keep-bg);border-color:#cfe3d4;color:var(--keep)}
 .choice .q{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);margin-right:auto}
 .choice.done .q{color:var(--keep)}
-.adjcards{margin-top:12px;display:flex;flex-direction:column;gap:9px}
+.adjcards{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .adjcard{border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:var(--surface);transition:.15s}
 .adjcard.rec{border:2px solid var(--accent)}
 .adjcard h4{font-size:13px;font-weight:700;margin-bottom:3px}
@@ -207,10 +209,10 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:8.5px;co
 .sug-choice .sug-q{font-weight:600;color:var(--ink)}
 .sug-choice .sug-label{font-family:var(--mono);font-size:11px;color:var(--dec);letter-spacing:.02em}
 .schip:hover{background:#e8c9b8}
-.inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:11px 11px 11px 16px;transition:.15s}
-.inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
+.inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1.5px solid var(--line);border-radius:24px;padding:12px 12px 12px 18px;transition:.2s;box-shadow:var(--shadow-sm)}
+.inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-bg)}
 textarea{flex:1;font-family:var(--sans);font-size:16px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:130px;line-height:1.5;padding:4px 0}
-.send{flex:none;width:36px;height:36px;border:0;border-radius:11px;background:var(--accent);color:#fff;font-size:16px;cursor:pointer;display:grid;place-items:center;transition:.15s}
+.send{flex:none;width:40px;height:40px;border:0;border-radius:14px;background:var(--accent);color:#fff;font-size:17px;cursor:pointer;display:grid;place-items:center;transition:.18s;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .send:hover{background:var(--accent-deep)}
 .send:disabled{opacity:.35;cursor:default}
 
@@ -355,11 +357,12 @@ body{display:block!important}
 .itin-card,.diff-card{display:none!important}
 
 /* top bar */
-.mob-bar{display:none;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--paper);flex:none;z-index:10}
+.mob-bar{display:none;align-items:center;gap:8px;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10;box-shadow:var(--shadow-sm)}
 .app.chatting .mob-bar{display:flex}
-.mob-bar-back{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;-webkit-tap-highlight-color:transparent}
-.mob-bar-title{font-size:14px;font-weight:600;color:var(--ink);flex:1}
-.mob-bar-avatar{width:32px;height:32px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:700}
+.mob-bar-back{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;border-radius:12px;-webkit-tap-highlight-color:transparent}
+.mob-bar-back:active{background:var(--line)}
+.mob-bar-title{font-size:16px;font-weight:700;color:var(--ink);flex:1;letter-spacing:-.02em}
+.mob-bar-avatar{width:34px;height:34px;border-radius:12px;background:#404040;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}
 
 /* split: top calendar + bottom chat */
 .app.chatting .stage{display:flex!important;flex-direction:column;grid-template-columns:none!important}
@@ -451,21 +454,20 @@ body{display:block!important}
 
   /* week view — table style, no gaps */
   .cal-wk{position:relative}
-  .cal-tbl{width:100%;border-collapse:collapse;table-layout:fixed}
-  .cal-th-time{width:42px;font-family:var(--mono);font-size:10px;color:#70726E;font-weight:400;padding:4px 4px 4px 6px;border-bottom:1px solid #E8EAED}
-  .cal-th-day{text-align:center;padding:6px 2px;font-size:11px;font-weight:600;color:#3C4043;border-bottom:1px solid #DADCE0;border-left:1px solid #E8EAED;cursor:pointer;-webkit-tap-highlight-color:transparent}
-  .cal-th-day:active{background:#F1F3F4}
-  .cal-th-day small{display:block;font-size:9px;font-weight:400;color:#70726E}
-  .cal-td-time{font-family:var(--mono);font-size:10px;color:#70726E;font-weight:400;padding:2px 6px;vertical-align:top;border-bottom:1px solid #F1F3F4;width:42px}
-  .cal-td-ev{border-left:1px solid #E8EAED;border-bottom:1px solid #F1F3F4;padding:2px;vertical-align:top;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:0}
-  .cal-td-ev{border-radius:4px;border-left:3px solid transparent;padding:4px 5px}
-  .cal-td-ev.act{background:#D2E3FC;border-color:#1967D2;color:#1967D2}
-  .cal-td-ev.routine{background:#F1F3F4;border-color:#9AA0A6;color:#5F6368}
-  .cal-td-ev.dec{background:#FCE8B2;border-color:#E37400;color:#B06000}
-  .cal-td-ev.broken{background:#FAD2CF;border-color:#C5221F;color:#C5221F;animation:pulse 1.4s ease-in-out infinite}
-  .cal-td-ev.changed{background:#CEEAD6;border-color:#34A853;color:#137333}
-  .cal-ev-txt{font-size:9px;font-weight:600;line-height:1.3}
-  .cal-ev-sub{font-size:8px;font-weight:400;opacity:.7}
+  .cal-tbl{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
+  .cal-th-time{width:42px;font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 4px 4px 6px}
+  .cal-th-day{text-align:center;padding:8px 2px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;-webkit-tap-highlight-color:transparent;letter-spacing:-.01em}
+  .cal-th-day:active{background:var(--line);border-radius:8px}
+  .cal-td-time{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 6px;vertical-align:top;width:42px}
+  .cal-td-ev{padding:6px 8px;vertical-align:top;cursor:pointer;-webkit-tap-highlight-color:transparent;border-radius:var(--radius-s);box-shadow:var(--shadow-sm);transition:box-shadow .15s,transform .15s}
+  .cal-td-ev:active{box-shadow:var(--shadow-md);transform:scale(.97)}
+  .cal-td-ev.act{background:#F5F5F5;color:#404040}
+  .cal-td-ev.routine{background:var(--routine);color:var(--routine-ink)}
+  .cal-td-ev.dec{background:var(--dec-bg);color:#8B6914}
+  .cal-td-ev.broken{background:var(--warn-bg);color:var(--warn);animation:pulse 1.4s ease-in-out infinite}
+  .cal-td-ev.changed{background:var(--keep-bg);color:var(--keep)}
+  .cal-ev-txt{font-size:10px;font-weight:700;line-height:1.35}
+  .cal-ev-sub{font-size:8.5px;font-weight:400;color:inherit;opacity:.7;margin-top:1px}
 
   /* day view — table style */
   .cal-dy{position:relative}
@@ -609,6 +611,40 @@ button:active::after,
   transform:scale(2.5);opacity:1;transition:transform 0s,opacity 0s
 }
 
+/* ---- 3-column diff comparison ---- */
+.diff3-tbl{width:100%;border-collapse:separate;border-spacing:2px;table-layout:fixed;min-width:360px;font-size:10px}
+.diff3-th{padding:8px 4px;font-size:10px;font-weight:700;text-align:center;border-radius:8px 8px 0 0}
+.diff3-th:first-child{width:36px}
+.diff3-before{background:var(--routine);color:var(--faint)}
+.diff3-a{background:#E8E8E8;color:#404040;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.15s}
+.diff3-a:active{background:#404040;color:#fff}
+.diff3-b{background:var(--dec-bg);color:#8B6914;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.15s}
+.diff3-b:active{background:var(--dec);color:#fff}
+.diff3-time{font-family:var(--mono);font-size:9px;color:var(--faint);padding:3px 4px;vertical-align:top}
+.diff3-cell{padding:5px 4px;border-radius:6px;vertical-align:top;line-height:1.3}
+.diff3-sub{font-size:8px;opacity:.7}
+.diff3-before-cell{background:var(--surface);color:var(--ink)}
+.diff3-old{opacity:1}
+.diff3-a-cell{background:#F5F5F5}
+.diff3-b-cell{background:#FFFBF0}
+.diff3-changed{font-weight:700}
+.diff3-unchanged{opacity:.35}
+.diff3-empty{background:#fff !important;box-shadow:none !important}
+.diff3-broken{color:var(--warn);font-weight:700}
+.diff3-highlight .diff3-a-cell{background:#EBEBEB;box-shadow:inset 0 0 0 1.5px #C0C0C0}
+.diff3-highlight .diff3-b-cell{background:var(--dec-bg);box-shadow:inset 0 0 0 1.5px var(--dec-line)}
+.diff3-highlight .diff3-before-cell{background:var(--surface)}
+.diff3-actions{display:flex;gap:8px;padding:12px 4px}
+.diff3-pick{flex:1;font-family:var(--sans);font-size:13px;font-weight:700;padding:12px;border-radius:12px;border:none;cursor:pointer;min-height:48px;transition:.15s;-webkit-tap-highlight-color:transparent}
+.diff3-pick:active{transform:scale(.97)}
+.diff3-pick-a{background:#404040;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.diff3-pick-b{background:var(--dec);color:#fff;box-shadow:0 2px 8px rgba(212,148,10,.3)}
+
+/* ---- inline choices (conversation flow) ---- */
+.inline-choices{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.inline-choice{font-family:var(--sans);font-size:13px;font-weight:600;border:1.5px solid var(--accent-line);background:var(--accent-bg);color:var(--accent-deep);border-radius:24px;padding:10px 18px;min-height:44px;cursor:pointer;transition:all .18s cubic-bezier(.4,0,.2,1);-webkit-tap-highlight-color:transparent;box-shadow:var(--shadow-sm)}
+.inline-choice:active{background:var(--accent);color:#fff;border-color:var(--accent);transform:scale(.95);box-shadow:var(--shadow-md)}
+
 /* ---- streaming cursor ---- */
 .bubble.streaming::after{content:'';display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:1px;vertical-align:text-bottom;animation:blinkcursor .6s step-end infinite}
 @keyframes blinkcursor{0%,100%{opacity:1}50%{opacity:0}}
@@ -620,7 +656,7 @@ button:active::after,
 .diff-header-label.after{color:var(--accent-deep)}
 .diff-cols{display:flex;gap:1px;background:var(--line)}
 .diff-col{flex:1;background:var(--paper);display:flex;flex-direction:column;gap:3px;padding:6px 4px}
-.diff-col.before{opacity:.85}
+.diff-col.before{opacity:1}
 .diff-col.after .cal-ev.changed,.diff-col.after .cal-ev-full.changed{border:2px solid var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
 .diff-col.after .cal-ev.broken,.diff-col.after .cal-ev-full.broken{border:2px dashed var(--warn);box-shadow:0 0 0 2px var(--warn-bg)}
 .diff-cell{border-radius:6px;padding:5px 6px;font-size:10px;line-height:1.3;min-height:28px}
@@ -632,7 +668,31 @@ button:active::after,
 .diff-cell.changed{background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent-deep)}
 .diff-cell.broken{background:var(--warn-bg);border:2px dashed var(--warn);color:var(--warn)}
 .diff-cell.same{background:var(--routine);color:var(--routine-ink);opacity:.5}
-.diff-cell.before-changed{text-decoration:line-through;text-decoration-color:var(--warn)}
+.diff-cell.before-changed{}
+
+/* ---- adjust modal ---- */
+.adj-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.4);display:none}
+.adj-backdrop.open{display:block}
+.adj-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:510;background:var(--surface);transform:translateY(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;overflow:hidden;pointer-events:none}
+.adj-modal.open{pointer-events:auto;transform:translateY(0)}
+@media(min-width:769px){.adj-modal{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) scale(.92);width:520px;max-height:85vh;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.18);opacity:0;transition:transform .22s,opacity .22s}.adj-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1}}
+.adj-head{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);flex:none;gap:8px}
+.adj-head button{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:4px}
+.adj-head .adj-title{flex:1;font-size:16px;font-weight:700}
+.adj-body{flex:1;overflow-y:auto;padding:16px}
+.adj-conflict{background:var(--warn-bg);border:1px solid var(--warn-line);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:13px;line-height:1.6;color:var(--warn)}
+.adj-conflict b{color:var(--ink)}
+.adj-options{display:flex;gap:8px;margin-top:14px}
+.adj-opt{flex:1;border-radius:12px;padding:12px;cursor:pointer;transition:.15s;-webkit-tap-highlight-color:transparent;border:2px solid transparent}
+.adj-opt:active{transform:scale(.97)}
+.adj-opt-a{background:#F5F5F5}
+.adj-opt-a:hover,.adj-opt-a:active{border-color:#404040}
+.adj-opt-b{background:#FFFBF0}
+.adj-opt-b:hover,.adj-opt-b:active{border-color:var(--dec)}
+.adj-opt-title{font-size:13px;font-weight:700;margin-bottom:4px}
+.adj-opt-desc{font-size:11px;color:var(--muted);line-height:1.5;margin-bottom:6px}
+.adj-opt-pro{font-size:11px;color:#2E7D4F}
+.adj-opt-con{font-size:11px;color:var(--warn)}
 
 /* ---- event detail modal ---- */
 .ev-backdrop{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.35);display:none}
@@ -766,7 +826,6 @@ button:active::after,
   <div class="mob-bar">
     <button class="mob-bar-back" onclick="goBackToLanding()">&#8249;</button>
     <span class="mob-bar-title">도쿄 여행 일정</span>
-    <span class="mob-bar-avatar">SK</span>
   </div>
 
   <div class="landing" id="landing">
@@ -835,6 +894,15 @@ button:active::after,
 </div>
 
 <div class="guide" id="guide" style="display:none"></div>
+
+<div class="adj-backdrop" id="adjBackdrop" onclick="closeAdjModal()"></div>
+<div class="adj-modal" id="adjModal">
+  <div class="adj-head">
+    <button onclick="closeAdjModal()">x</button>
+    <span class="adj-title">일정 충돌</span>
+  </div>
+  <div class="adj-body" id="adjBody"></div>
+</div>
 
 <div class="ev-backdrop" id="evBackdrop" onclick="closeEvModal()"></div>
 <div class="ev-modal" id="evModal">
@@ -1026,16 +1094,16 @@ const SCRIPT={
   sideFollow:`더 궁금하면 계속 물어봐요. 정리됐으면 **메인으로 가져오기**로 결론만 결정 기록에 합류시키면 됩니다.`,
   genericSide:(seed)=>`"${seed}" 부분이군요. 이 데모는 교통(JR패스)·통신(eSIM) 두 주제에 상세 답변이 준비돼 있어요.\n\n핵심은 같습니다 — 메인 일정을 건드리지 않고 여기서만 더 묻고, 결론만 결정 기록으로 가져옵니다.`,
   finalize:`정한 교통·통신 결정을 일정에 반영했어요. 확정본은 여기 다시 길게 출력하지 않고 — **왼쪽 일정표가 제자리에서 갱신**되고, 두 결정이 결정 기록에 한 줄씩 남았습니다. 이게 핵심이에요: 결정이 대화 로그가 아니라 다시 꺼내 쓸 단위로 보존됩니다.\n\n이제 여행 중에 변수가 생겨도, 흩어진 기록을 뒤질 필요가 없어요.`,
-  delayReply:`3시간 지연을 일정에 반영했어요.\n\n**변경된 부분:**\n- 하네다 도착: 12:30 → **15:30**\n- 이케부쿠로 도착: 14:00 → **17:20**\n- 선샤인시티 탐방: **시간 부족** (생략 가능)\n- Animate Cafe: **예약 조정 필요**\n\n교통(스이카)/통신(eSIM)은 영향 없어요. Animate Cafe 예약을 어떻게 할지 아래에서 골라주세요.`,
+  delayReply:`3시간 지연을 일정에 반영했어요. 현재 스케줄 기준으로 영향받는 항목을 정리했습니다.\n\n**즉시 조치 필요:**\n- **Animate Cafe 예약** — 17:00 예약인데 도착이 17:20 예상이라 시간 안 맞아요. 취소하거나 늦은 타임으로 변경해야 해요.\n- **호텔 체크인** — 도착 예상 17:20. 호텔에 늦는다고 미리 연락하세요.\n\n**자동 조정됨:**\n- 하네다 도착: 12:30 → **15:30**\n- 시내 도착: 14:00 → **17:20**\n- 선샤인시티 탐방: **시간 부족으로 생략** (Day 2~3으로 이동 가능)\n- 체크인/휴식: **체크인만** 하고 바로 저녁으로\n\n**영향 없음:** 교통(스이카), 통신(eSIM), Day 2~4 일정\n\nAnimate Cafe를 어떻게 할까요?`,
   adjust:[
-    {h:'안 A · 카페 취소',tl:'Animate Cafe 취소, 호텔 근처 저녁. 피로 최소.',pro:'피로 적음',con:'카페 포기',pin:'Day 1 저녁: Animate Cafe 취소, 호텔 근처 (지연 대응)',
-     was:'17:00 Animate Cafe 저녁',now:'19:30 이케부쿠로역 근처 저녁',shift:'+2.5시간 · 21:30 취침',
-     cell:{txt:'이케부쿠로 근처 저녁',sub:'호텔 도보권',meta:['🍜 저녁']}},
-    {h:'안 B · 카페 시간 변경',tl:'Animate Cafe 늦은 시간으로 변경 시도.',pro:'카페 유지',con:'취침 늦어짐',rec:true,pin:'Day 1 저녁: Animate Cafe 늦은 타임 (지연 대응)',
-     was:'17:00 Animate Cafe',now:'20:00 Animate Cafe 늦은 타임',shift:'+3시간 · 23:00 취침',
-     cell:{txt:'Animate Cafe (늦은 타임)',sub:'예약 변경 확인',meta:['🔖 예약']}},
+    {h:'카페 취소 + 가지치기',tl:'첫날은 체크인→짐 풀기→호텔 근처 저녁으로 단순화. 못 본 카페는 2~3일차로.',pro:'체력 보존, 노쇼 패널티 방지',con:'Animate Cafe 포기',pin:'Day 1: 카페 취소, 호텔 근처 가벼운 저녁 (지연 대응)',
+     was:'Animate Cafe 저녁',now:'호텔 근처 가벼운 저녁',shift:'체크인→짐 풀기→동네 산책→저녁',
+     cell:{txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',meta:['🍜 저녁']}},
+    {h:'카페 늦은 타임으로 변경',tl:'Animate Cafe에 예약 변경 연락. 늦은 타임이 되면 가능할 수도.',pro:'카페 유지 가능',con:'취침 늦어짐, 변경 불가 위험',rec:true,pin:'Day 1: Animate Cafe 늦은 타임 시도 (지연 대응)',
+     was:'Animate Cafe',now:'Animate Cafe (늦은 타임 시도)',shift:'도착 즉시 호텔→카페→늦은 저녁',
+     cell:{txt:'Animate Cafe (변경)',sub:'늦은 타임 시도',meta:['🔖 예약']}},
   ],
-  adjustDone:(label)=>`**${label}** 로 결정했어요. 왼쪽 일정표 Day 1 저녁 칸이 그 안으로 교체됐어요. 다른 방향이 궁금하면 말씀해 주세요.`,
+  adjustDone:(label)=>`**${label}**로 결정했어요. 일정표가 업데이트됐어요.\n\n공항 대기하는 동안 이것만 먼저 해두세요:\n1. 호텔에 늦는다고 메시지 보내기\n2. 첫날 예약(카페/식당) 취소 또는 변경하기\n\n이 두 가지만 처리하면 도착해서 허둥대는 일을 줄일 수 있어요.`,
   editDone:(txt)=>`직접 수정한 내용을 읽어 결정 기록에 '직접 수정' 한 줄로 기록했습니다. 대화로 한 결정과 손으로 한 수정이 같은 결정 기록을 공유해요.`,
 };
 
@@ -1186,44 +1254,70 @@ function renderLeft(){
   h+=`</tbody></table></div>`;
   // mobile calendar view
   h+=`<div class="mob-itin">`;
-  if(gridSnapshot&&calView==='week'){
-    // find which days have changes
-    const changedDays=[];
-    for(let di=0;di<4;di++){
-      for(let ri=0;ri<9;ri++){
-        if(S.grid[ri][di].changed||S.grid[ri][di].broken){changedDays.push(di);break;}
-      }
-    }
-    if(changedDays.length){
-      // diff header removed
-      changedDays.forEach(di=>{
-        h+=`<div class="diff-header"><span class="diff-header-label before">변경 전</span><span class="diff-header-label after">변경 후</span></div>`;
-        h+=`<div style="display:flex;border-bottom:1px solid var(--line)">`;
-        // day headers
-        h+=`<div style="flex:1;text-align:center;padding:4px;font-size:11px;font-weight:600;color:var(--faint)">${DAYS[di].d}<small style="display:block;font-size:9px;font-weight:400">${DAYS[di].date}</small></div>`;
-        h+=`<div style="flex:1;text-align:center;padding:4px;font-size:11px;font-weight:600;color:var(--accent-deep)">${DAYS[di].d}<small style="display:block;font-size:9px;font-weight:400">${DAYS[di].date}</small></div>`;
-        h+=`</div>`;
-        h+=`<div class="diff-cols">`;
-        // before column
-        h+=`<div class="diff-col before">`;
-        ROWS.forEach((rl,ri)=>{
-          const c=gridSnapshot[ri][di];
-          const isChanged=S.grid[ri][di].changed||S.grid[ri][di].broken;
-          const cls='diff-cell '+c.t+(isChanged?' before-changed':'');
-          h+=`<div class="${cls}"><div class="dc-txt">${esc(c.txt)}</div><div class="dc-sub">${esc(c.sub||'')}</div></div>`;
-        });
-        h+=`</div>`;
-        // after column
-        h+=`<div class="diff-col after">`;
-        ROWS.forEach((rl,ri)=>{
-          const c=S.grid[ri][di];
-          const cls='diff-cell '+c.t+(c.changed?' changed':'')+(c.broken?' broken':'');
-          h+=`<div class="${cls}"><div class="dc-txt">${esc(c.txt)}</div><div class="dc-sub">${esc(c.sub||'')}</div></div>`;
-        });
-        h+=`</div>`;
-        h+=`</div>`;
-      });
-    }
+  if(gridSnapshot&&calView==='week'&&!S.adjustChosen){
+    const di=0; // Day 1 is the affected day
+    // build A/B grids — 3h delay shifts events down
+    const gridA=gridSnapshot.map(row=>row.map(c=>({...c})));
+    const gridB=gridSnapshot.map(row=>row.map(c=>({...c})));
+    const adjA=SCRIPT.adjust[0],adjB=SCRIPT.adjust[1];
+    const empty={t:'routine',txt:'',sub:''};
+    // Row 1,2 (09:00,10:30): 지연으로 비어있음
+    gridA[1][0]={...empty,changed:true};
+    gridA[2][0]={...empty,changed:true};
+    gridB[1][0]={...empty,changed:true};
+    gridB[2][0]={...empty,changed:true};
+    // Row 3 (12:00): 하네다 도착 (지연)
+    gridA[3][0]={t:'dec',badge:'항공',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
+    gridB[3][0]={t:'dec',badge:'항공',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
+    // Row 4 (13:30): 이케부쿠로 이동
+    gridA[4][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
+    gridB[4][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
+    // Row 5 (15:00): 도착·체크인
+    gridA[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
+    gridB[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
+    // Row 6 (17:00): A=호텔 근처 저녁 / B=Animate Cafe 변경
+    gridA[6][0]={t:'act',txt:adjA.cell.txt,sub:adjA.cell.sub,changed:true};
+    gridB[6][0]={t:'dec',txt:adjB.cell.txt,sub:adjB.cell.sub,changed:true};
+    // Row 7 (19:00): A=산책 저녁 / B=늦은 저녁
+    gridA[7][0]={t:'act',txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',changed:true};
+    gridB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
+
+    h+=`<div style="overflow-x:auto">`;
+    h+=`<table class="diff3-tbl"><thead><tr>`;
+    h+=`<th class="diff3-th">시간</th>`;
+    h+=`<th class="diff3-th diff3-before">변경 전</th>`;
+    h+=`<th class="diff3-th diff3-a" onclick="chooseAdjust(0)">A안: ${esc(adjA.h)}</th>`;
+    h+=`<th class="diff3-th diff3-b" onclick="chooseAdjust(1)">B안: ${esc(adjB.h)}</th>`;
+    h+=`</tr></thead><tbody>`;
+    ROWS.forEach((rl,ri)=>{
+      if(ri===8) return; // 호텔·취침 행 제외
+      const before=gridSnapshot[ri][di];
+      const a=gridA[ri][di];
+      const b=gridB[ri][di];
+      const isChanged=a.changed||a.broken||b.changed||b.broken;
+      h+=`<tr class="${isChanged?'diff3-highlight':''}">`;
+      h+=`<td class="diff3-time">${rl}</td>`;
+      h+=`<td class="diff3-cell diff3-before-cell${before!==a?' diff3-old':''}">${esc(before.txt)}<br><span class="diff3-sub">${esc(before.sub||'')}</span></td>`;
+      h+=`<td class="diff3-cell diff3-a-cell${!a.txt?' diff3-empty':a.changed?' diff3-changed':a.broken?' diff3-broken':' diff3-unchanged'}">${esc(a.txt)}${a.txt?'<br><span class="diff3-sub">'+esc(a.sub||'')+'</span>':''}</td>`;
+      h+=`<td class="diff3-cell diff3-b-cell${!b.txt?' diff3-empty':b.changed?' diff3-changed':b.broken?' diff3-broken':' diff3-unchanged'}">${esc(b.txt)}${b.txt?'<br><span class="diff3-sub">'+esc(b.sub||'')+'</span>':''}</td>`;
+      h+=`</tr>`;
+    });
+    h+=`</tbody></table>`;
+    h+=`<div style="display:flex;gap:8px;margin-top:10px;font-size:12px;line-height:1.5">`;
+    h+=`<div style="flex:1;background:#F5F5F5;border-radius:10px;padding:10px 12px">`;
+    h+=`<div style="font-weight:700;margin-bottom:4px">A안: ${esc(adjA.h)}</div>`;
+    h+=`<div style="color:#56534D">${esc(adjA.tl)}</div>`;
+    h+=`<div style="margin-top:6px;color:#2E7D4F">+ ${esc(adjA.pro)}</div>`;
+    h+=`<div style="color:#B23B2E">- ${esc(adjA.con)}</div>`;
+    h+=`</div>`;
+    h+=`<div style="flex:1;background:#FFFBF0;border-radius:10px;padding:10px 12px">`;
+    h+=`<div style="font-weight:700;margin-bottom:4px">B안: ${esc(adjB.h)}</div>`;
+    h+=`<div style="color:#56534D">${esc(adjB.tl)}</div>`;
+    h+=`<div style="margin-top:6px;color:#2E7D4F">+ ${esc(adjB.pro)}</div>`;
+    h+=`<div style="color:#B23B2E">- ${esc(adjB.con)}</div>`;
+    h+=`</div>`;
+    h+=`</div>`;
+    h+=`</div>`;
   }
   if(calView==='week'){
     // day buttons removed — table header handles navigation
@@ -1315,15 +1409,13 @@ function streamLastMessage(){
         let extra='';
         if(m.itinCard)extra+=buildItinCard();
         if(m.diffCard)extra+=buildDiffCard(m.diffCard);
-        if(m.choices&&S.showChoices&&S.mode==='side'){
-          extra+=`<div class="choices">`;
-          S.choices.forEach(c=>{extra+=`<button class="choice ${c.done?'done':''}" ${c.done?'disabled':''} onclick="pickChoice('${c.id}')"><span class="q">${c.q}</span>${c.done?'✓ '+esc(c.label):esc(c.label)}</button>`;});
+        if(m.inlineChoices){
+          extra+=`<div class="inline-choices">`;
+          m.inlineChoices.forEach(c=>{extra+=`<button class="inline-choice" onclick="sendInlineChoice(\`${esc(c.label)}\`)">${esc(c.label)}</button>`;});
           extra+=`</div>`;
         }
         if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
-          extra+=`<div class="adjcards">`;
-          SCRIPT.adjust.forEach((a,ai)=>{extra+=`<div class="adjcard ${a.rec?'rec':''}"><h4>${esc(a.h)}</h4><div class="tl">${esc(a.tl)}</div><div class="pc"><span class="pro">+ ${esc(a.pro)}</span> &nbsp; <span class="con">− ${esc(a.con)}</span></div><button onclick="chooseAdjust(${ai})">이 안으로 결정</button></div>`;});
-          extra+=`</div>`;
+          extra+=`<div style="margin-top:10px"><button onclick="openAdjModal()" style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--accent-deep);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:20px;padding:8px 16px;cursor:pointer">A안 / B안 비교하기</button></div>`;
         }
         if(extra)el.insertAdjacentHTML('beforeend',extra);
       }
@@ -1359,12 +1451,15 @@ function renderMid(){
         });
         h+=`</div>`;
       }
-      if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
-        h+=`<div class="adjcards">`;
-        SCRIPT.adjust.forEach((a,ai)=>{
-          h+=`<div class="adjcard ${a.rec?'rec':''}" onmouseenter="previewAdjust(${ai})" onmouseleave="previewAdjust(null)"><h4>${esc(a.h)}</h4><div class="tl">${esc(a.tl)}</div><div class="pc"><span class="pro">+ ${esc(a.pro)}</span> &nbsp; <span class="con">− ${esc(a.con)}</span></div><div class="hoverhint">↕ 올려보면 일정표·시간이 미리 바뀝니다</div><div class="adjtime"><div class="at-row"><span class="at-lbl">변경 전</span><span class="at-was">${esc(a.was)}</span></div><div class="at-arrow">↓</div><div class="at-row"><span class="at-lbl">변경 후</span><span class="at-now">${esc(a.now)}</span></div><div class="at-shift">${esc(a.shift)}</div></div><button onclick="chooseAdjust(${ai})">이 안으로 결정 →</button></div>`;
+      if(m.inlineChoices&&i===lastAssistIdx){
+        h+=`<div class="inline-choices">`;
+        m.inlineChoices.forEach(c=>{
+          h+=`<button class="inline-choice" onclick="sendInlineChoice(\`${esc(c.label)}\`)">${esc(c.label)}</button>`;
         });
         h+=`</div>`;
+      }
+      if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
+        h+=`<div style="font-size:13px;color:var(--muted);margin-top:10px">위 일정표에서 A안 또는 B안 헤더를 눌러 결정해주세요.</div>`;
       }
       h+=`</div></div>`;
     }
@@ -1500,6 +1595,7 @@ function pickChoice(id){
 
 /* ================= MAIN SEND ================= */
 function sendSuggest(t){if(S.busy)return;document.getElementById('mainIn').value=t;onMainSend();}
+function sendInlineChoice(label){if(S.busy)return;document.getElementById('mainIn').value=label;onMainSend();}
 function fillMain(t){const i=document.getElementById('mainIn');i.value=t;i.focus();autoGrow(i);}
 
 function onMainSend(){
@@ -1570,7 +1666,7 @@ function routeMain(text){
     S.step=5;
   }else if(S.step===5||/최종|반영|확정/.test(text)){
     applyFinalize();
-    S.msgs.push({role:'assistant',text:SCRIPT.finalize,itinCard:true});
+    S.msgs.push({role:'assistant',text:'교통/통신 결정을 일정에 반영했어요! 이제 여행 중에 변수가 생겨도 빠르게 조정할 수 있어요.\n\n혹시 여행 중에 변수가 생기면 알려주세요. 예를 들어 항공편 지연 같은 상황이요.',inlineChoices:[{label:'항공편 3시간 지연됐어',value:'delay'},{label:'괜찮아, 일정 확정할게',value:'done'}]});
     S.step=6;
     mobNotify('left');
   }else if(S.step===6||/지연|늦|취소|휴무/.test(text)){
@@ -1595,32 +1691,28 @@ function routeMobile(text){
       const flightMap=['오전 도착/밤 출발이라 첫날부터 마지막 날까지 풀로 일정을 넣었어요.','오후 도착/오후 출발이라 첫날과 마지막 날은 여유롭게 잡았어요.','항공편은 미정이니 일단 오전 도착/밤 출발 기준으로 짰어요.'];
       const hotelMap=['**시부야/신주쿠** 베이스로 출발/복귀 동선을 최적화했어요.','**이케부쿠로** 베이스로 출발/복귀 동선을 최적화했어요.','**긴자/도쿄역** 베이스로 출발/복귀 동선을 최적화했어요.','숙소는 미정이니 신주쿠 기준으로 짰어요. 확정되면 조정할게요.'];
       const a=qsAnswers;
-      const draftMob=`선택하신 내용을 반영해서 맞춤 일정을 만들었어요.\n\n- ${purposeMap[a[0]]||purposeMap[0]}\n- ${disneyMap[a[1]]||disneyMap[0]}\n- ${flightMap[a[2]]||flightMap[0]}\n- ${hotelMap[a[3]]||hotelMap[0]}\n\n위에서 일정표를 확인해 보세요. 출발 전에 정해두면 좋은 결정이 두 가지 있어요 -- **교통(JR패스)**과 **통신(eSIM)**. 아래에서 하나씩 정리해 봐요.`;
+      const draftMob=`선택하신 내용을 반영해서 맞춤 일정을 만들었어요.\n\n- ${purposeMap[a[0]]||purposeMap[0]}\n- ${disneyMap[a[1]]||disneyMap[0]}\n- ${flightMap[a[2]]||flightMap[0]}\n- ${hotelMap[a[3]]||hotelMap[0]}`;
       S.grid=applyAnswersToGrid(S.grid,qsAnswers);
-      S.msgs.push({role:'assistant',text:draftMob,choices:true});
-      S.showChoices=true; S.drafted=true; S.step=2;
+      S.msgs.push({role:'assistant',text:draftMob});
+      S.msgs.push({role:'assistant',text:'그런데 교통은 어떻게 할 생각이에요? **JR패스**를 사면 JR 노선을 무제한으로 탈 수 있긴 한데, 7일권이 약 5만 엔이라 시내만 도는 우리 일정에는 좀 비싸거든요.',inlineChoices:[{label:'스이카가 나을듯',value:'transit_no'}]});
+      S.drafted=true; S.step=2;
       document.getElementById('app').classList.add('has-itin');
       renderAll();
     }),600);
     return;
   }else if(S.step===2){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[0]});
+    // transit decision
+    S.msgs.push({role:'assistant',text:'맞아요! 이번 일정은 **도쿄 시내만** 돌기 때문에 JR패스는 안 사는 게 이득이에요. **스이카** 충전식으로 탄 만큼만 쓰는 게 낫습니다.\n\n공항에서 발급하고, 지하철/버스/편의점까지 한 장으로 다 돼요.\n\n그러면 통신은요? **eSIM**이면 유심칩 없이 QR로 바로 설치할 수 있어요. 포켓와이파이는 둘이 떨어지면 한 명이 끊기거든요.',inlineChoices:[{label:'각자 eSIM으로',value:'esim'}]});
+    if(!S.ledger.some(d=>d.topic==='transit'))
+      S.ledger.push({txt:'교통: 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
     S.step=3;
   }else if(S.step===3){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[1]});
-    if(!S.ledger.some(d=>d.topic==='transit'))
-      S.ledger.push({txt:'교통: JR패스 ✕, 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
-    const tc=S.choices.find(c=>c.id==='transit');if(tc)tc.done=true;
-    mobNotify('left');
-    S.step=4;
-  }else if(S.step===4){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.comms[0]+'\n\n'+SCRIPT.side.comms[1]});
+    // comms decision
+    S.msgs.push({role:'assistant',text:'좋아요! **각자 eSIM 하나씩**이 깔끔해요.\n- 4일에 1만 원 안팎\n- 각자 구글맵/번역 자유\n- 반납 신경 안 써도 됨\n\n교통은 스이카, 통신은 eSIM으로 확정하고 일정에 반영했어요.\n\n혹시 여행 중에 변수가 생기면 알려주세요. 예를 들어 항공편 지연 같은 상황이요.',inlineChoices:[{label:'항공편 3시간 지연됐어',value:'delay'}]});
     if(!S.ledger.some(d=>d.topic==='comms'))
-      S.ledger.push({txt:'통신: 포켓와이파이 ✕, 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
-    const cc=S.choices.find(c=>c.id==='comms');if(cc)cc.done=true;
-    S.showChoices=false;
-    mobNotify('left');
-    S.step=5;
+      S.ledger.push({txt:'통신: 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
+    applyFinalize();
+    S.step=6;
   }else if(S.step===5||/최종|반영|확정/.test(text)){
     applyFinalize();
     S.msgs.push({role:'assistant',text:'정한 교통/통신 결정을 일정에 반영했어요.\n\n이제 여행 중에 변수가 생겨도 영향받는 부분만 빠르게 조정할 수 있어요.',itinCard:true});
@@ -1776,6 +1868,71 @@ function applyFinalize(){
   // subtle confirm: transit cell label tweak
 }
 
+/* ================= ADJUST MODAL ================= */
+function openAdjModal(){
+  const adjA=SCRIPT.adjust[0],adjB=SCRIPT.adjust[1];
+  const empty={t:'routine',txt:'',sub:''};
+  // build shifted A/B grids
+  const gA=gridSnapshot.map(row=>row.map(c=>({...c})));
+  const gB=gridSnapshot.map(row=>row.map(c=>({...c})));
+  gA[1][0]={...empty};gA[2][0]={...empty};
+  gB[1][0]={...empty};gB[2][0]={...empty};
+  gA[3][0]={t:'dec',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
+  gB[3][0]={t:'dec',txt:'하네다 도착(지연)',sub:'12:00 착륙 (+3h)',changed:true};
+  gA[4][0]={t:'dec',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
+  gB[4][0]={t:'dec',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',changed:true};
+  gA[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
+  gB[5][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true};
+  gA[6][0]={t:'act',txt:adjA.cell.txt,sub:adjA.cell.sub,changed:true};
+  gB[6][0]={t:'dec',txt:adjB.cell.txt,sub:adjB.cell.sub,changed:true};
+  gA[7][0]={t:'act',txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',changed:true};
+  gB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
+
+  let h='';
+  h+=`<div class="adj-conflict"><b>Animate Cafe 예약 충돌</b><br>17:00 예약인데 도착이 17:20 예상이라 시간이 안 맞아요. 취소하거나 늦은 타임으로 변경해야 해요.</div>`;
+  // diff3 table
+  h+=`<div style="overflow-x:auto;margin-bottom:14px">`;
+  h+=`<table class="diff3-tbl"><thead><tr>`;
+  h+=`<th class="diff3-th">시간</th><th class="diff3-th diff3-before">변경 전</th>`;
+  h+=`<th class="diff3-th diff3-a">A안</th><th class="diff3-th diff3-b">B안</th>`;
+  h+=`</tr></thead><tbody>`;
+  ROWS.forEach((rl,ri)=>{
+    if(ri===8) return;
+    const before=gridSnapshot[ri][0];
+    const a=gA[ri][0],b=gB[ri][0];
+    const isChanged=a.changed||b.changed;
+    h+=`<tr class="${isChanged?'diff3-highlight':''}">`;
+    h+=`<td class="diff3-time">${rl}</td>`;
+    h+=`<td class="diff3-cell diff3-before-cell">${esc(before.txt)}<br><span class="diff3-sub">${esc(before.sub||'')}</span></td>`;
+    h+=`<td class="diff3-cell diff3-a-cell${!a.txt?' diff3-empty':a.changed?' diff3-changed':' diff3-unchanged'}">${esc(a.txt)}${a.txt?'<br><span class="diff3-sub">'+esc(a.sub||'')+'</span>':''}</td>`;
+    h+=`<td class="diff3-cell diff3-b-cell${!b.txt?' diff3-empty':b.changed?' diff3-changed':' diff3-unchanged'}">${esc(b.txt)}${b.txt?'<br><span class="diff3-sub">'+esc(b.sub||'')+'</span>':''}</td>`;
+    h+=`</tr>`;
+  });
+  h+=`</tbody></table></div>`;
+  // option cards
+  h+=`<div class="adj-options">`;
+  h+=`<div class="adj-opt adj-opt-a" onclick="closeAdjModal();chooseAdjust(0)">`;
+  h+=`<div class="adj-opt-title">A안: ${esc(adjA.h)}</div>`;
+  h+=`<div class="adj-opt-desc">${esc(adjA.tl)}</div>`;
+  h+=`<div class="adj-opt-pro">+ ${esc(adjA.pro)}</div>`;
+  h+=`<div class="adj-opt-con">- ${esc(adjA.con)}</div>`;
+  h+=`</div>`;
+  h+=`<div class="adj-opt adj-opt-b" onclick="closeAdjModal();chooseAdjust(1)">`;
+  h+=`<div class="adj-opt-title">B안: ${esc(adjB.h)}</div>`;
+  h+=`<div class="adj-opt-desc">${esc(adjB.tl)}</div>`;
+  h+=`<div class="adj-opt-pro">+ ${esc(adjB.pro)}</div>`;
+  h+=`<div class="adj-opt-con">- ${esc(adjB.con)}</div>`;
+  h+=`</div></div>`;
+
+  document.getElementById('adjBody').innerHTML=h;
+  document.getElementById('adjBackdrop').classList.add('open');
+  document.getElementById('adjModal').classList.add('open');
+}
+function closeAdjModal(){
+  document.getElementById('adjBackdrop').classList.remove('open');
+  document.getElementById('adjModal').classList.remove('open');
+}
+
 /* ================= DELAY / REPLAN ================= */
 function applyDelay(){
   saveSnapshot();
@@ -1783,7 +1940,7 @@ function applyDelay(){
   S.ledger.forEach(d=>{ d.pill='keep'; d.pillLabel='유지'; d.state='live'; });
   S.ledger.push({txt:'Day 1 도착~저녁 — 지연 영향',pill:'affected',pillLabel:'영향',src:'조정 대상',state:'affected',topic:'d1eve'});
   // grid: 3시간 지연 → 도착 시간부터 연쇄 변경
-  S.grid[1][0]={t:'dec',badge:'항공',txt:'하네다 도착',sub:'착륙 (+3h 지연)',key:'arrive',changed:true,meta:['✈ 도착'],detail:'3시간 지연으로 15:30 도착. 입국 심사 30분.'};
+  S.grid[1][0]={t:'dec',badge:'항공',txt:'하네다 도착',sub:'12:00 착륙 (+3h 지연)',key:'arrive',changed:true,meta:['✈ 도착'],detail:'3시간 지연으로 15:30 도착. 입국 심사 30분.'};
   S.grid[2][0]={t:'dec',badge:'교통',txt:'이케부쿠로 이동',sub:'리무진버스 약 80분',key:'transit',changed:true,meta:['🚌 리무진'],detail:'16:00 출발, 17:20 이케부쿠로 도착 예상.'};
   S.grid[3][0]={t:'act',txt:'이케부쿠로 도착',sub:'호텔 체크인',changed:true,detail:'지연으로 도착 늦어짐. 체크인 후 바로 저녁.'};
   S.grid[4][0]={t:'act',txt:'선샤인시티 탐방',sub:'시간 부족 — 생략 가능',broken:true,detail:'도착 지연으로 선샤인시티 방문 시간이 부족해요. 내일로 옮기거나 생략할 수 있어요.'};
@@ -1791,6 +1948,7 @@ function applyDelay(){
   S.grid[6][0]={t:'act',txt:'Animate Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'원래 17:00 예약이 도착 지연으로 불가. 늦은 타임으로 변경하거나 취소해야 해요.'};
   S.grid[7][0]={t:'act',txt:'이케부쿠로 저녁',sub:'시간 조정 필요',changed:true,detail:'저녁 시간이 전체적으로 밀림.'};
   mobNotify('left');
+  setTimeout(()=>openAdjModal(),800);
 }
 function chooseAdjust(ai){
   saveSnapshot();
