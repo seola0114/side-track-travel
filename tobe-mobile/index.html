@@ -452,6 +452,21 @@ body{display:block!important}
   .cal-nav-btn:active{background:var(--accent-bg)}
   .cal-nav-btn:disabled{opacity:.3;cursor:default}
 
+  /* calendar toolbar */
+  .cal-toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:3}
+  .cal-toolbar-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
+  .cal-seg{display:flex;background:var(--routine);border-radius:8px;padding:2px;gap:0}
+  .cal-seg button{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--faint);background:none;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.15s}
+  .cal-seg button.active{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .cal-collapse-btn{background:none;border:1px solid var(--line);border-radius:6px;width:28px;height:28px;display:grid;place-items:center;font-size:14px;color:var(--muted);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.15s}
+  .cal-collapse-btn:active{background:var(--line)}
+  .cal-collapse-btn.collapsed{transform:rotate(180deg)}
+  .cal-body{overflow:hidden;transition:max-height .3s ease}
+  .cal-body.collapsed{max-height:0!important;overflow:hidden}
+  /* resize handle */
+  .cal-resize{height:16px;display:flex;align-items:center;justify-content:center;cursor:ns-resize;-webkit-tap-highlight-color:transparent;touch-action:none}
+  .cal-resize-bar{width:32px;height:4px;border-radius:2px;background:var(--line)}
+
   /* week view — table style, no gaps */
   .cal-wk{position:relative}
   .cal-tbl{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed}
@@ -1251,6 +1266,22 @@ function renderLeft(){
   h+=`</tbody></table></div>`;
   // mobile calendar view
   h+=`<div class="mob-itin">`;
+  // toolbar: view toggle + collapse
+  h+=`<div class="cal-toolbar">`;
+  if(calView==='day'){
+    h+=`<button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''}>&#8249;</button>`;
+    h+=`<span class="cal-toolbar-title">${DAYS[calDay].d} · ${DAYS[calDay].date}</span>`;
+    h+=`<button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''}>&#8250;</button>`;
+  }else{
+    h+=`<span class="cal-toolbar-title">일정표</span>`;
+  }
+  h+=`<div class="cal-seg">`;
+  h+=`<button class="${calView==='day'?'active':''}" onclick="calDrill(${calDay||0})">1일</button>`;
+  h+=`<button class="${calView==='week'?'active':''}" onclick="calBack()">전체</button>`;
+  h+=`</div>`;
+  h+=`<button class="cal-collapse-btn${calCollapsed?' collapsed':''}" onclick="toggleCalCollapse()" aria-label="달력 접기/펼기">▲</button>`;
+  h+=`</div>`;
+  h+=`<div class="cal-body${calCollapsed?' collapsed':''}" id="calBody" style="max-height:${calMaxH}px">`;
   if(gridSnapshot&&calView==='week'&&!S.adjustChosen){
     const di=0; // Day 1 is the affected day
     // build A/B grids — 3h delay shifts events down
@@ -1334,8 +1365,6 @@ function renderLeft(){
     });
     h+=`</tbody></table></div>`;
   }else{
-    const d=DAYS[calDay];
-    h+=`<div class="cal-head"><button class="cal-back" onclick="calBack()" aria-label="주간 뷰로 돌아가기">&#8249;</button><span class="cal-title">${d.d} &middot; ${d.date}</span><div class="cal-day-nav"><button class="cal-nav-btn" onclick="calDayNav(-1)" ${calDay===0?'disabled':''} aria-label="이전 날">&#8249;</button><button class="cal-nav-btn" onclick="calDayNav(1)" ${calDay===DAYS.length-1?'disabled':''} aria-label="다음 날">&#8250;</button></div><button class="cal-view-btn" onclick="calBack()">전체</button></div>`;
     h+=`<div class="cal-dy"><table class="cal-tbl cal-tbl-day"><tbody>`;
     ROWS.forEach((rl,ri)=>{
       const c=dg[ri][calDay];
@@ -1346,9 +1375,13 @@ function renderLeft(){
     });
     h+=`</tbody></table></div>`;
   }
+  h+=`</div>`; // close cal-body
+  h+=`<div class="cal-resize" id="calResize"><div class="cal-resize-bar"></div></div>`;
   h+=`</div>`;
   h+=`</div>`;
   w.innerHTML=h;
+  initCalResize();
+  initCalSwipe();
 }
 
 /* ================= INLINE ITINERARY CARD ================= */
@@ -2176,12 +2209,42 @@ function qsNav(dir){qsIdx=Math.max(0,Math.min(QS_DATA.length-1,qsIdx+dir));rende
 
 let mobTab='mid';
 let calView='week',calDay=0;
+let calCollapsed=false, calMaxH=400;
 const SLOT_T=[{s:7,e:8.5},{s:8.5,e:10},{s:10,e:11.5},{s:11.5,e:13},{s:13,e:14.5},{s:14.5,e:16.5},{s:16.5,e:18.5},{s:18.5,e:20.5},{s:20.5,e:22}];
 let CAL_PX=30;// px per hour, adjustable by pinch zoom
 let calScale=1;
-function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;renderLeft();}
-function calBack(){calView='week';CAL_PX=30;calScale=1;renderLeft();}
+function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;calCollapsed=false;renderLeft();}
+function calBack(){calView='week';CAL_PX=30;calScale=1;calCollapsed=false;renderLeft();}
 function calDayNav(dir){calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));renderLeft();}
+function toggleCalCollapse(){calCollapsed=!calCollapsed;renderLeft();}
+function initCalResize(){
+  const handle=document.getElementById('calResize');
+  const body=document.getElementById('calBody');
+  if(!handle||!body)return;
+  let startY=0,startH=0;
+  function onMove(e){
+    const y=e.touches?e.touches[0].clientY:e.clientY;
+    calMaxH=Math.max(100,startH+(y-startY));
+    body.style.maxHeight=calMaxH+'px';
+  }
+  function onEnd(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);}
+  handle.addEventListener('mousedown',e=>{startY=e.clientY;startH=body.offsetHeight;document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);});
+  handle.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;startH=body.offsetHeight;document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);},{passive:true});
+}
+function initCalSwipe(){
+  if(calView!=='day')return;
+  const body=document.getElementById('calBody');
+  if(!body)return;
+  let sx=0;
+  body.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;},{passive:true});
+  body.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    if(Math.abs(dx)>50){
+      if(dx<0&&calDay<DAYS.length-1){calDay++;renderLeft();}
+      else if(dx>0&&calDay>0){calDay--;renderLeft();}
+    }
+  },{passive:true});
+}
 function initCalPinch(){
   const el=document.getElementById('leftScroll');if(!el)return;
   let startDist=0,startPx=0;
