@@ -1376,11 +1376,9 @@ function renderLeft(){
     h+=`</tbody></table></div>`;
   }
   h+=`</div>`; // close cal-body
-  if(!calCollapsed) h+=`<div class="cal-resize" id="calResize"><div class="cal-resize-bar"></div></div>`;
   h+=`</div>`;
   h+=`</div>`;
   w.innerHTML=h;
-  initCalResize();
   initCalSwipe();
 }
 
@@ -2217,20 +2215,6 @@ function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;calCollapsed=fa
 function calBack(){calView='week';CAL_PX=30;calScale=1;calCollapsed=false;renderLeft();}
 function calDayNav(dir){calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));renderLeft();}
 function toggleCalCollapse(){calCollapsed=!calCollapsed;renderLeft();}
-function initCalResize(){
-  const handle=document.getElementById('calResize');
-  const body=document.getElementById('calBody');
-  if(!handle||!body)return;
-  let startY=0,startH=0;
-  function onMove(e){
-    const y=e.touches?e.touches[0].clientY:e.clientY;
-    calMaxH=Math.max(100,startH+(y-startY));
-    body.style.maxHeight=calMaxH+'px';
-  }
-  function onEnd(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onEnd);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);}
-  handle.addEventListener('mousedown',e=>{startY=e.clientY;startH=body.offsetHeight;document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onEnd);});
-  handle.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;startH=body.offsetHeight;document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onEnd);},{passive:true});
-}
 function initCalSwipe(){
   if(calView!=='day')return;
   const body=document.getElementById('calBody');
