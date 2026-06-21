@@ -479,10 +479,10 @@ body{display:block!important}
   .cal-td-ev:active{box-shadow:var(--shadow-md);transform:scale(.97)}
   .cal-td-ev.act{background:#F5F5F5;color:#404040}
   .cal-td-ev.routine{background:var(--routine);color:var(--routine-ink)}
-  .cal-td-ev.dec{background:var(--dec-bg);color:#8B6914}
+  .cal-td-ev.dec{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
   .cal-td-ev.broken{background:var(--warn-bg);color:var(--warn);animation:pulse 1.4s ease-in-out infinite}
   .cal-td-ev.changed{background:var(--keep-bg);color:var(--keep)}
-  .cal-ev-txt{font-size:10px;font-weight:700;line-height:1.35}
+  .cal-ev-txt{font-size:10px;font-weight:700;line-height:1.1}
   .cal-ev-sub{font-size:8.5px;font-weight:400;color:inherit;opacity:.7;margin-top:1px}
 
   /* day view — table style */
@@ -492,7 +492,7 @@ body{display:block!important}
   .cal-tbl-day .cal-ev-sub{font-size:12px}
   .cal-tbl-day .cal-td-time{font-size:12px;padding:8px 8px;width:52px}
   .cal-tbl-day .bdg{font-family:var(--mono);font-size:9px;font-weight:600;opacity:.8}
-  .cal-ev-full.dec{background:#FCE8B2;color:#B06000;border-color:#E37400}
+  .cal-ev-full.dec{background:var(--surface);color:var(--ink);border-color:var(--line)}
   .cal-ev-full.broken{background:#FAD2CF;color:#C5221F;border-color:#C5221F;animation:pulse 1.4s ease-in-out infinite}
   .cal-ev-full.changed{background:#CEEAD6;color:#137333;border-color:#34A853}
   .cal-ev-full .ev-top{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-bottom:2px}
@@ -1332,20 +1332,6 @@ function renderLeft(){
       h+=`</tr>`;
     });
     h+=`</tbody></table>`;
-    h+=`<div style="display:flex;gap:8px;margin-top:10px;font-size:12px;line-height:1.5">`;
-    h+=`<div style="flex:1;background:#F5F5F5;border-radius:10px;padding:10px 12px">`;
-    h+=`<div style="font-weight:700;margin-bottom:4px">A안: ${esc(adjA.h)}</div>`;
-    h+=`<div style="color:#56534D">${esc(adjA.tl)}</div>`;
-    h+=`<div style="margin-top:6px;color:#2E7D4F">+ ${esc(adjA.pro)}</div>`;
-    h+=`<div style="color:#B23B2E">- ${esc(adjA.con)}</div>`;
-    h+=`</div>`;
-    h+=`<div style="flex:1;background:#FFFBF0;border-radius:10px;padding:10px 12px">`;
-    h+=`<div style="font-weight:700;margin-bottom:4px">B안: ${esc(adjB.h)}</div>`;
-    h+=`<div style="color:#56534D">${esc(adjB.tl)}</div>`;
-    h+=`<div style="margin-top:6px;color:#2E7D4F">+ ${esc(adjB.pro)}</div>`;
-    h+=`<div style="color:#B23B2E">- ${esc(adjB.con)}</div>`;
-    h+=`</div>`;
-    h+=`</div>`;
     h+=`</div>`;
   }
   if(calView==='week'){
@@ -1977,7 +1963,6 @@ function applyDelay(){
   S.grid[6][0]={t:'act',txt:'Animate Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'원래 17:00 예약이 도착 지연으로 불가. 늦은 타임으로 변경하거나 취소해야 해요.'};
   S.grid[7][0]={t:'act',txt:'이케부쿠로 저녁',sub:'시간 조정 필요',changed:true,detail:'저녁 시간이 전체적으로 밀림.'};
   mobNotify('left');
-  setTimeout(()=>openAdjModal(),800);
 }
 function chooseAdjust(ai){
   saveSnapshot();
