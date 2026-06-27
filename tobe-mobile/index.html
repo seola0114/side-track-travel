@@ -4,17 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
 <title>Side Track — 일정 변경 대응</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Pretendard+Variable:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
 <style>
 :root{
-  /* DaleUI color tokens (light) */
   --white:#FFFFFF;
-  --black:#000000;
-
-  /* slate (neutral) */
   --slate-1:#F4F6F7;
   --slate-2:#E3E8EA;
   --slate-3:#CAD3D7;
@@ -24,38 +17,22 @@
   --slate-10:#3D464D;
   --slate-11:#363C43;
   --slate-12:#1C2024;
-
-  /* violet (brand) */
   --violet-2:#F7F8FF;
-  --violet-3:#EFF1FF;
-  --violet-4:#E3E7FF;
   --violet-9:#5333E1;
   --violet-10:#481ACF;
   --violet-11:#32228D;
-
-  /* semantic */
   --red-3:#FEEBEC;
-  --red-10:#D7292E;
   --red-11:#CB2328;
   --amber-3:#FFF7C2;
-  --amber-9:#FFC53D;
-  --amber-11:#DD9E08;
   --amber-12:#4F3422;
   --green-3:#E6F6EB;
   --green-10:#21784F;
   --green-11:#1A6644;
-
-  /* typography */
   --sans:"Pretendard Variable","Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
-
-  /* radii */
-  --r-xs:2px;
   --r-sm:4px;
   --r-md:8px;
   --r-lg:16px;
   --r-full:9999px;
-
-  /* transitions */
   --ease:cubic-bezier(.4,0,.2,1);
   --dur:200ms;
 }
@@ -65,7 +42,7 @@ html,body{height:100%}
 body{font-family:var(--sans);background:var(--white);color:var(--slate-9);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100dvh;overflow:hidden;max-width:430px;margin:0 auto}
 
 /* ---- topbar ---- */
-.topbar{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--slate-5);background:var(--white);flex:none}
+.topbar{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid var(--slate-2);background:var(--white);flex:none}
 .back-btn{background:none;color:var(--violet-9);border:none;font-family:var(--sans);font-size:14px;font-weight:500;padding:0;cursor:pointer;flex:none;line-height:1.2;transition:color var(--dur) var(--ease)}
 .back-btn:active{color:var(--violet-11)}
 .topbar-title{font-size:18px;font-weight:600;color:var(--slate-12);line-height:1.2}
@@ -78,37 +55,62 @@ body{font-family:var(--sans);background:var(--white);color:var(--slate-9);font-s
 .bubble{align-self:flex-end;max-width:75%;padding:12px 16px;font-size:16px;line-height:1.5;font-weight:400;background:var(--slate-1);color:var(--slate-11);border-radius:var(--r-lg);border:1px solid var(--slate-2);word-break:keep-all}
 
 /* ---- main card ---- */
-.card{background:var(--white);border:1px solid var(--slate-5);border-radius:var(--r-md);padding:24px 16px;display:flex;flex-direction:column;gap:0}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--white);border:1px solid var(--slate-2);border-radius:var(--r-md);padding:24px 16px;display:flex;flex-direction:column;gap:0;animation:fadeUp .4s var(--ease) both}
 .card-context{font-size:14px;font-weight:500;color:var(--slate-7);line-height:1.2;margin-bottom:4px}
-.card-title{font-size:24px;font-weight:700;color:var(--slate-12);line-height:1.2;letter-spacing:-0.1px;margin-bottom:24px}
+.card-title{font-size:24px;font-weight:700;color:var(--slate-12);line-height:1.2;letter-spacing:-0.1px;margin-bottom:20px}
 
 /* sections */
 .section{padding:12px 0;border-top:1px solid var(--slate-2)}
 .section-label{font-size:12px;font-weight:500;text-transform:uppercase;line-height:1.2;margin-bottom:8px;color:var(--slate-7)}
-.section-item{font-size:14px;font-weight:400;line-height:1.5;color:var(--slate-9);display:flex;align-items:center;gap:8px}
+.section-item{font-size:14px;font-weight:400;line-height:1.5;color:var(--slate-9);display:flex;align-items:center;gap:8px;padding:4px 0}
+.section-item .time{font-size:12px;font-weight:500;color:var(--slate-7);min-width:40px;flex:none}
 
-/* tag-style dots */
-.tag{display:inline-flex;align-items:center;gap:4px;padding:2px 12px;border-radius:var(--r-full);font-size:12px;font-weight:500;line-height:1.2}
+/* tags */
+.tag{display:inline-flex;align-items:center;padding:2px 10px;border-radius:var(--r-full);font-size:12px;font-weight:500;line-height:1.2;flex:none}
 .tag-warning{background:var(--amber-3);color:var(--amber-12)}
-.tag-neutral{background:var(--slate-1);color:var(--slate-7)}
+.tag-danger{background:var(--red-3);color:var(--red-11)}
+.tag-neutral{background:var(--slate-1);color:var(--slate-7);border:1px solid var(--slate-2)}
 
 /* ---- A/B plan comparison ---- */
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:20px}
-.plan{background:var(--slate-1);border-radius:var(--r-md);padding:16px 12px;cursor:pointer;border:1.5px solid transparent;transition:border-color var(--dur) var(--ease),background-color var(--dur) var(--ease);display:flex;flex-direction:column;gap:8px;-webkit-tap-highlight-color:transparent}
+.plans-hint{font-size:12px;font-weight:500;color:var(--violet-9);text-align:center;margin-top:16px;margin-bottom:4px}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.plan{background:var(--slate-1);border-radius:var(--r-md);padding:16px 12px;cursor:pointer;border:1.5px solid transparent;transition:border-color var(--dur) var(--ease),background-color var(--dur) var(--ease),opacity var(--dur) var(--ease);display:flex;flex-direction:column;gap:8px;-webkit-tap-highlight-color:transparent}
 .plan:active{transform:scale(.98)}
 .plan.selected{border-color:var(--violet-9);background:var(--violet-2)}
+.plan.dimmed{opacity:.4}
 .plan-label{font-size:12px;font-weight:500;color:var(--slate-7);line-height:1.2}
+.plan.selected .plan-label{color:var(--violet-9)}
 .plan-title{font-size:18px;font-weight:600;color:var(--slate-12);line-height:1.2}
-.plan-items{display:flex;flex-direction:column;gap:4px}
+.plan-desc{font-size:13px;font-weight:400;color:var(--slate-7);line-height:1.5;margin-top:4px;padding-top:8px;border-top:1px solid var(--slate-2)}
+.plan.selected .plan-desc{border-top-color:var(--violet-9);opacity:.3}
+.plan-items{display:flex;flex-direction:column;gap:2px}
 .plan-item{font-size:14px;font-weight:400;color:var(--slate-7);line-height:1.5}
 
-/* ---- resolved state ---- */
-.resolved{display:none;padding:16px;background:var(--green-3);border-radius:var(--r-md);border:1px solid var(--green-10)}
-.resolved.show{display:flex;align-items:flex-start;gap:8px}
-.resolved-icon{font-size:16px;flex:none;margin-top:1px}
-.resolved-body{flex:1}
-.resolved-text{font-size:14px;font-weight:500;color:var(--green-11);line-height:1.5}
-.resolved-sub{font-size:12px;font-weight:400;color:var(--green-10);line-height:1.5}
+/* ---- resolved: updated timeline ---- */
+.resolved{display:none;flex-direction:column;gap:12px;animation:fadeUp .3s var(--ease) both}
+.resolved.show{display:flex}
+
+.resolved-banner{display:flex;align-items:center;gap:8px;padding:12px 16px;background:var(--green-3);border-radius:var(--r-md);border:1px solid var(--green-10)}
+.resolved-banner svg{width:16px;height:16px;flex:none;color:var(--green-11)}
+.resolved-banner-text{font-size:14px;font-weight:500;color:var(--green-11);line-height:1.2}
+
+.timeline{background:var(--white);border:1px solid var(--slate-2);border-radius:var(--r-md);overflow:hidden}
+.tl-header{padding:12px 16px;border-bottom:1px solid var(--slate-2);font-size:14px;font-weight:600;color:var(--slate-12)}
+.tl-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--slate-2)}
+.tl-item:last-child{border-bottom:none}
+.tl-time{font-size:13px;font-weight:500;color:var(--slate-7);width:44px;flex:none;padding-top:1px}
+.tl-body{flex:1;min-width:0}
+.tl-name{font-size:14px;font-weight:500;color:var(--slate-12);line-height:1.2}
+.tl-detail{font-size:12px;font-weight:400;color:var(--slate-7);margin-top:2px}
+.tl-item.cancelled{opacity:.4}
+.tl-item.cancelled .tl-name{text-decoration:line-through}
+.tl-item.changed .tl-name{color:var(--violet-9)}
+.tl-tag{display:inline-flex;padding:1px 8px;border-radius:var(--r-full);font-size:11px;font-weight:500;margin-left:6px;vertical-align:middle}
+.tl-tag-delay{background:var(--amber-3);color:var(--amber-12)}
+.tl-tag-cancel{background:var(--red-3);color:var(--red-11)}
+.tl-tag-keep{background:var(--slate-1);color:var(--slate-7)}
+.tl-tag-change{background:var(--violet-2);color:var(--violet-9)}
 
 /* ---- typing ---- */
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:.8}}
@@ -129,51 +131,68 @@ body{font-family:var(--sans);background:var(--white);color:var(--slate-9);font-s
 
 <div class="scroll" id="scroll">
 
-  <!-- 사용자 입력: 변수 발생 -->
   <div class="bubble">비행기 3시간 지연됐어</div>
 
-  <!-- 타이핑 -->
   <div id="typing">
     <div class="typing-row"><span></span><span></span><span></span></div>
   </div>
 
-  <!-- 키스크린: AI 추천 카드 -->
+  <!-- 키스크린 -->
   <div class="card hidden" id="mainCard">
     <div class="card-context">KE723 · 14:00 → 17:00 출발</div>
     <div class="card-title">저녁 일정 조정이 필요해요</div>
 
-    <!-- 영향받는 일정 -->
     <div class="section">
       <div class="section-label">영향받는 일정</div>
       <div class="section-item">
+        <span class="time">14:00</span>
+        <span class="tag tag-warning">3h 지연</span>
+        인천 출발 → 17:00
+      </div>
+      <div class="section-item">
+        <span class="time">16:30</span>
         <span class="tag tag-warning">지연</span>
-        저녁 카페 17:30 — 시간 부족
+        간사이 도착 → 19:30
+      </div>
+      <div class="section-item">
+        <span class="time">17:30</span>
+        <span class="tag tag-danger">충돌</span>
+        저녁 카페 — 시간 부족
       </div>
     </div>
 
-    <!-- 유지되는 일정 -->
     <div class="section">
       <div class="section-label">유지</div>
-      <div class="section-item"><span class="tag tag-neutral">유지</span>호텔 체크인</div>
-      <div class="section-item"><span class="tag tag-neutral">유지</span>야경</div>
+      <div class="section-item">
+        <span class="time">19:00</span>
+        <span class="tag tag-neutral">유지</span>
+        호텔 체크인
+      </div>
+      <div class="section-item">
+        <span class="time">20:00</span>
+        <span class="tag tag-neutral">유지</span>
+        야경
+      </div>
     </div>
 
-    <!-- A안 / B안 비교 -->
+    <div class="plans-hint">탭하여 선택</div>
     <div class="plans" id="plans">
-      <div class="plan" data-plan="a" id="planA">
+      <div class="plan" id="planA">
         <div class="plan-label">A안</div>
         <div class="plan-title">카페 취소</div>
+        <div class="plan-desc">도착 후 바로 호텔로</div>
         <div class="plan-items">
           <div class="plan-item">카페 예약 취소</div>
           <div class="plan-item">호텔 20:30</div>
           <div class="plan-item">야경 21:30</div>
         </div>
       </div>
-      <div class="plan" data-plan="b" id="planB">
+      <div class="plan" id="planB">
         <div class="plan-label">B안</div>
         <div class="plan-title">카페 늦추기</div>
+        <div class="plan-desc">전체 일정 뒤로 조정</div>
         <div class="plan-items">
-          <div class="plan-item">카페 20:30으로 변경</div>
+          <div class="plan-item">카페 20:30 변경</div>
           <div class="plan-item">호텔 21:30</div>
           <div class="plan-item">야경 22:00</div>
         </div>
@@ -181,13 +200,13 @@ body{font-family:var(--sans);background:var(--white);color:var(--slate-9);font-s
     </div>
   </div>
 
-  <!-- 선택 후 확정 -->
+  <!-- 선택 후: 변경된 일정표 -->
   <div class="resolved" id="resolved">
-    <div class="resolved-icon">✓</div>
-    <div class="resolved-body">
-      <div class="resolved-text" id="resolvedText"></div>
-      <div class="resolved-sub">일정표에 반영되었어요</div>
+    <div class="resolved-banner">
+      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M5 8.5L7 10.5L11 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="resolved-banner-text" id="resolvedText"></span>
     </div>
+    <div class="timeline" id="timeline"></div>
   </div>
 
 </div>
@@ -201,31 +220,62 @@ body{font-family:var(--sans);background:var(--white);color:var(--slate-9);font-s
   const planB = document.getElementById('planB');
   const resolved = document.getElementById('resolved');
   const resolvedText = document.getElementById('resolvedText');
+  const timeline = document.getElementById('timeline');
 
+  const planATimeline = [
+    {time:'17:00',name:'인천 출발',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
+    {time:'19:30',name:'간사이 도착',detail:'입국 심사 약 40분',tag:'delay',tagText:'지연'},
+    {time:'17:30',name:'저녁 카페',detail:'시간 부족으로 취소',tag:'cancel',tagText:'취소',cancelled:true},
+    {time:'20:30',name:'호텔 체크인',detail:'크로스 호텔 오사카',tag:'keep',tagText:'유지'},
+    {time:'21:30',name:'야경',detail:'도톤보리 산책',tag:'keep',tagText:'유지'},
+  ];
+
+  const planBTimeline = [
+    {time:'17:00',name:'인천 출발',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
+    {time:'19:30',name:'간사이 도착',detail:'입국 심사 약 40분',tag:'delay',tagText:'지연'},
+    {time:'20:30',name:'저녁 카페',detail:'% Arabica 난바점',tag:'change',tagText:'변경',changed:true},
+    {time:'21:30',name:'호텔 체크인',detail:'크로스 호텔 오사카',tag:'change',tagText:'변경',changed:true},
+    {time:'22:00',name:'야경',detail:'도톤보리 산책',tag:'change',tagText:'변경',changed:true},
+  ];
+
+  function renderTimeline(items){
+    let html='<div class="tl-header">변경된 일정</div>';
+    items.forEach(it=>{
+      const cls = it.cancelled ? ' cancelled' : it.changed ? ' changed' : '';
+      html+='<div class="tl-item'+cls+'">';
+      html+='<div class="tl-time">'+it.time+'</div>';
+      html+='<div class="tl-body">';
+      html+='<div class="tl-name">'+it.name+'<span class="tl-tag tl-tag-'+it.tag+'">'+it.tagText+'</span></div>';
+      html+='<div class="tl-detail">'+it.detail+'</div>';
+      html+='</div></div>';
+    });
+    timeline.innerHTML=html;
+  }
+
+  // 타이핑 → 카드 등장
   setTimeout(()=>{
     typing.classList.add('hidden');
     mainCard.classList.remove('hidden');
     scroll.scrollTop = scroll.scrollHeight;
   }, 1200);
 
-  planA.addEventListener('click',()=>{
-    if(planA.classList.contains('selected')) return;
-    planA.classList.add('selected');
-    planB.classList.remove('selected');
-    planB.style.opacity='.4';
-    resolvedText.textContent='A안 적용 — 카페 취소, 나머지 유지';
+  function selectPlan(selected, other, label, items){
+    selected.classList.add('selected');
+    selected.classList.remove('dimmed');
+    other.classList.remove('selected');
+    other.classList.add('dimmed');
+    resolvedText.textContent = label;
+    renderTimeline(items);
     resolved.classList.add('show');
-    scroll.scrollTop = scroll.scrollHeight;
+    requestAnimationFrame(()=>scroll.scrollTop = scroll.scrollHeight);
+  }
+
+  planA.addEventListener('click',()=>{
+    selectPlan(planA, planB, 'A안 적용 — 카페 취소, 나머지 유지', planATimeline);
   });
 
   planB.addEventListener('click',()=>{
-    if(planB.classList.contains('selected')) return;
-    planB.classList.add('selected');
-    planA.classList.remove('selected');
-    planA.style.opacity='.4';
-    resolvedText.textContent='B안 적용 — 카페 20:30, 전체 일정 조정';
-    resolved.classList.add('show');
-    scroll.scrollTop = scroll.scrollHeight;
+    selectPlan(planB, planA, 'B안 적용 — 카페 20:30, 전체 뒤로 조정', planBTimeline);
   });
 })();
 </script>
