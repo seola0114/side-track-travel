@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Side Track — 3주차 아카이브</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="/variables.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--color-ivory-canvas);color:var(--color-ink-black);font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;-webkit-font-smoothing:antialiased}
+body{display:flex;align-items:center;justify-content:center;padding:24px;min-height:100vh}
+.wrap{width:100%;max-width:420px;display:flex;flex-direction:column;gap:10px}
+.header{text-align:center}
+.header .back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--color-stone-gray);text-decoration:none;margin-bottom:12px}
+.header .back:hover{color:var(--color-ink-black)}
+.header h1{font-size:22px;font-weight:700;letter-spacing:-.02em;color:var(--color-ink-black);line-height:var(--leading-heading-sm)}
+.header .sub{font-size:13px;color:var(--color-warm-slate);margin-top:4px}
+.card{display:block;text-decoration:none;color:inherit;border-radius:var(--radius-cards);padding:14px var(--spacing-16);border:1px solid var(--color-linen-border);background:var(--surface-pure-white);transition:border-color .18s;-webkit-tap-highlight-color:transparent}
+.card:hover{border-color:var(--color-charcoal)}
+.card:active{transform:scale(.97)}
+.card .label{font-size:var(--text-caption);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;font-weight:var(--font-weight-medium);color:var(--color-stone-gray)}
+.card h2{font-size:16px;font-weight:600;margin-bottom:3px;color:var(--color-charcoal);line-height:var(--leading-heading-sm)}
+.card .desc{font-size:13px;color:var(--color-warm-slate);line-height:1.5}
+.card .arrow{float:right;font-size:16px;color:var(--color-pewter);margin-top:-18px}
+.card .tags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
+.card .tag{font-size:10px;padding:3px var(--spacing-8);border-radius:var(--radius-lg);font-weight:var(--font-weight-medium);background:var(--color-dust-blue);color:var(--color-warm-slate)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <a class="back" href="/">← 돌아가기</a>
+    <h1>3주차 버전</h1>
+    <div class="sub">사이드바 + 2컬럼 레이아웃 기반 일정 관리</div>
+  </div>
+
+  <a class="card" href="/archive/week3/pc.html">
+    <div class="label">PC</div>
+    <h2>데스크톱 버전</h2>
+    <span class="arrow">→</span>
+    <div class="desc">사이드바 + 일정표/대화 2컬럼 레이아웃. 일정 클릭 시 상세 모달.</div>
+    <div class="tags">
+      <span class="tag">2컬럼</span>
+      <span class="tag">캘린더 뷰</span>
+      <span class="tag">상세 모달</span>
+    </div>
+  </a>
+
+  <a class="card" href="/archive/week3/mobile.html">
+    <div class="label">Mobile</div>
+    <h2>모바일 버전</h2>
+    <span class="arrow">→</span>
+    <div class="desc">하단 탭 바로 일정/대화 전환. 인라인 카드로 탭 전환 없이 일정 확인.</div>
+    <div class="tags">
+      <span class="tag">탭 바</span>
+      <span class="tag">인라인 카드</span>
+      <span class="tag">핀치 줌</span>
+    </div>
+  </a>
+</div>
+</body>
+</html>
