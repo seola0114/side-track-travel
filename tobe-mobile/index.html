@@ -110,14 +110,6 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
 .tl-badge-keep{background:rgba(142,142,147,.12);color:var(--label3)}
 .tl-badge-change{background:rgba(0,122,255,.12);color:var(--blue)}
 
-/* ---- context bar (situation) ---- */
-.ctx{background:var(--card);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
-.ctx-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,149,0,.12);display:grid;place-items:center;flex:none}
-.ctx-icon svg{width:20px;height:20px;color:var(--orange)}
-.ctx-body{flex:1;min-width:0}
-.ctx-line1{font-size:15px;font-weight:600;color:var(--label);line-height:1.33}
-.ctx-line2{font-size:13px;font-weight:400;color:var(--label3);line-height:1.38}
-
 /* ---- typing ---- */
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:.6}}
 .typing-row{display:flex;gap:5px;padding:12px 0}
@@ -140,18 +132,7 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
 
 <div class="scroll" id="scroll">
 
-  <!-- 사용자 상황 컨텍스트 -->
-  <div class="ctx">
-    <div class="ctx-icon">
-      <svg viewBox="0 0 20 20" fill="none"><path d="M10 2L3 10H7V18H13V10H17L10 2Z" fill="currentColor"/></svg>
-    </div>
-    <div class="ctx-body">
-      <div class="ctx-line1">Day 1 · 7월 15일 (화) 인천공항</div>
-      <div class="ctx-line2">탑승구 대기 중 · KE723 14:00 출발 예정</div>
-    </div>
-  </div>
-
-  <div class="bubble">비행기 3시간 지연됐어. 저녁 일정 어떡하지?</div>
+  <div class="bubble">비행기 3시간 지연됐어</div>
 
   <div id="typing">
     <div class="typing-row"><span></span><span></span><span></span></div>
@@ -160,8 +141,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
   <!-- 키스크린 -->
   <div class="card hidden" id="mainCard">
     <div class="card-header">
-      <div class="card-context">KE723 14:00 → 17:00 변경 · 도착 19:30 예상</div>
-      <div class="card-title">저녁 카페 시간이 안 맞아요</div>
+      <div class="card-context">Day 1 · KE723 14:00 출발 → 17:00으로 변경</div>
+      <div class="card-title">저녁 카페 예약 시간과 겹쳐요</div>
     </div>
 
     <div class="group">
@@ -169,31 +150,31 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
       <div class="row">
         <span class="row-time">14:00</span>
         <span class="badge badge-orange">3h 지연</span>
-        <span class="row-text">인천 출발 → 17:00</span>
+        <span class="row-text">인천 → 간사이 출발 17:00</span>
       </div>
       <div class="row">
         <span class="row-time">16:30</span>
         <span class="badge badge-orange">지연</span>
-        <span class="row-text">간사이 도착 → 19:30</span>
+        <span class="row-text">간사이 도착 19:30 예상</span>
       </div>
       <div class="row">
         <span class="row-time">17:30</span>
         <span class="badge badge-red">충돌</span>
-        <span class="row-text">저녁 카페 — 시간 부족</span>
+        <span class="row-text">% Arabica 난바 — 예약 17:30</span>
       </div>
     </div>
 
     <div class="group">
-      <div class="group-label">유지</div>
+      <div class="group-label">영향 없음</div>
       <div class="row">
         <span class="row-time">19:00</span>
         <span class="badge badge-gray">유지</span>
-        <span class="row-text">호텔 체크인</span>
+        <span class="row-text">크로스 호텔 체크인</span>
       </div>
       <div class="row">
         <span class="row-time">20:00</span>
         <span class="badge badge-gray">유지</span>
-        <span class="row-text">야경</span>
+        <span class="row-text">도톤보리 야경</span>
       </div>
     </div>
 
@@ -202,9 +183,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
       <div class="plan" id="planA">
         <div class="plan-label">A안</div>
         <div class="plan-title">카페 취소</div>
-        <div class="plan-desc">도착 후 바로 호텔로</div>
+        <div class="plan-desc">예약 취소 필요</div>
         <div class="plan-items">
-          <div class="plan-item">카페 예약 취소</div>
+          <div class="plan-item">% Arabica 예약 취소</div>
           <div class="plan-item">호텔 20:30</div>
           <div class="plan-item">야경 21:30</div>
         </div>
@@ -212,9 +193,9 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
       <div class="plan" id="planB">
         <div class="plan-label">B안</div>
         <div class="plan-title">카페 늦추기</div>
-        <div class="plan-desc">전체 일정 뒤로 조정</div>
+        <div class="plan-desc">예약 시간 변경 필요</div>
         <div class="plan-items">
-          <div class="plan-item">카페 20:30 변경</div>
+          <div class="plan-item">% Arabica 20:30 변경</div>
           <div class="plan-item">호텔 21:30</div>
           <div class="plan-item">야경 22:00</div>
         </div>
@@ -245,19 +226,19 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
   const timeline = document.getElementById('timeline');
 
   const planATimeline = [
-    {time:'17:00',name:'인천 출발',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
+    {time:'17:00',name:'인천 → 간사이',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
     {time:'19:30',name:'간사이 도착',detail:'입국 심사 약 40분',tag:'delay',tagText:'지연'},
-    {time:'17:30',name:'저녁 카페',detail:'시간 부족으로 취소',tag:'cancel',tagText:'취소',cancelled:true},
-    {time:'20:30',name:'호텔 체크인',detail:'크로스 호텔 오사카',tag:'keep',tagText:'유지'},
-    {time:'21:30',name:'야경',detail:'도톤보리 산책',tag:'keep',tagText:'유지'},
+    {time:'17:30',name:'% Arabica 난바',detail:'예약 취소',tag:'cancel',tagText:'취소',cancelled:true},
+    {time:'20:30',name:'크로스 호텔 체크인',detail:'늦은 체크인 가능',tag:'keep',tagText:'유지'},
+    {time:'21:30',name:'도톤보리 야경',detail:'산책',tag:'keep',tagText:'유지'},
   ];
 
   const planBTimeline = [
-    {time:'17:00',name:'인천 출발',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
+    {time:'17:00',name:'인천 → 간사이',detail:'KE723 (3시간 지연)',tag:'delay',tagText:'지연'},
     {time:'19:30',name:'간사이 도착',detail:'입국 심사 약 40분',tag:'delay',tagText:'지연'},
-    {time:'20:30',name:'저녁 카페',detail:'% Arabica 난바점',tag:'change',tagText:'변경',changed:true},
-    {time:'21:30',name:'호텔 체크인',detail:'크로스 호텔 오사카',tag:'change',tagText:'변경',changed:true},
-    {time:'22:00',name:'야경',detail:'도톤보리 산책',tag:'change',tagText:'변경',changed:true},
+    {time:'20:30',name:'% Arabica 난바',detail:'예약 시간 변경',tag:'change',tagText:'변경',changed:true},
+    {time:'21:30',name:'크로스 호텔 체크인',detail:'늦은 체크인 가능',tag:'change',tagText:'변경',changed:true},
+    {time:'22:00',name:'도톤보리 야경',detail:'산책',tag:'change',tagText:'변경',changed:true},
   ];
 
   function renderTimeline(items){
