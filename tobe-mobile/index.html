@@ -150,7 +150,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
 <!-- Bottom CTA -->
 <div class="cta-area" id="ctaArea" style="display:none">
   <button class="btn-primary" id="btnProceed">이대로 진행</button>
-  <button class="btn-secondary" id="btnDismiss">다음 안 보기</button>
+  <button class="btn-secondary" id="btnDismiss">다른 추천 보기</button>
 </div>
 
 <!-- Detail Modal -->
@@ -216,6 +216,35 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
   const modalClose = document.getElementById('modalClose');
   const toast = document.getElementById('toast');
 
+  // Alternative plans to cycle through
+  const altPlans=[
+    {
+      label:'추천',
+      title:'저녁 일정 가볍게',
+      sections:[
+        {title:'해야 할 것',items:['저녁 카페 예약 취소']},
+        {title:'나머지 일정 유지',items:['호텔 체크인','야경']}
+      ]
+    },
+    {
+      label:'대안 A',
+      title:'카페 시간만 늦추기',
+      sections:[
+        {title:'변경',items:['저녁 카페 17:30 → 20:30으로 변경']},
+        {title:'유지',items:['호텔 체크인 (21:30)','야경 (22:00)']}
+      ]
+    },
+    {
+      label:'대안 B',
+      title:'오늘은 쉬어가기',
+      sections:[
+        {title:'취소',items:['저녁 카페 예약 취소','야경 생략']},
+        {title:'유지',items:['호텔 체크인 후 휴식']}
+      ]
+    }
+  ];
+  let altIdx=0;
+
   // Show typing then response
   setTimeout(()=>{
     typingIndicator.style.display='none';
@@ -229,10 +258,40 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
     detailModal.classList.add('open');
   });
 
-  // Dismiss button
+  // Dismiss button → show next alternative
   btnDismiss.addEventListener('click',()=>{
-    showToast('다음부터 추천을 표시하지 않습니다');
+    altIdx++;
+    if(altIdx>=altPlans.length){
+      altIdx=0; // cycle back
+    }
+    // Hide current card, show typing, then new card
+    aiResponse.style.display='none';
     ctaArea.style.display='none';
+
+    const tRow=document.createElement('div');
+    tRow.className='bubble-row ai';
+    tRow.id='altTyping';
+    tRow.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+    chatArea.appendChild(tRow);
+    chatArea.scrollTop=chatArea.scrollHeight;
+
+    setTimeout(()=>{
+      tRow.remove();
+      const p=altPlans[altIdx];
+      const card=document.createElement('div');
+      let html='<div class="reco-card"><div><div class="reco-label">'+p.label+'</div><div class="reco-title">'+p.title+'</div></div>';
+      p.sections.forEach(sec=>{
+        html+='<div class="reco-section"><div class="reco-section-title">'+sec.title+'</div>';
+        sec.items.forEach(item=>{html+='<div class="reco-item">'+item+'</div>'});
+        html+='</div>';
+      });
+      html+='</div>';
+      card.innerHTML=html;
+      aiResponse.parentNode.insertBefore(card,aiResponse.nextSibling);
+      // Remove old aiResponse container (first card already shown)
+      ctaArea.style.display='flex';
+      chatArea.scrollTop=chatArea.scrollHeight;
+    },800);
   });
 
   // Close modal
@@ -251,65 +310,6 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
     toast.classList.add('show');
     setTimeout(()=>toast.classList.remove('show'),2200);
   }
-
-  // Allow new message input simulation
-  let step=0;
-  const scenarios=[
-    {
-      user:'숙소 근처 늦은 저녁 추천해줘',
-      label:'추천',
-      title:'숙소 근처 야식 스팟',
-      sections:[
-        {title:'추천 장소',items:['이치란 라멘 도톤보리점','마츠야 난바점']},
-        {title:'참고',items:['도보 10분 이내','23시까지 영업']}
-      ]
-    },
-    {
-      user:'내일 비 온다는데 일정 괜찮아?',
-      label:'추천',
-      title:'실내 일정으로 전환',
-      sections:[
-        {title:'변경 제안',items:['나라 공원 → 오사카 아쿠아리움','산책 → 실내 쇼핑']},
-        {title:'유지',items:['점심 예약','저녁 이자카야']}
-      ]
-    }
-  ];
-
-  chatArea.addEventListener('click',(e)=>{
-    if(step>=scenarios.length) return;
-    if(e.target.closest('.reco-card')||e.target.closest('.bubble')) return;
-
-    const s=scenarios[step];
-    step++;
-
-    // Add user bubble
-    const uRow=document.createElement('div');
-    uRow.className='bubble-row user';
-    uRow.innerHTML='<div class="bubble">'+s.user+'</div>';
-    chatArea.appendChild(uRow);
-
-    // Typing
-    const tRow=document.createElement('div');
-    tRow.className='bubble-row ai';
-    tRow.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
-    chatArea.appendChild(tRow);
-    chatArea.scrollTop=chatArea.scrollHeight;
-
-    setTimeout(()=>{
-      tRow.remove();
-      const card=document.createElement('div');
-      let sectionsHtml='';
-      s.sections.forEach(sec=>{
-        sectionsHtml+='<div class="reco-section"><div class="reco-section-title">'+sec.title+'</div>';
-        sec.items.forEach(item=>{sectionsHtml+='<div class="reco-item">'+item+'</div>'});
-        sectionsHtml+='</div>';
-      });
-      card.innerHTML='<div class="reco-card"><div><div class="reco-label">'+s.label+'</div><div class="reco-title">'+s.title+'</div></div>'+sectionsHtml+'</div>';
-      chatArea.appendChild(card);
-      chatArea.scrollTop=chatArea.scrollHeight;
-      ctaArea.style.display='flex';
-    },1000);
-  });
 })();
 </script>
 </body>

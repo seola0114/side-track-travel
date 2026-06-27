@@ -215,7 +215,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
             </div>
             <div class="reco-actions">
               <button class="reco-btn primary" id="btnApply">이대로 진행</button>
-              <button class="reco-btn secondary" id="btnDismiss">다음 안 보기</button>
+              <button class="reco-btn secondary" id="btnDismiss">다른 추천 보기</button>
             </div>
           </div>
         </div>
@@ -305,6 +305,26 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
   const hotel = document.getElementById('hotel');
   const night = document.getElementById('night');
 
+  // Alternative plans
+  const altPlans=[
+    {
+      label:'추천',title:'저녁 일정 가볍게',
+      sections:[{title:'해야 할 것',items:['저녁 카페 예약 취소']},{title:'나머지 일정 유지',items:['호텔 체크인','야경']}],
+      schedule:{cafe:'cancel',hotel:{time:'20:30',badge:'keep'},night:{time:'21:30',badge:'keep'},strip:'저녁 카페 취소, 나머지 유지'}
+    },
+    {
+      label:'대안 A',title:'카페 시간만 늦추기',
+      sections:[{title:'변경',items:['저녁 카페 17:30 → 20:30으로 변경']},{title:'유지',items:['호텔 체크인 (21:30)','야경 (22:00)']}],
+      schedule:{cafe:'move',cafeTime:'20:30',hotel:{time:'21:30',badge:'keep'},night:{time:'22:00',badge:'keep'},strip:'카페 20:30으로 변경, 나머지 유지'}
+    },
+    {
+      label:'대안 B',title:'오늘은 쉬어가기',
+      sections:[{title:'취소',items:['저녁 카페 예약 취소','야경 생략']},{title:'유지',items:['호텔 체크인 후 휴식']}],
+      schedule:{cafe:'cancel',night:'cancel',hotel:{time:'20:30',badge:'keep'},strip:'카페·야경 취소, 호텔 휴식'}
+    }
+  ];
+  let altIdx=0;
+
   // Initial typing → show response
   setTimeout(()=>{
     typingIndicator.style.display='none';
@@ -321,26 +341,81 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
     arrival.querySelector('.tl-detail').textContent='원래 16:30 → 19:30 도착 예정';
   },1200);
 
-  // Apply schedule change
-  btnApply.addEventListener('click',()=>{
-    cafe.classList.add('cancelled');
-    cafe.querySelector('.tl-name').innerHTML='저녁 카페 <span class="tl-badge cancel">취소</span>';
+  function applySchedule(plan){
+    // Reset all
+    cafe.classList.remove('cancelled');
+    night.classList.remove('cancelled');
+    cafe.querySelector('.tl-name').textContent='저녁 카페';
+    night.querySelector('.tl-name').textContent='야경';
 
+    const s=plan.schedule;
+    if(s.cafe==='cancel'){
+      cafe.classList.add('cancelled');
+      cafe.querySelector('.tl-name').innerHTML='저녁 카페 <span class="tl-badge cancel">취소</span>';
+    } else if(s.cafe==='move'){
+      cafe.querySelector('.tl-time').textContent=s.cafeTime;
+      cafe.querySelector('.tl-name').innerHTML='저녁 카페 <span class="tl-badge delay">변경</span>';
+    }
+    if(s.night==='cancel'){
+      night.classList.add('cancelled');
+      night.querySelector('.tl-name').innerHTML='야경 <span class="tl-badge cancel">취소</span>';
+    } else {
+      night.querySelector('.tl-name').innerHTML='야경 <span class="tl-badge keep">유지</span>';
+      night.querySelector('.tl-time').textContent=s.night.time;
+    }
     hotel.querySelector('.tl-name').innerHTML='호텔 체크인 <span class="tl-badge keep">유지</span>';
-    hotel.querySelector('.tl-time').textContent='20:30';
+    hotel.querySelector('.tl-time').textContent=s.hotel.time;
 
-    night.querySelector('.tl-name').innerHTML='야경 <span class="tl-badge keep">유지</span>';
-    night.querySelector('.tl-time').textContent='21:30';
-
+    statusStrip.querySelector('span').innerHTML='<strong>일정 변경 완료</strong> — '+s.strip;
     statusStrip.style.display='flex';
     showToast('일정이 업데이트되었습니다');
+  }
+
+  // Apply schedule change
+  btnApply.addEventListener('click',()=>{
+    applySchedule(altPlans[altIdx]);
     btnApply.textContent='적용됨';
     btnApply.style.opacity='.5';
     btnApply.style.pointerEvents='none';
   });
 
+  // Dismiss → show alternative
   btnDismiss.addEventListener('click',()=>{
-    showToast('다음부터 추천을 표시하지 않습니다');
+    altIdx++;
+    if(altIdx>=altPlans.length) altIdx=0;
+
+    aiResponse.style.display='none';
+
+    const tRow=document.createElement('div');
+    tRow.className='bubble-row ai';
+    tRow.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
+    chatScroll.appendChild(tRow);
+    chatScroll.scrollTop=chatScroll.scrollHeight;
+
+    setTimeout(()=>{
+      tRow.remove();
+      const p=altPlans[altIdx];
+      let sectionsHtml='';
+      p.sections.forEach(sec=>{
+        sectionsHtml+='<div class="reco-section"><div class="reco-section-title">'+sec.title+'</div>';
+        sec.items.forEach(item=>{sectionsHtml+='<div class="reco-item">'+item+'</div>'});
+        sectionsHtml+='</div>';
+      });
+      const card=document.createElement('div');
+      card.innerHTML='<div class="reco-card"><div><div class="reco-label">'+p.label+'</div><div class="reco-title">'+p.title+'</div></div>'+sectionsHtml+'<div class="reco-actions"><button class="reco-btn primary" id="btnApplyAlt">이대로 진행</button><button class="reco-btn secondary" id="btnDismissAlt">다른 추천 보기</button></div></div>';
+      chatScroll.appendChild(card);
+      chatScroll.scrollTop=chatScroll.scrollHeight;
+
+      card.querySelector('#btnApplyAlt').addEventListener('click',function(){
+        applySchedule(p);
+        this.textContent='적용됨';
+        this.style.opacity='.5';
+        this.style.pointerEvents='none';
+      });
+      card.querySelector('#btnDismissAlt').addEventListener('click',function(){
+        btnDismiss.click();
+      });
+    },800);
   });
 
   // Additional chat scenarios
