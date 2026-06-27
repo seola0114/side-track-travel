@@ -110,6 +110,14 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
 .tl-badge-keep{background:rgba(142,142,147,.12);color:var(--label3)}
 .tl-badge-change{background:rgba(0,122,255,.12);color:var(--blue)}
 
+/* ---- context bar (situation) ---- */
+.ctx{background:var(--card);border-radius:12px;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.ctx-icon{width:36px;height:36px;border-radius:10px;background:rgba(255,149,0,.12);display:grid;place-items:center;flex:none}
+.ctx-icon svg{width:20px;height:20px;color:var(--orange)}
+.ctx-body{flex:1;min-width:0}
+.ctx-line1{font-size:15px;font-weight:600;color:var(--label);line-height:1.33}
+.ctx-line2{font-size:13px;font-weight:400;color:var(--label3);line-height:1.38}
+
 /* ---- typing ---- */
 @keyframes blink{0%,80%,100%{opacity:.15}40%{opacity:.6}}
 .typing-row{display:flex;gap:5px;padding:12px 0}
@@ -128,11 +136,22 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
     돌아가기
   </button>
 </div>
-<div class="nav-title">바뀐 일정</div>
+<div class="nav-title">오사카 3박 4일</div>
 
 <div class="scroll" id="scroll">
 
-  <div class="bubble">비행기 3시간 지연됐어</div>
+  <!-- 사용자 상황 컨텍스트 -->
+  <div class="ctx">
+    <div class="ctx-icon">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M10 2L3 10H7V18H13V10H17L10 2Z" fill="currentColor"/></svg>
+    </div>
+    <div class="ctx-body">
+      <div class="ctx-line1">Day 1 · 7월 15일 (화) 인천공항</div>
+      <div class="ctx-line2">탑승구 대기 중 · KE723 14:00 출발 예정</div>
+    </div>
+  </div>
+
+  <div class="bubble">비행기 3시간 지연됐어. 저녁 일정 어떡하지?</div>
 
   <div id="typing">
     <div class="typing-row"><span></span><span></span><span></span></div>
@@ -141,8 +160,8 @@ body{font-family:var(--sans);background:var(--bg);color:var(--label);font-size:1
   <!-- 키스크린 -->
   <div class="card hidden" id="mainCard">
     <div class="card-header">
-      <div class="card-context">KE723 · 14:00 → 17:00 출발</div>
-      <div class="card-title">저녁 일정 조정이 필요해요</div>
+      <div class="card-context">KE723 14:00 → 17:00 변경 · 도착 19:30 예상</div>
+      <div class="card-title">저녁 카페 시간이 안 맞아요</div>
     </div>
 
     <div class="group">
