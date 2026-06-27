@@ -6,108 +6,105 @@
 <title>To-Be — 일정 변경 대응 (Mobile)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#faf9f5; --paper:#faf9f5; --surface:#ffffff;
-  --surface-hover:#f5f3ed; --surface-active:#ebe8e0;
-  --ink:#141413; --muted:#3d3d3a; --faint:#73726c; --disabled:#9c9a92;
-  --line:#dedcd1; --line2:#dedcd1; --line-strong:#b7b7b5;
-  --accent:#1f1e1d;
-  --warn:#D94B3F; --warn-bg:#FEF0EE;
-  --keep:#34A853; --keep-bg:#E8F5E9;
-  --radius-xs:4px; --radius-sm:8px; --radius:12px; --radius-lg:16px; --radius-xl:20px;
-  --mono:'JetBrains Mono',ui-monospace,monospace;
-  --sans:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,sans-serif;
-  --ease:cubic-bezier(.4,0,.2,1); --dur:150ms;
+  /* Hyer Aviation tokens */
+  --ink:#000d10;
+  --copper:#bc7155;
+  --white:#ffffff;
+  --dusk:#0f0f1c;
+  --slate:#151623;
+  --ash:#8e8e95;
+  --bone:#d5d3d4;
+
+  --sans:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+  --dur:150ms;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}}
 html,body{height:100%}
-body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100dvh;overflow:hidden;max-width:430px;margin:0 auto}
+body{font-family:var(--sans);background:var(--white);color:var(--ink);font-size:17px;line-height:1.61;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column;height:100dvh;overflow:hidden;max-width:430px;margin:0 auto}
 
-/* ---- header ---- */
-.topbar{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--line);background:var(--paper);flex:none;min-height:56px}
-.back-btn{background:var(--ink);color:#fff;border:none;font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 14px;border-radius:var(--radius-sm);cursor:pointer;transition:opacity var(--dur) var(--ease);flex:none}
-.back-btn:active{opacity:.7}
-.topbar-title{font-size:17px;font-weight:700;letter-spacing:-.02em}
+/* ---- topbar ---- */
+.topbar{display:flex;align-items:center;gap:16px;padding:15px 22px;border-bottom:1px solid var(--ash);background:var(--white);flex:none;min-height:56px}
+.back-btn{background:none;color:var(--ink);border:none;font-family:var(--sans);font-size:17px;font-weight:400;padding:0;cursor:pointer;letter-spacing:.2px;flex:none;transition:opacity var(--dur) var(--ease)}
+.back-btn:active{opacity:.5}
+.topbar-title{font-size:20px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
 
 /* ---- chat area ---- */
-.chat-area{flex:1;overflow-y:auto;padding:20px 16px;display:flex;flex-direction:column;gap:16px}
+.chat-area{flex:1;overflow-y:auto;padding:34px 22px;display:flex;flex-direction:column;gap:22px}
 
 /* user bubble */
 .bubble-row{display:flex}
 .bubble-row.user{justify-content:flex-end}
 .bubble-row.ai{justify-content:flex-start}
-.bubble{max-width:80%;padding:12px 16px;border-radius:var(--radius-lg);font-size:14px;line-height:1.6;word-break:keep-all}
-.bubble-row.user .bubble{background:var(--surface);border:1px solid var(--line);color:var(--ink);border-bottom-right-radius:var(--radius-xs)}
+.bubble{max-width:80%;padding:15px 22px;font-size:17px;line-height:1.61;word-break:keep-all;letter-spacing:.2px}
+.bubble-row.user .bubble{background:var(--white);border:1px solid var(--ash);color:var(--ink);border-radius:0}
 
-/* recommendation card */
-.reco-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-lg);padding:24px 20px;display:flex;flex-direction:column;gap:16px}
-.reco-label{font-size:13px;font-weight:600;color:var(--faint);letter-spacing:.02em}
-.reco-title{font-size:22px;font-weight:700;letter-spacing:-.02em;line-height:1.3;color:var(--ink)}
+/* recommendation card — sharp edges, hairline dividers */
+.reco-card{background:var(--white);border:1px solid var(--ink);border-radius:0;padding:34px 22px;display:flex;flex-direction:column;gap:0}
+.reco-header{margin-bottom:22px}
+.reco-label{font-size:17px;font-weight:400;color:var(--ash);letter-spacing:.2px;margin-bottom:4px}
+.reco-title{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1;color:var(--ink)}
 
-.reco-section{display:flex;flex-direction:column;gap:6px}
-.reco-section-title{font-size:14px;font-weight:700;color:var(--ink)}
-.reco-item{font-size:14px;color:var(--muted);line-height:1.5;padding-left:0}
+.reco-section{padding:22px 0;border-top:1px solid var(--ash)}
+.reco-section-title{font-size:17px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em}
+.reco-item{font-size:17px;color:var(--ash);line-height:1.61;letter-spacing:.2px}
 .reco-item.action{color:var(--ink)}
 
-.reco-divider{border:none;border-top:1px solid var(--line);margin:4px 0}
-
-/* ---- bottom CTA ---- */
-.cta-area{padding:16px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line);background:var(--paper);flex:none;padding-bottom:max(16px,env(safe-area-inset-bottom))}
-.btn-primary{width:100%;padding:16px;border:none;border-radius:var(--radius);background:var(--ink);color:#fff;font-family:var(--sans);font-size:15px;font-weight:600;cursor:pointer;transition:opacity var(--dur) var(--ease)}
+/* ---- bottom CTA — pill buttons ---- */
+.cta-area{padding:22px;display:flex;flex-direction:column;gap:11px;border-top:1px solid var(--ash);background:var(--white);flex:none;padding-bottom:max(22px,env(safe-area-inset-bottom))}
+.btn-primary{width:100%;padding:15px 22px;border:none;border-radius:1000px;background:var(--copper);color:var(--white);font-family:var(--sans);font-size:17px;font-weight:700;cursor:pointer;transition:opacity var(--dur) var(--ease);letter-spacing:-.01em}
 .btn-primary:active{opacity:.8}
-.btn-secondary{width:100%;padding:16px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--muted);font-family:var(--sans);font-size:15px;font-weight:500;cursor:pointer;transition:border-color var(--dur) var(--ease),color var(--dur) var(--ease)}
-.btn-secondary:active{border-color:var(--line-strong);color:var(--ink)}
+.btn-secondary{width:100%;padding:15px 22px;border:1px solid var(--ink);border-radius:1000px;background:var(--white);color:var(--ink);font-family:var(--sans);font-size:17px;font-weight:700;cursor:pointer;transition:opacity var(--dur) var(--ease);letter-spacing:-.01em}
+.btn-secondary:active{opacity:.7}
 
 /* ---- toast ---- */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:var(--radius);font-size:13px;font-weight:500;opacity:0;transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none;z-index:100;white-space:nowrap}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--white);padding:15px 22px;border-radius:1000px;font-size:17px;font-weight:400;letter-spacing:.2px;opacity:0;transition:opacity .3s var(--ease),transform .3s var(--ease);pointer-events:none;z-index:100;white-space:nowrap}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
 /* ---- modal overlay ---- */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:flex-end;justify-content:center;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,13,16,.5);display:flex;align-items:flex-end;justify-content:center;z-index:50;opacity:0;pointer-events:none;transition:opacity .25s var(--ease)}
 .modal-overlay.open{opacity:1;pointer-events:auto}
-.modal-sheet{background:var(--paper);border-radius:var(--radius-xl) var(--radius-xl) 0 0;width:100%;max-width:430px;max-height:85dvh;overflow-y:auto;padding:24px 20px 32px;transform:translateY(100%);transition:transform .3s var(--ease)}
+.modal-sheet{background:var(--white);border-radius:0;width:100%;max-width:430px;max-height:85dvh;overflow-y:auto;padding:34px 22px 38px;transform:translateY(100%);transition:transform .3s var(--ease)}
 .modal-overlay.open .modal-sheet{transform:translateY(0)}
-.modal-handle{width:36px;height:4px;background:var(--line);border-radius:2px;margin:0 auto 20px}
-.modal-title{font-size:18px;font-weight:700;margin-bottom:16px;letter-spacing:-.02em}
+.modal-title{font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:22px;color:var(--ink)}
 
 /* timeline in modal */
-.timeline{display:flex;flex-direction:column;gap:0}
-.tl-item{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.timeline{display:flex;flex-direction:column}
+.tl-item{display:flex;gap:16px;padding:17px 0;border-bottom:1px solid var(--ash)}
 .tl-item:last-child{border-bottom:none}
-.tl-time{font-family:var(--mono);font-size:12px;color:var(--faint);width:52px;flex:none;padding-top:2px}
+.tl-time{font-family:var(--sans);font-size:17px;font-weight:400;color:var(--ash);width:52px;flex:none;padding-top:1px;letter-spacing:.2px}
 .tl-content{flex:1}
-.tl-name{font-size:14px;font-weight:600;color:var(--ink);line-height:1.4}
-.tl-detail{font-size:12px;color:var(--faint);margin-top:2px}
-.tl-item.cancelled .tl-name{text-decoration:line-through;color:var(--disabled)}
-.tl-item.cancelled .tl-detail{color:var(--disabled)}
-.tl-badge{display:inline-block;font-size:10px;font-weight:600;padding:2px 8px;border-radius:var(--radius-xs);margin-left:6px}
-.tl-badge.cancel{background:var(--warn-bg);color:var(--warn)}
-.tl-badge.keep{background:var(--keep-bg);color:var(--keep)}
-.tl-badge.delay{background:#FFF3E0;color:#E65100}
+.tl-name{font-size:17px;font-weight:700;color:var(--ink);line-height:1.4;letter-spacing:-.01em}
+.tl-detail{font-size:17px;font-weight:400;color:var(--ash);margin-top:2px;letter-spacing:.2px}
+.tl-item.cancelled .tl-name{text-decoration:line-through;color:var(--ash)}
+.tl-item.cancelled .tl-detail{color:var(--bone)}
+.tl-badge{display:inline-block;font-size:14px;font-weight:700;padding:2px 11px;border-radius:0;margin-left:8px;vertical-align:middle;letter-spacing:0}
+.tl-badge.cancel{background:var(--ink);color:var(--white)}
+.tl-badge.keep{background:none;border:1px solid var(--ash);color:var(--ash)}
+.tl-badge.delay{background:var(--copper);color:var(--white)}
 
-.modal-close{width:100%;padding:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);color:var(--muted);font-family:var(--sans);font-size:14px;font-weight:500;cursor:pointer;margin-top:16px}
+.modal-close{width:100%;padding:15px 22px;border:1px solid var(--ink);border-radius:1000px;background:var(--white);color:var(--ink);font-family:var(--sans);font-size:17px;font-weight:700;cursor:pointer;margin-top:34px;letter-spacing:-.01em}
 
 /* ---- typing indicator ---- */
-@keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
-.typing{display:flex;gap:4px;padding:12px 16px}
-.typing span{width:6px;height:6px;border-radius:50%;background:var(--disabled);animation:blink 1.4s infinite both}
+@keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
+.typing{display:flex;gap:5px;padding:15px 22px}
+.typing span{width:6px;height:6px;border-radius:50%;background:var(--ash);animation:blink 1.4s infinite both}
 .typing span:nth-child(2){animation-delay:.2s}
 .typing span:nth-child(3){animation-delay:.4s}
 
-/* scroll styling */
-.chat-area::-webkit-scrollbar{width:6px}
-.chat-area::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+/* scroll */
+.chat-area::-webkit-scrollbar{width:0;display:none}
 </style>
 </head>
 <body>
 
 <!-- Top Bar -->
 <div class="topbar">
-  <button class="back-btn" onclick="window.location.href='/'">뒤로</button>
+  <button class="back-btn" onclick="window.location.href='/'">← Back</button>
   <span class="topbar-title">바뀐 일정 확인하기</span>
 </div>
 
@@ -121,7 +118,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
   <!-- AI typing then recommendation -->
   <div id="aiResponse" style="display:none">
     <div class="reco-card">
-      <div>
+      <div class="reco-header">
         <div class="reco-label">추천</div>
         <div class="reco-title">저녁 일정 가볍게</div>
       </div>
@@ -156,7 +153,6 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
 <!-- Detail Modal -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal-sheet">
-    <div class="modal-handle"></div>
     <div class="modal-title">변경된 일정 상세</div>
 
     <div class="timeline">
@@ -261,16 +257,13 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
   // Dismiss button → show next alternative
   btnDismiss.addEventListener('click',()=>{
     altIdx++;
-    if(altIdx>=altPlans.length){
-      altIdx=0; // cycle back
-    }
-    // Hide current card, show typing, then new card
+    if(altIdx>=altPlans.length) altIdx=0;
+
     aiResponse.style.display='none';
     ctaArea.style.display='none';
 
     const tRow=document.createElement('div');
     tRow.className='bubble-row ai';
-    tRow.id='altTyping';
     tRow.innerHTML='<div class="typing"><span></span><span></span><span></span></div>';
     chatArea.appendChild(tRow);
     chatArea.scrollTop=chatArea.scrollHeight;
@@ -279,7 +272,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
       tRow.remove();
       const p=altPlans[altIdx];
       const card=document.createElement('div');
-      let html='<div class="reco-card"><div><div class="reco-label">'+p.label+'</div><div class="reco-title">'+p.title+'</div></div>';
+      let html='<div class="reco-card"><div class="reco-header"><div class="reco-label">'+p.label+'</div><div class="reco-title">'+p.title+'</div></div>';
       p.sections.forEach(sec=>{
         html+='<div class="reco-section"><div class="reco-section-title">'+sec.title+'</div>';
         sec.items.forEach(item=>{html+='<div class="reco-item">'+item+'</div>'});
@@ -287,8 +280,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
       });
       html+='</div>';
       card.innerHTML=html;
-      aiResponse.parentNode.insertBefore(card,aiResponse.nextSibling);
-      // Remove old aiResponse container (first card already shown)
+      chatArea.appendChild(card);
       ctaArea.style.display='flex';
       chatArea.scrollTop=chatArea.scrollHeight;
     },800);
