@@ -1342,15 +1342,7 @@ function buildItinCard(){
   h+=`</div></div>`;
   return h;
 }
-function buildDiffCard(changes){
-  // changes: [{day, was, now}]
-  let h=`<div class="diff-card"><div class="diff-card-head"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg><span class="dch-title">일정 변경</span></div><div class="diff-card-body">`;
-  changes.forEach(c=>{
-    h+=`<div class="diff-row"><span class="diff-day">${esc(c.day)}</span><span class="diff-was">${esc(c.was)}</span><span class="diff-arrow">→</span><span class="diff-now">${esc(c.now)}</span></div>`;
-  });
-  h+=`</div></div>`;
-  return h;
-}
+function buildDiffCard(){return '';}
 
 /* ================= STREAMING EFFECT ================= */
 let _streamTimer=null;
