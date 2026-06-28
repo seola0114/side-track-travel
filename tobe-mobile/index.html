@@ -1969,13 +1969,13 @@ function openAdjModal(){
   h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">`;
   h+=`<button onclick="closeAdjModal();chooseAdjust(0)" style="text-align:left;font-family:var(--sans);background:var(--dec-bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s">`;
   h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">A안 선택</div>`;
-  h+=`<div style="font-size:11px;color:var(--keep);margin-bottom:2px">+ ${esc(adjA.pro)}</div>`;
-  h+=`<div style="font-size:11px;color:var(--warn)">- ${esc(adjA.con)}</div>`;
+  h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adjA.pro)}</div>`;
+  h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adjA.con)}</div>`;
   h+=`</button>`;
   h+=`<button onclick="closeAdjModal();chooseAdjust(1)" style="text-align:left;font-family:var(--sans);background:var(--keep-bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s">`;
   h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">B안 선택</div>`;
-  h+=`<div style="font-size:11px;color:var(--keep);margin-bottom:2px">+ ${esc(adjB.pro)}</div>`;
-  h+=`<div style="font-size:11px;color:var(--warn)">- ${esc(adjB.con)}</div>`;
+  h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adjB.pro)}</div>`;
+  h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adjB.con)}</div>`;
   h+=`</button></div>`;
 
   document.getElementById('adjBody').innerHTML=h;
