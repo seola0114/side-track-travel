@@ -383,7 +383,7 @@ textarea::placeholder{color:var(--faint)}
 .cal-seg button.active{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
 .cal-collapse-btn{background:none;border:1px solid var(--line);border-radius:6px;width:36px;height:36px;display:grid;place-items:center;font-size:14px;color:var(--muted);cursor:pointer;transition:.15s;flex:none}
 .cal-collapse-btn.collapsed{transform:rotate(180deg)}
-.cal-body{overflow-y:auto;transition:max-height .3s ease}
+.cal-body{overflow-y:auto}
 .cal-body.collapsed{max-height:0!important;overflow:hidden}
 .cal-wk{position:relative}
 .cal-tbl{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed}
@@ -1355,7 +1355,7 @@ function renderLeft(){
     if(changed)summary+=` · <span style="color:var(--accent-deep)">${changed}개 변경</span>`;
     h+=`<div style="padding:10px 12px;font-size:12px;color:var(--muted);border-bottom:1px solid var(--line)">${summary}</div>`;
   }
-  h+=`<div class="cal-body${calCollapsed?' collapsed':''}" id="calBody" style="max-height:${calMaxH}px">`;
+  h+=`<div class="cal-body${calCollapsed?' collapsed':''}" id="calBody">`;
   if(calView==='week'){
     // day buttons removed — table header handles navigation
     // table-style: time | day1 | day2 | day3 | day4
