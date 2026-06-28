@@ -736,8 +736,8 @@ button:active::after,
 .adj-pick{text-align:left;font-family:var(--sans);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s;opacity:.6}
 .adj-pick:hover{border-color:var(--muted)}
 .adj-pick:active{transform:scale(.96)}
-.adj-pick.rec{border-color:var(--accent);opacity:1}
-.adj-pick.selected{border-color:var(--accent);background:var(--accent-bg);opacity:1}
+.adj-pick.rec{border-color:var(--line);opacity:1}
+.adj-pick.selected{border:2px solid var(--accent);background:var(--accent-bg);opacity:1}
 .adj-pick:not(.selected){opacity:.5}
 .adj-pick.selected+.adj-pick:not(.selected),.adj-pick:not(.selected):has(+.adj-pick.selected){opacity:.5}
 .adj-confirm{width:100%;font-family:var(--sans);font-size:14px;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:var(--radius-sm);padding:14px;margin-top:12px;cursor:pointer;min-height:44px;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
