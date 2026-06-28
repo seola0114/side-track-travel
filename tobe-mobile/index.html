@@ -126,7 +126,6 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:9px;colo
 .cell.dec{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .cell.expandable{cursor:pointer}
 .cell.expandable:hover{border-color:var(--accent-line);box-shadow:0 2px 8px rgba(27,25,22,.06)}
-.cell.open{box-shadow:0 3px 12px rgba(27,25,22,.1)}
 .cell .bdg{display:inline-block;font-family:var(--mono);font-size:8px;font-weight:600;background:var(--surface);color:var(--dec);border:1px solid var(--dec-line);border-radius:9px;padding:0 6px}
 .cell.broken{background:var(--warn-bg);border:1.5px dashed var(--warn-line);color:var(--warn);animation:pulse 1.4s ease-in-out infinite}
 .cell.broken .bdg{color:var(--warn);border-color:var(--warn-line)}
@@ -220,11 +219,6 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:9px;colo
 .suggest:has(.schip){flex-direction:row;flex-wrap:wrap;align-items:center}
 .suggest .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-right:4px}
 .schip{font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--radius-xl);padding:8px 12px;min-height:44px;cursor:pointer;text-align:left;transition:border-color var(--dur) var(--ease),background var(--dur) var(--ease)}
-.sug-choice{display:flex;align-items:center;justify-content:space-between;width:100%;font-family:var(--sans);font-size:13px;font-weight:500;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--radius-sm);padding:12px 16px;min-height:48px;cursor:pointer;text-align:left;transition:border-color var(--dur) var(--ease);-webkit-tap-highlight-color:transparent}
-.sug-choice:active{background:var(--surface-hover);transform:scale(.98)}
-.sug-choice+.sug-choice{margin-top:4px}
-.sug-choice .sug-q{font-weight:600;color:var(--ink)}
-.sug-choice .sug-label{font-family:var(--mono);font-size:11px;color:var(--faint);letter-spacing:.02em}
 .schip:hover{background:var(--surface-hover);border-color:var(--accent)}
 .inrow{display:flex;flex-direction:column;gap:0;background:var(--surface);border:none;border-radius:20px;padding:14px;box-shadow:0 4px 20px rgba(0,0,0,.035),0 0 0 0.5px rgba(0,0,0,.06);transition:box-shadow var(--dur) var(--ease)}
 .inrow:hover{box-shadow:0 4px 20px rgba(0,0,0,.035),0 0 0 0.5px rgba(0,0,0,.12)}
@@ -325,9 +319,6 @@ textarea::placeholder{color:var(--faint)}
 .land-logo{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--muted);justify-content:center}
 .land-logo .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
 .land-title{font-size:26px;font-weight:700;letter-spacing:-.02em;text-align:center;color:var(--ink)}
-.land-inrow{display:flex;gap:8px;align-items:flex-end;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:13px 13px 13px 18px;box-shadow:0 6px 24px rgba(27,25,22,.06);transition:.15s}
-.land-inrow:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-bg)}
-.land-inrow textarea{flex:1;font-family:var(--sans);font-size:15px;border:0;outline:0;resize:none;background:none;color:var(--ink);max-height:130px;line-height:1.5;padding:4px 0}
 .land-hint{font-size:12px;color:var(--faint);text-align:center;line-height:1.6}
 
 /* landing top bar */
@@ -439,7 +430,6 @@ body{display:block!important}
 .mob-tabs{display:none!important}
 .gridwrap{display:none!important}
 .mob-itin{display:block!important}
-.itin-card,.diff-card{display:none!important}
 
 /* top bar */
 .mob-bar{display:none;align-items:center;gap:8px;padding:0 12px;height:48px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10}
@@ -447,7 +437,6 @@ body{display:block!important}
 .app.chatting .mob-bar{display:flex}
 .mob-bar-back{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;border-radius:12px;-webkit-tap-highlight-color:transparent}
 .mob-bar-back:active{background:var(--line)}
-.mob-bar-title{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--ink);flex:1;letter-spacing:-.02em}
 .mob-bar-avatar{width:34px;height:34px;border-radius:12px;background:#404040;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:700}
 
 /* split: top calendar + bottom chat */
@@ -512,8 +501,6 @@ body{display:block!important}
   .landing{padding:0 20px 40px}
   .land-inner{max-width:100%}
   .land-title{font-size:20px}
-  .land-inrow{padding:10px 10px 10px 14px}
-  .land-inrow textarea{font-size:14px}
   .land-hint{font-size:11px}
 
   /* left column — hide table, show cards */
@@ -572,46 +559,11 @@ body{display:block!important}
   .quote-card .qtxt{font-size:12px}
 }
 
-/* ---- inline itinerary card (artifact) ---- */
-.itin-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;margin-top:12px;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:.14s;display:none}
-.diff-card{display:none}
-/* inline cards disabled - split view shows calendar directly */
-.itin-card:active{transform:scale(.98)}
-.itin-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px;color:var(--faint)}
-.itin-card-head svg{width:16px;height:16px;flex:none}
-.itin-card-head .ich-title{font-weight:600;color:var(--ink);flex:1}
-.itin-card-head .ich-action{font-size:11px;color:var(--accent);font-weight:500}
-.itin-card-grid{display:flex;padding:8px 6px;gap:4px;overflow:hidden}
-.itin-card-day{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
-.itin-card-day .icd-label{font-family:var(--mono);font-size:9px;color:var(--faint);text-align:center;padding:2px 0;font-weight:600}
-.itin-card-day .icd-ev{border-radius:4px;padding:3px 4px;font-size:8px;font-weight:600;line-height:1.2;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.icd-ev.act{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
-.icd-ev.routine{background:var(--routine);color:var(--routine-ink);font-weight:500}
-.icd-ev.dec{background:var(--dec-bg);color:var(--dec);border:1px solid var(--dec-line)}
-.icd-ev.broken{background:var(--warn-bg);color:var(--warn);border:1px dashed var(--warn-line)}
-.icd-ev.changed{background:var(--accent-bg);color:var(--accent-deep);border:1px solid var(--accent)}
-
-/* change diff card */
-.diff-card{background:var(--surface);border:1px solid var(--accent);border-radius:14px;margin-top:12px;overflow:hidden;display:none}
-/* diff cards disabled - split view */
-.diff-card-head{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid var(--line);font-size:12px}
-.diff-card-head svg{width:16px;height:16px;flex:none;color:var(--accent)}
-.diff-card-head .dch-title{font-weight:600;color:var(--accent-deep);flex:1}
-.diff-card-body{padding:10px 14px}
-.diff-row{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px}
-.diff-row .diff-day{font-family:var(--mono);font-size:10px;color:var(--faint);width:36px;flex:none;font-weight:600}
-.diff-row .diff-was{color:var(--faint);text-decoration:line-through;font-size:12px}
-.diff-row .diff-arrow{color:var(--faint);font-size:11px}
-.diff-row .diff-now{color:var(--accent-deep);font-weight:600}
-
 /* ---- ripple press effect ---- */
-.ripple-wrap{position:relative;overflow:hidden}
-.ripple-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at var(--rx,50%) var(--ry,50%),rgba(0,0,0,.08) 0%,transparent 60%);opacity:0;transition:opacity .15s;pointer-events:none}
-.ripple-wrap:active::after{opacity:1;transition:opacity 0s}
 button,
 .sb-item,.sb-rec,.sb-mtab,.sb-new,.sb-acct,.sb-tab-icon,
 .land-menu-btn,.land-send,.land-feat,.land-attach,.land-model,.land-mic,.land-voice,
-.schip,.choice,.sug-choice,
+.schip,.choice,
 .cal-dbtn,.cal-nav-btn,.cal-view-btn,.cal-back,
 .cal-ev,.cal-ev-full,.cell.expandable,
 .mob-bar-back,
@@ -621,7 +573,7 @@ button,
 button::after,
 .sb-item::after,.sb-rec::after,.sb-mtab::after,.sb-new::after,.sb-acct::after,
 .land-menu-btn::after,.land-send::after,.land-feat::after,
-.schip::after,.choice::after,.sug-choice::after,
+.schip::after,.choice::after,
 .cal-dbtn::after,.cal-nav-btn::after,.cal-view-btn::after,
 .cal-ev-full::after,.cell.expandable::after,
 .mob-bar-back::after,
@@ -634,7 +586,7 @@ button::after,
 button:active::after,
 .sb-item:active::after,.sb-rec:active::after,.sb-mtab:active::after,.sb-new:active::after,.sb-acct:active::after,
 .land-menu-btn:active::after,.land-send:active::after,.land-feat:active::after,
-.schip:active::after,.choice:active::after,.sug-choice:active::after,
+.schip:active::after,.choice:active::after,
 .cal-dbtn:active::after,.cal-nav-btn:active::after,.cal-view-btn:active::after,
 .cal-ev-full:active::after,.cell.expandable:active::after,
 .mob-bar-back:active::after,
@@ -644,16 +596,9 @@ button:active::after,
 
 /* ---- 3-column diff comparison ---- */
 .diff3-tbl{width:100%;border-collapse:separate;border-spacing:4px;table-layout:fixed;min-width:280px;font-size:12px}
-.diff3-th{padding:10px 4px;font-size:13px;font-weight:700;text-align:center;border-radius:var(--radius) var(--radius) 0 0}
-.diff3-th:first-child{width:40px}
-.diff3-before{background:var(--routine);color:var(--routine-ink)}
-.diff3-a{background:var(--dec-bg);color:var(--ink)}
-.diff3-b{background:var(--keep-bg);color:var(--ink)}
 .diff3-time{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:8px 4px;vertical-align:top;width:40px}
 .diff3-cell{padding:8px;border-radius:var(--radius);vertical-align:top;line-height:1.15;font-size:12px;font-weight:700}
 .diff3-sub{font-size:10px;font-weight:400;opacity:.65;margin-top:1px;line-height:1.2}
-.diff3-before-cell{background:var(--surface);color:var(--ink)}
-.diff3-old{opacity:1}
 .diff3-a-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
 .diff3-b-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius)}
 .diff3-changed{font-weight:700;color:var(--accent-deep)}
@@ -669,7 +614,6 @@ button:active::after,
 .diff3-tbl.sel-a .diff3-a-cell{opacity:1}
 .diff3-tbl.sel-b .diff3-b-cell{opacity:1}
 .diff3-tbl .diff3-a-cell,.diff3-tbl .diff3-b-cell{transition:opacity .2s var(--ease)}
-.diff3-highlight .diff3-before-cell{background:var(--surface)}
 .diff3-actions{display:flex;gap:8px;padding:12px 4px}
 .diff3-pick{flex:1;font-family:var(--sans);font-size:13px;font-weight:600;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:48px;transition:border-color var(--dur) var(--ease);-webkit-tap-highlight-color:transparent}
 .diff3-pick:hover{border-color:var(--accent)}
@@ -686,27 +630,6 @@ button:active::after,
 .bubble.streaming::after{content:'';display:inline-block;width:2px;height:1em;background:var(--ink);margin-left:1px;vertical-align:text-bottom;animation:blinkcursor .6s step-end infinite}
 @keyframes blinkcursor{0%,100%{opacity:1}50%{opacity:0}}
 
-/* ---- before/after diff ---- */
-.diff-header{display:flex;border-bottom:1px solid var(--line);background:var(--surface)}
-.diff-header-label{flex:1;text-align:center;padding:6px 0;font-size:11px;font-weight:600}
-.diff-header-label.before{color:var(--faint)}
-.diff-header-label.after{color:var(--accent-deep)}
-.diff-cols{display:flex;gap:1px;background:var(--line)}
-.diff-col{flex:1;background:var(--paper);display:flex;flex-direction:column;gap:3px;padding:6px 4px}
-.diff-col.before{opacity:1}
-.diff-col.after .cal-ev.changed,.diff-col.after .cal-ev-full.changed{border:2px solid var(--accent);box-shadow:0 0 0 2px var(--accent-bg)}
-.diff-col.after .cal-ev.broken,.diff-col.after .cal-ev-full.broken{border:2px dashed var(--warn);box-shadow:0 0 0 2px var(--warn-bg)}
-.diff-cell{border-radius:6px;padding:5px 6px;font-size:10px;line-height:1.3;min-height:28px}
-.diff-cell .dc-txt{font-weight:600;font-size:11px}
-.diff-cell .dc-sub{font-size:9px;color:var(--faint);margin-top:1px}
-.diff-cell.routine{background:var(--routine);color:var(--routine-ink)}
-.diff-cell.routine .dc-sub{color:var(--routine-ink)}
-.diff-cell.act{background:var(--surface);border:1px solid var(--line)}
-.diff-cell.dec{background:var(--dec-bg);border:1px solid var(--dec-line);color:var(--dec)}
-.diff-cell.changed{background:var(--accent-bg);border:2px solid var(--accent);color:var(--accent-deep)}
-.diff-cell.broken{background:var(--warn-bg);border:2px dashed var(--warn);color:var(--warn)}
-.diff-cell.same{background:var(--routine);color:var(--routine-ink);opacity:.5}
-.diff-cell.before-changed{}
 
 /* ---- adjust modal ---- */
 /* ---- adjust modal ---- */
@@ -721,18 +644,6 @@ button:active::after,
 .adj-head .adj-close:hover{color:var(--ink)}
 .adj-head .adj-close svg{width:24px;height:24px}
 .adj-body{flex:1;overflow-y:auto;padding:16px;padding-bottom:32px}
-.adj-conflict{background:var(--accent-bg);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:16px;font-size:13px;line-height:1.6;color:var(--muted)}
-.adj-conflict b{color:var(--ink);font-weight:700}
-.adj-options{display:flex;gap:8px;margin-top:16px}
-.adj-opt{flex:1;border-radius:var(--radius-sm);padding:16px;cursor:pointer;transition:border-color var(--dur) var(--ease);-webkit-tap-highlight-color:transparent;border:1px solid var(--line);background:var(--surface)}
-.adj-opt:hover{border-color:var(--accent)}
-.adj-opt:active{transform:scale(.97)}
-.adj-opt-a{background:var(--surface)}
-.adj-opt-b{background:var(--surface)}
-.adj-opt-title{font-size:14px;font-weight:700;margin-bottom:4px;color:var(--ink)}
-.adj-opt-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px}
-.adj-opt-pro{font-size:11px;color:var(--keep)}
-.adj-opt-con{font-size:11px;color:var(--warn)}
 .adj-pick{text-align:left;font-family:var(--sans);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s;opacity:.6}
 .adj-pick:hover{border-color:var(--muted)}
 .adj-pick:active{transform:scale(.96)}
@@ -827,7 +738,6 @@ button:focus-visible,
 .land-model:focus-visible,
 .schip:focus-visible,
 .choice:focus-visible,
-.sug-choice:focus-visible,
 .inline-choice:focus-visible,
 .mob-tab:focus-visible,
 .mob-bar-back:focus-visible,
@@ -1228,7 +1138,7 @@ function fresh(){return{
   choices:[{id:'transit',label:'교통 — JR패스를 살까?',q:'교통',done:false},{id:'comms',label:'통신 — eSIM이 나을까?',q:'통신',done:false}],
   showChoices:false,
   side:null, folded:[],
-  adjustOpen:false, adjustChosen:false,
+  adjustChosen:false,
   busy:false,
   meter:{active:false,done:false,t0:0,ms:0,actions:0,scrolls:0,msgs:0,clicks:0},
   quote:null, chatting:false, _openCell:null, _previewAdjust:null,
@@ -1478,7 +1388,6 @@ function streamLastMessage(){
         }
         if(extra)el.insertAdjacentHTML('beforeend',extra);
       }
-      renderSuggest();
     }else{
       el.innerHTML=parsed.slice(0,idx);
     }
@@ -1593,23 +1502,10 @@ const STEPS=[
   {now:'⑦ 조정안 선택 · 직접 수정',hint:'두 조정안 중 하나를 고르면 그 칸만 갱신·기록됩니다. 일정표 칸을 직접 고쳐도 같은 결정 기록에 남아요.'},
 ];
 function renderGuide(){
-  const el=document.getElementById('gStep');
-  if(!el)return;
-  const idx=Math.min(S.step,7)-1;
-  el.textContent=Math.min(S.step,7)+' / 7';
-  document.getElementById('gNow').innerHTML=STEPS[idx].now;
-  document.getElementById('gHint').innerHTML=STEPS[idx].hint;
-  let d='';for(let i=0;i<7;i++)d+=`<i class="${i<S.step-1?'done':(i===S.step-1?'cur':'')}"></i>`;
-  document.getElementById('gDots').innerHTML=d;
+  return;
 }
 
-/* ================= SUGGEST CHIPS (middle composer) ================= */
-function renderSuggest(){
-  const w=document.getElementById('suggest');if(!w)return;
-  w.innerHTML='';
-}
-
-function renderAll(){renderLeft();renderMid();renderRight();renderGuide();renderSuggest();
+function renderAll(){renderLeft();renderMid();renderRight();renderGuide();
   document.getElementById('mainSend').disabled=!!S.busy;}
 
 /* ================= UTIL (simulated AI context) ================= */
@@ -1733,44 +1629,7 @@ function clearQuote(){S.quote=null;renderQuote();}
 
 function routeMain(text){
   if(S.mode==='linear'){routeLinear(text);return;}
-  routeMobile(text);return; // mobile version always uses routeMobile
-  // side mode routing by phase
-  if(S.step===1){
-    S.msgs.push({role:'assistant',text:'11월 도쿄, 좋은 시즌이네요! Seola의 관심사들(코난, 앙상블 스타즈, 카페, 팝업 이벤트 등)을 고려해서 초안을 짜봤습니다. 몇 가지 확인하고 싶은 게 있어서 먼저 물어봐도 될까요?'});
-    renderAll();
-    setTimeout(()=>openQs(()=>{
-      S.msgs.push({role:'assistant',text:SCRIPT.draft,choices:true,itinCard:true});
-      S.showChoices=true; S.drafted=true; S.step=2;
-      mobNotify('left');
-      renderAll();
-    }),600);
-    return;
-  }else if(S.step===2){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[0]});
-    S.step=3;
-  }else if(S.step===3){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.transit[1]});
-    if(!S.ledger.some(d=>d.topic==='transit'))
-      S.ledger.push({txt:'교통: JR패스 ✕, 스이카로 확정',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'transit',landing:true});
-    S.step=4;
-  }else if(S.step===4){
-    S.msgs.push({role:'assistant',text:SCRIPT.side.comms[0]+'\n\n'+SCRIPT.side.comms[1]});
-    if(!S.ledger.some(d=>d.topic==='comms'))
-      S.ledger.push({txt:'통신: 포켓와이파이 ✕, 각자 eSIM',pill:'reflect',pillLabel:'반영됨',src:'대화 결론',state:'live',topic:'comms',landing:true});
-    S.step=5;
-  }else if(S.step===5||/최종|반영|확정/.test(text)){
-    applyFinalize();
-    S.msgs.push({role:'assistant',text:'교통/통신 결정을 일정에 반영했어요! 이제 여행 중에 변수가 생겨도 빠르게 조정할 수 있어요.\n\n혹시 여행 중에 변수가 생기면 알려주세요. 예를 들어 항공편 지연 같은 상황이요.',inlineChoices:[{label:'항공편 3시간 지연됐어',value:'delay'},{label:'괜찮아, 일정 확정할게',value:'done'}]});
-    S.step=6;
-    mobNotify('left');
-  }else if(S.step===6||/지연|늦|취소|휴무/.test(text)){
-    meterStart();
-    applyDelay();
-    S.msgs.push({role:'assistant',text:SCRIPT.delayReply,adjust:true});
-    S.adjustOpen=true; S.step=7;
-  }else{
-    S.msgs.push({role:'assistant',text:'제안 칩을 눌러 다음 단계로 진행해 보세요. (이 데모는 고정 시나리오로 동작합니다)'});
-  }
+  routeMobile(text);return;
   renderAll();
 }
 
@@ -1819,7 +1678,6 @@ function routeMobile(text){
     // 일정표 변경 → 자동 펼치기
     calCollapsed=false;
     S.msgs.push({role:'assistant',text:SCRIPT.delayReply,adjust:true});
-    S.adjustOpen=true;
     mobNotify('left');
     S.step=7;
   }else{
@@ -1846,16 +1704,6 @@ function routeLinear(text){
 }
 
 /* ================= SIDE TRACK ================= */
-function openSideFromChoice(id){
-  if(S.busy)return;
-  const ch=S.choices.find(c=>c.id===id); if(!ch||ch.done)return;
-  const title=ch.q==='교통'?'교통 — JR패스':'통신 — eSIM';
-  const seed=ch.q==='교통'?'JR패스를 살까?':'eSIM이 나을까?';
-  S.side={id:id,topic:(id==='transit'?'transit':'comms'),title,seed,msgs:[],suggests:['이게 뭔데?','우리 일정엔 어떤 게 나아?'],busy:false};
-  if(S.step<3)S.step=3;
-  // auto first answer
-  sideAsk('이게 뭔데?');
-}
 function openSideFromSelection(seed){
   if(S.busy)return;
   // map selection to a known topic if possible
@@ -1945,15 +1793,11 @@ function flyToLedger(start, line){
 
 /* ================= FINALIZE ================= */
 /* ================= GRID SNAPSHOT (before/after) ================= */
-let gridSnapshot=null, showBefore=false;
+let gridSnapshot=null;
 function saveSnapshot(){
   gridSnapshot=S.grid.map(row=>row.map(c=>({...c,meta:c.meta?[...c.meta]:undefined})));
 }
-function toggleBeforeAfter(){
-  showBefore=!showBefore;
-  renderLeft();
-}
-function getDisplayGrid(){return showBefore&&gridSnapshot?gridSnapshot:S.grid;}
+function getDisplayGrid(){return S.grid;}
 
 function applyFinalize(){
   // grid stays; decisions already in ledger. If user skipped side, seed ledger.
@@ -1967,6 +1811,7 @@ function applyFinalize(){
 
 /* ================= ADJUST MODAL ================= */
 function openAdjModal(){
+  if(!gridSnapshot)return;
   const adjA=SCRIPT.adjust[0],adjB=SCRIPT.adjust[1];
   const empty={t:'routine',txt:'',sub:''};
   // build shifted A/B grids
@@ -2111,13 +1956,6 @@ function chooseAdjust(ai){
 function toggleCell(ri,ci){
   openEvModal(ri,ci);
 }
-/* 조정안 hover 시 일정표 칸 미리보기 */
-function previewAdjust(ai){
-  if(S._previewAdjust===ai)return;
-  S._previewAdjust=ai;
-  renderLeft();
-}
-
 /* ================= DIRECT EDIT ================= */
 let editCell=null;
 function startEdit(ri,ci){
@@ -2308,12 +2146,10 @@ function qsNav(dir){qsIdx=Math.max(0,Math.min(QS_DATA.length-1,qsIdx+dir));rende
 
 let mobTab='mid';
 let calView='week',calDay=0;
-let calCollapsed=false, calMaxH=400;
+let calCollapsed=false;
 const SLOT_T=[{s:7,e:8.5},{s:8.5,e:10},{s:10,e:11.5},{s:11.5,e:13},{s:13,e:14.5},{s:14.5,e:16.5},{s:16.5,e:18.5},{s:18.5,e:20.5},{s:20.5,e:22}];
-let CAL_PX=30;// px per hour, adjustable by pinch zoom
-let calScale=1;
-function calDrill(d){calView='day';calDay=d;CAL_PX=35;calScale=1;calCollapsed=false;renderLeft();}
-function calBack(){calView='week';CAL_PX=30;calScale=1;calCollapsed=false;renderLeft();}
+function calDrill(d){calView='day';calDay=d;calCollapsed=false;renderLeft();}
+function calBack(){calView='week';calCollapsed=false;renderLeft();}
 function calDayNav(dir){
   const prev=calDay;
   calDay=Math.max(0,Math.min(DAYS.length-1,calDay+dir));
@@ -2342,29 +2178,6 @@ function initCalSwipe(){
       else if(dx>0&&calDay>0){calDayNav(-1);}
     }
   },{passive:true});
-}
-function initCalPinch(){
-  const el=document.getElementById('leftScroll');if(!el)return;
-  let startDist=0,startPx=0;
-  el.addEventListener('touchstart',e=>{
-    if(e.touches.length===2){
-      startDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-      startPx=CAL_PX;
-      e.preventDefault();
-    }
-  },{passive:false});
-  el.addEventListener('touchmove',e=>{
-    if(e.touches.length===2&&startDist>0){
-      const dist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
-      const ratio=dist/startDist;
-      const minPx=calView==='week'?18:30;
-      const maxPx=calView==='week'?60:90;
-      CAL_PX=Math.round(Math.max(minPx,Math.min(maxPx,startPx*ratio)));
-      renderLeft();
-      e.preventDefault();
-    }
-  },{passive:false});
-  el.addEventListener('touchend',()=>{startDist=0;});
 }
 function toggleSidebar(){
   if(window.innerWidth<=1100){document.body.classList.toggle('sb-open');}
@@ -2417,12 +2230,12 @@ document.addEventListener('click',e=>{
   }
 },true);
 
-resetAll('side');initCalPinch();
+resetAll('side');
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeEvModal();closeQs();closeSidebar();}});
 
 // ripple: set touch position as CSS vars
 document.addEventListener('pointerdown',e=>{
-  const el=e.target.closest('button,.sb-item,.sb-rec,.sb-mtab,.sb-new,.sb-acct,.land-feat,.schip,.choice,.sug-choice,.cal-dbtn,.cal-nav-btn,.cal-view-btn,.cal-ev-full,.cell.expandable,.send');
+  const el=e.target.closest('button,.sb-item,.sb-rec,.sb-mtab,.sb-new,.sb-acct,.land-feat,.schip,.choice,.cal-dbtn,.cal-nav-btn,.cal-view-btn,.cal-ev-full,.cell.expandable,.send');
   if(!el)return;
   const r=el.getBoundingClientRect();
   el.style.setProperty('--rx',((e.clientX-r.left)/r.width*100)+'%');
