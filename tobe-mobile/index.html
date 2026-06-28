@@ -663,6 +663,12 @@ button:active::after,
 .diff3-broken{color:var(--warn);font-weight:700}
 .diff3-highlight .diff3-a-cell{background:rgba(204,219,232,.3);box-shadow:0 1px 4px rgba(0,0,0,.08)}
 .diff3-highlight .diff3-b-cell{background:rgba(232,245,233,.3);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+/* selected/dimmed column states */
+.diff3-tbl.sel-a .diff3-b-cell{opacity:.3;box-shadow:none}
+.diff3-tbl.sel-b .diff3-a-cell{opacity:.3;box-shadow:none}
+.diff3-tbl.sel-a .diff3-a-cell{opacity:1}
+.diff3-tbl.sel-b .diff3-b-cell{opacity:1}
+.diff3-tbl .diff3-a-cell,.diff3-tbl .diff3-b-cell{transition:opacity .2s var(--ease)}
 .diff3-highlight .diff3-before-cell{background:var(--surface)}
 .diff3-actions{display:flex;gap:8px;padding:12px 4px}
 .diff3-pick{flex:1;font-family:var(--sans);font-size:13px;font-weight:600;padding:12px;border-radius:var(--radius-sm);border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:48px;transition:border-color var(--dur) var(--ease);-webkit-tap-highlight-color:transparent}
@@ -1982,7 +1988,7 @@ function openAdjModal(){
   let h='';
   // diff3 table
   h+=`<div style="overflow-x:auto;margin-bottom:14px">`;
-  h+=`<table class="diff3-tbl"><tbody>`;
+  h+=`<table class="diff3-tbl sel-a"><tbody>`;
   ROWS.forEach((rl,ri)=>{
     if(ri===8) return;
     const before=gridSnapshot[ri][0];
@@ -2042,6 +2048,8 @@ function selectAdj(i){
   document.querySelectorAll('#adjPicks .adj-pick').forEach((el,idx)=>{
     el.classList.toggle('selected',idx===i);
   });
+  const tbl=document.querySelector('.diff3-tbl');
+  if(tbl){tbl.classList.remove('sel-a','sel-b');tbl.classList.add(i===0?'sel-a':'sel-b');}
 }
 function confirmAdj(){
   closeAdjModal();
