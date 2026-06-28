@@ -394,7 +394,8 @@ textarea::placeholder{color:var(--faint)}
 .cal-td-ev{padding:8px 6px;vertical-align:top;cursor:pointer;border-radius:var(--radius);transition:transform .15s,box-shadow .15s}
 .cal-td-ev:active{transform:scale(.96)}
 .cal-td-ev.act{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.06)}
-.cal-td-ev.routine{background:var(--routine);color:var(--routine-ink)}
+.cal-td-ev.routine{background:var(--routine);color:var(--routine-ink);padding:3px 6px;opacity:.5}
+.cal-td-ev.routine .cal-ev-txt{font-size:9px;font-weight:500}
 .cal-td-ev.dec{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.06)}
 .cal-td-ev.broken{background:var(--warn-bg);color:var(--warn);animation:pulse 1.4s ease-in-out infinite;font-weight:700;border:1.5px dashed var(--warn-line)}
 .cal-td-ev.changed{background:var(--keep-bg);color:var(--keep);box-shadow:0 1px 3px rgba(52,168,83,.1)}
@@ -1186,7 +1187,7 @@ const SCRIPT={
      was:'Ani Cafe',now:'Ani Cafe (늦은 타임 시도)',shift:'도착 즉시 호텔→카페→늦은 저녁',
      cell:{txt:'Ani Cafe',sub:'늦은 타임',meta:['🔖 예약']}},
   ],
-  adjustDone:(label)=>`**${label}**로 결정했어요. 일정표가 업데이트됐어요.\n\n공항 대기하는 동안 이것만 먼저 해두세요:\n1. 호텔에 늦는다고 메시지 보내기\n2. 첫날 예약(카페/식당) 취소 또는 변경하기\n\n이 두 가지만 처리하면 도착해서 허둥대는 일을 줄일 수 있어요.`,
+  adjustDone:(label)=>`**${label}**로 결정했어요. 일정표가 업데이트됐어요.\n\n공항 대기하는 동안 이것만 먼저 해두세요:\n1. 호텔에 늦는다고 메시지 보내기\n2. 첫날 예약(카페/식당) 취소 또는 변경하기\n\n마음이 바뀌면 다시 조정할 수 있어요.`,
   editDone:(txt)=>`직접 수정한 내용을 읽어 결정 기록에 '직접 수정' 한 줄로 기록했습니다. 대화로 한 결정과 손으로 한 수정이 같은 결정 기록을 공유해요.`,
 };
 
@@ -1487,7 +1488,9 @@ function renderMid(){
       h+=`<div class="msg assistant"><div class="who">Assistant</div><div class="bubble selectable">${md(m.text)}`;
       // inline itinerary card
       if(m.itinCard)h+=buildItinCard();
-      if(m.diffCard)h+=buildDiffCard(m.diffCard);
+      if(m.diffCard){h+=buildDiffCard(m.diffCard);
+        h+=`<div style="margin-top:8px"><button onclick="reopenAdjust()" style="font-family:var(--sans);font-size:12px;font-weight:500;color:var(--faint);background:none;border:1px solid var(--line);border-radius:20px;padding:6px 14px;min-height:44px;cursor:pointer">다른 안으로 변경</button></div>`;
+      }
       if(m.choices&&S.showChoices&&S.mode==='side'){
         h+=`<div class="choices">`;
         S.choices.forEach(c=>{
@@ -2023,6 +2026,15 @@ function applyDelay(){
   S.grid[6][0]={t:'act',txt:'Ani Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'원래 17:00 예약이 도착 지연으로 불가. 늦은 타임으로 변경하거나 취소해야 해요.'};
   S.grid[7][0]={t:'act',txt:'저녁',sub:'시간 조정 필요',changed:true,detail:'저녁 시간이 전체적으로 밀림.'};
   mobNotify('left');
+}
+function reopenAdjust(){
+  S.adjustChosen=false;
+  // 마지막 adjustDone 메시지 제거
+  for(let i=S.msgs.length-1;i>=0;i--){
+    if(S.msgs[i].diffCard){S.msgs.splice(i,1);break;}
+  }
+  renderAll();
+  setTimeout(()=>openAdjModal(),300);
 }
 function chooseAdjust(ai){
   saveSnapshot();
