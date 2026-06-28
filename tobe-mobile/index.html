@@ -1922,21 +1922,16 @@ function openAdjModal(){
     h+=`<td class="diff3-cell diff3-b-cell${bCls}">${!b.txt&&before.txt?'<span style="text-decoration:line-through;opacity:.5">'+esc(before.txt)+'</span>':esc(b.txt)}${b.txt?'<br><span class="diff3-sub">'+esc(b.sub||'')+'</span>':''}</td>`;
     h+=`</tr>`;
   });
+  // 테이블 하단에 pro/con + 선택 버튼 row 추가
+  h+=`<tr><td class="diff3-time"></td>`;
+  h+=`<td class="diff3-cell" style="padding:8px 4px;vertical-align:top"><div style="font-size:10px;color:var(--keep);margin-bottom:2px">+ ${esc(adjA.pro)}</div><div style="font-size:10px;color:var(--warn)">- ${esc(adjA.con)}</div></td>`;
+  h+=`<td class="diff3-cell" style="padding:8px 4px;vertical-align:top"><div style="font-size:10px;color:var(--keep);margin-bottom:2px">+ ${esc(adjB.pro)}</div><div style="font-size:10px;color:var(--warn)">- ${esc(adjB.con)}</div></td>`;
+  h+=`</tr>`;
+  h+=`<tr><td class="diff3-time"></td>`;
+  h+=`<td style="padding:4px"><button onclick="closeAdjModal();chooseAdjust(0)" style="width:100%;font-family:var(--sans);font-size:12px;font-weight:600;padding:10px 8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--radius-sm);cursor:pointer">A안 선택</button></td>`;
+  h+=`<td style="padding:4px"><button onclick="closeAdjModal();chooseAdjust(1)" style="width:100%;font-family:var(--sans);font-size:12px;font-weight:600;padding:10px 8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:var(--radius-sm);cursor:pointer">B안 선택</button></td>`;
+  h+=`</tr>`;
   h+=`</tbody></table></div>`;
-  // option cards
-  h+=`<div class="adj-options">`;
-  h+=`<div class="adj-opt adj-opt-a" onclick="closeAdjModal();chooseAdjust(0)">`;
-  h+=`<div class="adj-opt-title">A안: ${esc(adjA.h)}</div>`;
-  h+=`<div class="adj-opt-desc">${esc(adjA.tl)}</div>`;
-  h+=`<div class="adj-opt-pro">+ ${esc(adjA.pro)}</div>`;
-  h+=`<div class="adj-opt-con">- ${esc(adjA.con)}</div>`;
-  h+=`</div>`;
-  h+=`<div class="adj-opt adj-opt-b" onclick="closeAdjModal();chooseAdjust(1)">`;
-  h+=`<div class="adj-opt-title">B안: ${esc(adjB.h)}</div>`;
-  h+=`<div class="adj-opt-desc">${esc(adjB.tl)}</div>`;
-  h+=`<div class="adj-opt-pro">+ ${esc(adjB.pro)}</div>`;
-  h+=`<div class="adj-opt-con">- ${esc(adjB.con)}</div>`;
-  h+=`</div></div>`;
 
   document.getElementById('adjBody').innerHTML=h;
   document.getElementById('adjBackdrop').classList.add('open');
