@@ -3,68 +3,113 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Side Track — 비교 데모</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
-<link rel="stylesheet" href="/variables.css">
+<title>Side Track — 여행 일정 관리 프로토타입</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 <style>
+:root{
+  --bg:#faf9f5; --surface:#ffffff; --ink:#141413; --muted:#3d3d3a; --faint:#73726c; --disabled:#9c9a92;
+  --line:#dedcd1; --line2:#e6e3d8; --accent:#1f1e1d; --accent-bg:#f0eee6;
+  --keep:#34A853; --keep-bg:#E8F5E9; --warn:#D94B3F; --warn-bg:#FEF0EE;
+  --dec-bg:#ccdbe8;
+  --radius:12px; --radius-sm:8px; --radius-xs:4px;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --sans:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;
+  --ease:cubic-bezier(.4,0,.2,1);
+}
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--color-ivory-canvas);color:var(--color-ink-black);font-family:"Pretendard",-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif;-webkit-font-smoothing:antialiased}
+html,body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
 body{display:flex;align-items:center;justify-content:center;padding:24px;min-height:100vh}
-.wrap{width:100%;max-width:520px;display:flex;flex-direction:column;gap:10px}
+::selection{background:var(--dec-bg);color:var(--ink)}
 
+.wrap{width:100%;max-width:480px;display:flex;flex-direction:column;gap:12px}
 
-.header{text-align:center}
-.header .brandmark{font-size:15px;font-weight:500;color:var(--color-charcoal);letter-spacing:.02em}
-.header h1{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:var(--spacing-8);color:var(--color-ink-black);line-height:var(--leading-heading-sm)}
+/* header */
+.header{text-align:center;margin-bottom:8px}
+.header-logo{display:inline-flex;align-items:center;gap:8px;margin-bottom:12px}
+.header-logo svg{width:20px;height:20px}
+.header-logo span{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+.header h1{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1.3;color:var(--ink)}
+.header .sub{font-size:14px;color:var(--faint);margin-top:6px;line-height:1.6}
 
-.card{display:block;text-decoration:none;color:inherit;border-radius:var(--radius-cards);padding:14px var(--spacing-16);transition:border-color .18s;-webkit-tap-highlight-color:transparent;border:1px solid var(--color-linen-border)}
-.card:active{transform:scale(.97)}
+/* main card (tobe) */
+.card-main{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:20px;transition:border-color .2s var(--ease),box-shadow .2s var(--ease);-webkit-tap-highlight-color:transparent}
+.card-main:hover{border-color:var(--accent);box-shadow:0 4px 20px rgba(0,0,0,.04)}
+.card-main:active{transform:scale(.98)}
+.card-main .label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.card-main h2{font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.3;margin-bottom:6px}
+.card-main .desc{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:12px}
+.card-main .tags{display:flex;gap:6px;flex-wrap:wrap}
+.card-main .tag{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 8px;border-radius:var(--radius-xs);letter-spacing:.02em}
+.tag-accent{background:var(--accent);color:#fff}
+.tag-keep{background:var(--keep-bg);color:var(--keep)}
+.tag-dec{background:var(--dec-bg);color:var(--accent)}
+.card-main .arrow-row{display:flex;align-items:center;gap:6px;margin-top:14px;font-size:12px;font-weight:600;color:var(--accent)}
+.card-main .arrow-row svg{width:14px;height:14px}
 
-.card-tobe{background:var(--surface-pure-white)}
-.card-tobe:hover{border-color:var(--color-charcoal)}
+/* asis card */
+.card-asis{display:block;text-decoration:none;color:inherit;background:var(--accent-bg);border:1px solid var(--line);border-radius:var(--radius);padding:16px 20px;transition:border-color .2s var(--ease);-webkit-tap-highlight-color:transparent}
+.card-asis:hover{border-color:var(--muted)}
+.card-asis:active{transform:scale(.98)}
+.card-asis .label{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--disabled);margin-bottom:4px}
+.card-asis h2{font-size:14px;font-weight:600;color:var(--muted);margin-bottom:3px}
+.card-asis .desc{font-size:12px;color:var(--faint);line-height:1.5}
+.card-asis .tags{display:flex;gap:4px;margin-top:8px;flex-wrap:wrap}
+.card-asis .tag{font-size:9px;padding:2px 6px;border-radius:var(--radius-xs);background:transparent;border:1px solid var(--line);color:var(--faint);font-family:var(--mono);font-weight:500}
 
-.card-asis{background:var(--surface-warm-parchment)}
-.card-asis:hover{border-color:var(--color-charcoal)}
+/* divider */
+.divider{display:flex;align-items:center;gap:12px;margin:4px 0}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--line)}
+.divider span{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--disabled)}
 
-.card-archive{background:var(--surface-warm-parchment)}
-.card-archive:hover{border-color:var(--color-charcoal)}
+/* archive cards */
+.archive-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.card-archive{display:block;text-decoration:none;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:12px;transition:border-color .2s var(--ease);-webkit-tap-highlight-color:transparent}
+.card-archive:hover{border-color:var(--muted)}
+.card-archive:active{transform:scale(.98)}
+.card-archive .week{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--disabled);margin-bottom:4px}
+.card-archive .title{font-size:13px;font-weight:600;color:var(--muted);margin-bottom:2px}
+.card-archive .sub{font-size:11px;color:var(--faint);line-height:1.4}
 
-.card .label{font-size:var(--text-caption);letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px;font-weight:var(--font-weight-medium);color:var(--color-stone-gray)}
-.card h2{font-size:16px;font-weight:600;margin-bottom:3px;color:var(--color-charcoal);line-height:var(--leading-heading-sm)}
-.card .desc{font-size:13px;color:var(--color-warm-slate);line-height:1.5}
-.card .arrow{float:right;font-size:16px;color:var(--color-pewter);margin-top:-18px}
-.card .tags{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}
-.card .tag{font-size:10px;padding:3px var(--spacing-8);border-radius:var(--radius-lg);font-weight:var(--font-weight-medium);background:var(--color-dust-blue);color:var(--color-warm-slate)}
-.card-asis .tag{background:var(--surface-warm-parchment);color:var(--color-stone-gray);border:1px solid var(--color-linen-border)}
-
-.divider{border:none;border-top:1px solid var(--color-linen-border);margin:4px 0}
-.section-label{font-size:var(--text-caption);color:var(--color-pewter);letter-spacing:.06em;font-weight:var(--font-weight-medium);text-align:center}
+/* footer */
+.footer{text-align:center;margin-top:4px}
+.footer a{font-family:var(--mono);font-size:10px;color:var(--disabled);text-decoration:none;letter-spacing:.04em}
+.footer a:hover{color:var(--muted)}
 </style>
 </head>
 <body>
 <div class="wrap">
+
   <div class="header">
-    <div class="brandmark">Side Track</div>
-    <h1>여행 일정 관리, 어떻게 다를까?</h1>
+    <div class="header-logo">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2L14.5 8.5L21 6.5L16.5 12L21 17.5L14.5 15.5L12 22L9.5 15.5L3 17.5L7.5 12L3 6.5L9.5 8.5L12 2Z" fill="#D97757"/></svg>
+      <span>Side Track</span>
+    </div>
+    <h1>여행 중 변수가 생기면,<br>일정을 어떻게 고칠까?</h1>
+    <div class="sub">AI 일정 관리의 As-Is와 To-Be를 비교합니다.</div>
   </div>
 
-  <a class="card card-tobe" href="/tobe-mobile/">
-    <div class="label">To-Be · Week 4</div>
-    <h2>일정 변경 대응 (모바일)</h2>
-    <span class="arrow">→</span>
-    <div class="desc">여행 중 변수 발생 시, AI가 영향받는 일정을 분석하고 A/B안을 비교 제시. 한 번의 선택으로 일정표에 즉시 반영.</div>
+  <a class="card-main" href="/tobe-mobile/">
+    <div class="label">To-Be · Week 4 · 프로토타입</div>
+    <h2>일정 변경 대응</h2>
+    <div class="desc">여행 중 변수 발생 시, AI가 영향받는 일정을 분석하고 A/B안을 비교 제시합니다. 한 번의 선택으로 일정표에 즉시 반영.</div>
     <div class="tags">
-      <span class="tag">키스크린 바로 보기</span>
-      <span class="tag">A/B 비교</span>
-      <span class="tag">일정표 연동</span>
+      <span class="tag tag-accent">키스크린 바로 보기</span>
+      <span class="tag tag-keep">A/B 비교</span>
+      <span class="tag tag-dec">일정표 연동</span>
+    </div>
+    <div class="arrow-row">
+      프로토타입 열기
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </div>
   </a>
 
-  <a class="card card-asis" href="/asis/">
-    <div class="label">As-Is</div>
+  <a class="card-asis" href="/asis/">
+    <div class="label">As-Is · 대조군</div>
     <h2>기존 클로드 앱 경험</h2>
-    <span class="arrow">→</span>
-    <div class="desc">일정이 대화 텍스트로만 관리됩니다. 변수가 생기면 이전 결정을 스크롤해서 찾아야 해요.</div>
+    <div class="desc">일정이 텍스트로만 관리됩니다. 변수가 생기면 이전 결정을 스크롤해서 찾아야 해요.</div>
     <div class="tags">
       <span class="tag">텍스트 일정</span>
       <span class="tag">결정 흩어짐</span>
@@ -72,29 +117,29 @@ body{display:flex;align-items:center;justify-content:center;padding:24px;min-hei
     </div>
   </a>
 
-  <hr class="divider">
-  <div class="section-label">이전 버전</div>
+  <div class="divider"><span>이전 버전</span></div>
 
-  <a class="card card-archive" href="/archive/week3/">
-    <div class="label">Week 3</div>
-    <h2>3주차 버전</h2>
-    <span class="arrow">→</span>
-    <div class="desc">사이드바 + 2컬럼 일정 관리. 캘린더 뷰, 상세 모달, 탭 바 기반.</div>
-  </a>
+  <div class="archive-grid">
+    <a class="card-archive" href="/archive/week3/">
+      <div class="week">Week 3</div>
+      <div class="title">3주차</div>
+      <div class="sub">2컬럼 일정 관리</div>
+    </a>
+    <a class="card-archive" href="/archive/week2/">
+      <div class="week">Week 2</div>
+      <div class="title">2주차</div>
+      <div class="sub">초기 프로토타입</div>
+    </a>
+    <a class="card-archive" href="/archive/week1/">
+      <div class="week">Week 1</div>
+      <div class="title">1주차</div>
+      <div class="sub">컨셉 탐색</div>
+    </a>
+  </div>
 
-  <a class="card card-archive" href="/archive/week2/">
-    <div class="label">Week 2</div>
-    <h2>2주차 버전</h2>
-    <span class="arrow">→</span>
-    <div class="desc">2주차 시점의 프로토타입입니다.</div>
-  </a>
-
-  <a class="card card-archive" href="/archive/week1/">
-    <div class="label">Week 1</div>
-    <h2>1주차 버전</h2>
-    <span class="arrow">→</span>
-    <div class="desc">1주차 시점의 프로토타입입니다.</div>
-  </a>
+  <div class="footer">
+    <a href="https://github.com/seola0114/side-track-travel">github.com/seola0114/side-track-travel</a>
+  </div>
 
 </div>
 </body>
