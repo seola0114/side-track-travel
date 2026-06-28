@@ -38,7 +38,7 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:
 ::selection{background:#ccdbe8;color:var(--ink)}
 svg{stroke-linecap:round;stroke-linejoin:round}
 .app{display:flex;flex-direction:column;height:100dvh;flex:1;min-width:0;position:relative;max-width:430px;width:100%}
-@media(min-width:500px){body{background:#e8e6e0;padding:20px 0}.app{border-radius:20px;overflow:hidden;height:calc(100dvh - 40px);box-shadow:0 8px 40px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);background:var(--paper)}}
+@media(min-width:500px){body{background:#e8e6e0;align-items:center}.app{border-radius:20px;overflow:hidden;height:min(932px,calc(100dvh - 40px));box-shadow:0 8px 40px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);background:var(--paper);flex:none}}
 
 /* ---- LNB (left nav) ---- */
 .sidebar{width:248px;flex:none;display:flex;flex-direction:column;background:var(--paper);border-right:1px solid var(--line);padding:8px 10px;gap:3px;min-height:0;height:100dvh}
