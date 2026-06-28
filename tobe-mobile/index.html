@@ -728,6 +728,9 @@ button:active::after,
 .adj-pick{text-align:left;font-family:var(--sans);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s}
 .adj-pick:hover{border-color:var(--accent);background:var(--accent-bg)}
 .adj-pick:active{transform:scale(.96);background:var(--accent-bg)}
+.adj-pick.rec{border:2px solid var(--accent)}
+.adj-rec-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;background:var(--accent);color:#fff;border-radius:9px;padding:1px 7px;margin-left:4px;vertical-align:middle}
+.adj-rec-reason{font-size:10px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);line-height:1.5}
 
 /* ---- event detail modal ---- */
 .ev-backdrop{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.35);display:none}
@@ -1176,10 +1179,10 @@ const SCRIPT={
   finalize:`정한 교통·통신 결정을 일정에 반영했어요. 확정본은 여기 다시 길게 출력하지 않고 — **왼쪽 일정표가 제자리에서 갱신**되고, 두 결정이 결정 기록에 한 줄씩 남았습니다. 이게 핵심이에요: 결정이 대화 로그가 아니라 다시 꺼내 쓸 단위로 보존됩니다.\n\n이제 여행 중에 변수가 생겨도, 흩어진 기록을 뒤질 필요가 없어요.`,
   delayReply:`3시간 지연을 반영했어요. **Animate Cafe 예약**(17:00)이 도착 시간과 겹칩니다.\n\n**해야 할 것:** 카페 예약 취소 또는 변경, 호텔에 늦는다고 연락\n**자동 조정:** 도착 15:30→시내 17:20, 선샤인시티 생략\n**영향 없음:** 교통·통신·Day 2~4\n\nAnimate Cafe를 어떻게 할까요?`,
   adjust:[
-    {h:'카페 취소',tl:'첫날은 체크인→짐 풀기→호텔 근처 저녁으로 단순화. 못 본 카페는 2~3일차로.',pro:'체력 보존, 노쇼 패널티 방지',con:'Animate Cafe 포기',pin:'Day 1: 카페 취소, 호텔 근처 가벼운 저녁 (지연 대응)',
+    {h:'카페 취소',tl:'첫날은 체크인→짐 풀기→호텔 근처 저녁으로 단순화. 못 본 카페는 2~3일차로.',pro:'체력 보존, 노쇼 패널티 방지',con:'Animate Cafe 포기',rec:true,pin:'Day 1: 카페 취소, 호텔 근처 가벼운 저녁 (지연 대응)',
      was:'Animate Cafe 저녁',now:'호텔 근처 가벼운 저녁',shift:'체크인→짐 풀기→동네 산책→저녁',
      cell:{txt:'호텔 근처 저녁',sub:'가벼운 동네 산책 후',meta:['🍜 저녁']}},
-    {h:'카페 늦은 타임으로 변경',tl:'Animate Cafe에 예약 변경 연락. 늦은 타임이 되면 가능할 수도.',pro:'카페 유지 가능',con:'취침 늦어짐, 변경 불가 위험',rec:true,pin:'Day 1: Animate Cafe 늦은 타임 시도 (지연 대응)',
+    {h:'카페 늦은 타임으로 변경',tl:'Animate Cafe에 예약 변경 연락. 늦은 타임이 되면 가능할 수도.',pro:'카페 유지 가능',con:'취침 늦어짐, 변경 불가 위험',pin:'Day 1: Animate Cafe 늦은 타임 시도 (지연 대응)',
      was:'Animate Cafe',now:'Animate Cafe (늦은 타임 시도)',shift:'도착 즉시 호텔→카페→늦은 저녁',
      cell:{txt:'Animate Cafe (변경)',sub:'늦은 타임 시도',meta:['🔖 예약']}},
   ],
@@ -1793,8 +1796,11 @@ function routeMobile(text){
     mobNotify('left');
     S.step=6;
   }else if(S.step===6||/지연|늦|취소|휴무/.test(text)){
+    if(!S.drafted){S.drafted=true;S.grid=applyAnswersToGrid(baseGrid(),[0,0,0,1]);applyFinalize();document.getElementById('app').classList.add('has-itin');}
     meterStart();
     applyDelay();
+    // 일정표 변경 → 자동 펼치기
+    calCollapsed=false;
     S.msgs.push({role:'assistant',text:SCRIPT.delayReply,adjust:true});
     S.adjustOpen=true;
     mobNotify('left');
@@ -1983,16 +1989,16 @@ function openAdjModal(){
   h+=`</tbody></table></div>`;
   // A안/B안 선택 카드 (헤더+장단점+버튼 통합)
   h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">`;
-  h+=`<button class="adj-pick" onclick="closeAdjModal();chooseAdjust(0)">`;
-  h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">A안 선택</div>`;
-  h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adjA.pro)}</div>`;
-  h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adjA.con)}</div>`;
-  h+=`</button>`;
-  h+=`<button class="adj-pick" onclick="closeAdjModal();chooseAdjust(1)">`;
-  h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">B안 선택</div>`;
-  h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adjB.pro)}</div>`;
-  h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adjB.con)}</div>`;
-  h+=`</button></div>`;
+  [adjA,adjB].forEach((adj,i)=>{
+    const isRec=adj.rec;
+    h+=`<button class="adj-pick${isRec?' rec':''}" onclick="closeAdjModal();chooseAdjust(${i})">`;
+    h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">${i===0?'A':'B'}안 선택${isRec?'<span class="adj-rec-badge">추천</span>':''}</div>`;
+    h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adj.pro)}</div>`;
+    h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adj.con)}</div>`;
+    if(isRec)h+=`<div class="adj-rec-reason">3시간 지연 후 바로 카페로 가면 체력 소모가 커요. 카페는 2~3일차에 다시 잡을 수 있어서 첫날은 가볍게 쉬는 게 나아요.</div>`;
+    h+=`</button>`;
+  });
+  h+=`</div>`;
 
   document.getElementById('adjBody').innerHTML=h;
   document.getElementById('adjBackdrop').classList.add('open');
@@ -2023,6 +2029,7 @@ function chooseAdjust(ai){
   saveSnapshot();
   const a=SCRIPT.adjust[ai];
   if(S.meter&&S.meter.active)meterCount('click');
+  calCollapsed=false; // 변경 반영 후 일정표 펼치기
   // 시간 밀림 반영: row 1,2 비움 → row 3부터 재배치
   S.grid[1][0]={t:'routine',txt:'',sub:'',changed:true};
   S.grid[2][0]={t:'routine',txt:'',sub:'',changed:true};
