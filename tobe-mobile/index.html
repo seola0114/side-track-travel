@@ -1987,7 +1987,7 @@ function openAdjModal(){
   });
   h+=`</tbody></table></div>`;
   // A안/B안 선택 카드 (헤더+장단점+버튼 통합)
-  h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">`;
+  h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">`;
   [adjA,adjB].forEach((adj,i)=>{
     const isRec=adj.rec;
     h+=`<button class="adj-pick${isRec?' rec':''}" onclick="closeAdjModal();chooseAdjust(${i})">`;
