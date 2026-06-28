@@ -981,7 +981,7 @@ input:focus-visible{outline:2px solid var(--accent);outline-offset:0}
 <div class="adj-backdrop" id="adjBackdrop" onclick="closeAdjModal()"></div>
 <div class="adj-modal" id="adjModal">
   <div class="adj-head">
-    <span class="adj-title">일정 충돌</span>
+    <span class="adj-title">일정 조정</span>
     <button class="adj-close" onclick="closeAdjModal()" aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
   </div>
   <div class="adj-body" id="adjBody"></div>
@@ -1969,7 +1969,6 @@ function openAdjModal(){
   gB[7][0]={t:'act',txt:'늦은 저녁',sub:'카페 후 식사',changed:true};
 
   let h='';
-  h+=`<div class="adj-conflict"><b>Ani Cafe 예약 충돌</b><br>17:00 예약인데 도착이 17:20 예상이라 시간이 안 맞아요. 취소하거나 늦은 타임으로 변경해야 해요.</div>`;
   // diff3 table
   h+=`<div style="overflow-x:auto;margin-bottom:14px">`;
   h+=`<table class="diff3-tbl"><tbody>`;
