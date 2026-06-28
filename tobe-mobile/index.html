@@ -1385,6 +1385,7 @@ function renderLeft(){
     h+=`<div class="cal-dy"><table class="cal-tbl cal-tbl-day"><tbody>`;
     ROWS.forEach((rl,ri)=>{
       const c=dg[ri][calDay];
+      if(!c.txt){h+=`<tr><td class="cal-td-time">${rl}</td><td class="cal-td-ev" style="background:none;box-shadow:none"></td></tr>`;return;}
       let cls='cal-td-ev '+c.t;
       if(c.broken)cls+=' broken';if(c.changed)cls+=' changed';
       const bdg=c.badge?`<span class="bdg">${esc(c.badge)}</span> `:'';
