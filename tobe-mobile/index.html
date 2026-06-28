@@ -373,10 +373,10 @@ textarea::placeholder{color:var(--faint)}
 .cal-nav-btn:disabled{opacity:.3;cursor:default}
 .cal-toolbar{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0;z-index:3}
 .cal-toolbar-title{font-size:13px;font-weight:600;color:var(--ink);flex:1}
-.cal-seg{display:flex;background:var(--routine);border-radius:8px;padding:2px;gap:0}
-.cal-seg button{font-family:var(--sans);font-size:11px;font-weight:500;color:var(--faint);background:none;border:none;border-radius:6px;padding:4px 10px;cursor:pointer;transition:.15s}
+.cal-seg{display:flex;background:var(--routine);border-radius:6px;padding:2px;gap:0;flex:none}
+.cal-seg button{font-family:var(--sans);font-size:10px;font-weight:500;color:var(--faint);background:none;border:none;border-radius:4px;padding:3px 8px;cursor:pointer;transition:.15s}
 .cal-seg button.active{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.08)}
-.cal-collapse-btn{background:none;border:1px solid var(--line);border-radius:6px;width:28px;height:28px;display:grid;place-items:center;font-size:14px;color:var(--muted);cursor:pointer;transition:.15s}
+.cal-collapse-btn{background:none;border:1px solid var(--line);border-radius:6px;width:24px;height:24px;display:grid;place-items:center;font-size:12px;color:var(--muted);cursor:pointer;transition:.15s;flex:none}
 .cal-collapse-btn.collapsed{transform:rotate(180deg)}
 .cal-body{overflow-y:auto;transition:max-height .3s ease}
 .cal-body.collapsed{max-height:0!important;overflow:hidden}
@@ -385,7 +385,7 @@ textarea::placeholder{color:var(--faint)}
 .cal-th-time{width:42px;font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 4px 4px 6px}
 .cal-th-day{text-align:center;padding:8px 2px;font-size:12px;font-weight:700;color:var(--ink);cursor:pointer;letter-spacing:-.01em}
 .cal-td-time{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 6px;vertical-align:top;width:42px}
-.cal-td-ev{padding:4px 8px;vertical-align:top;cursor:pointer;border-radius:var(--radius-s);transition:transform .15s}
+.cal-td-ev{padding:4px 8px;vertical-align:top;cursor:pointer;border-radius:var(--radius-sm);transition:transform .15s}
 .cal-td-ev:active{transform:scale(.97)}
 .cal-td-ev.act{background:var(--surface);color:var(--ink);border:1px solid var(--line)}
 .cal-td-ev.routine{background:var(--routine);color:var(--routine-ink)}
@@ -434,8 +434,8 @@ body{display:block!important}
 .itin-card,.diff-card{display:none!important}
 
 /* top bar */
-.mob-bar{display:none;align-items:center;gap:8px;padding:0 16px;height:48px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10}
-.mob-bar-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mob-bar{display:none;align-items:center;gap:8px;padding:0 12px;height:48px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10}
+.mob-bar-title{white-space:nowrap;font-size:15px}
 .app.chatting .mob-bar{display:flex}
 .mob-bar-back{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;border-radius:12px;-webkit-tap-highlight-color:transparent}
 .mob-bar-back:active{background:var(--line)}
@@ -642,12 +642,12 @@ button:active::after,
 .diff3-a{background:var(--dec-bg);color:var(--ink)}
 .diff3-b{background:var(--keep-bg);color:var(--ink)}
 .diff3-time{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 6px;vertical-align:top;width:42px}
-.diff3-cell{padding:4px 8px;border-radius:var(--radius-xs);vertical-align:top;line-height:1.3;font-size:12px;font-weight:700}
+.diff3-cell{padding:4px 8px;border-radius:var(--radius-sm);vertical-align:top;line-height:1.3;font-size:12px;font-weight:700}
 .diff3-sub{font-size:10px;font-weight:400;opacity:.7}
 .diff3-before-cell{background:var(--surface);color:var(--ink)}
 .diff3-old{opacity:1}
-.diff3-a-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-xs)}
-.diff3-b-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-xs)}
+.diff3-a-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm)}
+.diff3-b-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm)}
 .diff3-changed{font-weight:700;color:var(--accent-deep)}
 .diff3-unchanged{opacity:.35;font-weight:400}
 .diff3-empty{background:var(--paper)!important;border-color:transparent!important}
