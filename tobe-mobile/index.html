@@ -435,6 +435,7 @@ body{display:block!important}
 
 /* top bar */
 .mob-bar{display:none;align-items:center;gap:8px;padding:0 16px;height:48px;background:var(--surface);border-bottom:1px solid var(--line);flex:none;z-index:10}
+.mob-bar-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .app.chatting .mob-bar{display:flex}
 .mob-bar-back{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:10px 14px;min-height:44px;min-width:44px;border-radius:12px;-webkit-tap-highlight-color:transparent}
 .mob-bar-back:active{background:var(--line)}
@@ -634,21 +635,21 @@ button:active::after,
 }
 
 /* ---- 3-column diff comparison ---- */
-.diff3-tbl{width:100%;border-collapse:separate;border-spacing:2px;table-layout:fixed;min-width:360px;font-size:12px}
-.diff3-th{padding:8px 4px;font-size:12px;font-weight:600;text-align:center;border-radius:var(--radius-sm) var(--radius-sm) 0 0}
-.diff3-th:first-child{width:40px}
+.diff3-tbl{width:100%;border-collapse:separate;border-spacing:3px;table-layout:fixed;min-width:300px;font-size:12px}
+.diff3-th{padding:8px 4px;font-size:12px;font-weight:700;text-align:center;border-radius:var(--radius-sm) var(--radius-sm) 0 0}
+.diff3-th:first-child{width:42px}
 .diff3-before{background:var(--routine);color:var(--faint)}
 .diff3-a{background:var(--dec-bg);color:var(--ink)}
 .diff3-b{background:var(--keep-bg);color:var(--ink)}
-.diff3-time{font-family:var(--mono);font-size:10px;color:var(--faint);padding:6px 4px;vertical-align:top}
-.diff3-cell{padding:6px;border-radius:var(--radius-xs);vertical-align:top;line-height:1.4}
-.diff3-sub{font-size:10px;opacity:.7}
+.diff3-time{font-family:var(--mono);font-size:10px;color:var(--faint);font-weight:500;padding:4px 6px;vertical-align:top;width:42px}
+.diff3-cell{padding:4px 8px;border-radius:var(--radius-xs);vertical-align:top;line-height:1.3;font-size:12px;font-weight:700}
+.diff3-sub{font-size:10px;font-weight:400;opacity:.7}
 .diff3-before-cell{background:var(--surface);color:var(--ink)}
 .diff3-old{opacity:1}
-.diff3-a-cell{background:var(--surface);border:1px solid var(--line)}
-.diff3-b-cell{background:var(--surface);border:1px solid var(--line)}
+.diff3-a-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-xs)}
+.diff3-b-cell{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-xs)}
 .diff3-changed{font-weight:700;color:var(--accent-deep)}
-.diff3-unchanged{opacity:.35}
+.diff3-unchanged{opacity:.35;font-weight:400}
 .diff3-empty{background:var(--paper)!important;border-color:transparent!important}
 .diff3-cancelled{color:var(--warn);text-decoration:line-through;opacity:.5}
 .diff3-broken{color:var(--warn);font-weight:700}
@@ -973,10 +974,10 @@ button:active::after,
 /* ================= ITINERARY MODEL ================= */
 /* 칸 종류: routine(반복 루틴) / act(활동) / dec(결정이 실린 칸) */
 const DAYS=[
-  {d:'Day 1',date:'11.03 月'},
-  {d:'Day 2',date:'11.04 火'},
-  {d:'Day 3',date:'11.05 水'},
-  {d:'Day 4',date:'11.06 木'},
+  {d:'Day 1',date:'11.03 월'},
+  {d:'Day 2',date:'11.04 화'},
+  {d:'Day 3',date:'11.05 수'},
+  {d:'Day 4',date:'11.06 목'},
 ];
 const ROWS=['07:00','09:00','10:30','12:00','13:30','15:00','17:00','19:00','21:00'];
 const ROWLABEL=['기상','오전①','오전②','점심','오후①','오후②','저녁준비','저녁','밤'];
