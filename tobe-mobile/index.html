@@ -1906,7 +1906,7 @@ function openAdjModal(){
   // diff3 table
   h+=`<div style="overflow-x:auto;margin-bottom:14px">`;
   h+=`<table class="diff3-tbl"><thead><tr>`;
-  h+=`<th class="diff3-th"></th><th class="diff3-th diff3-before">변경 전</th>`;
+  h+=`<th class="diff3-th"></th>`;
   h+=`<th class="diff3-th diff3-a">A안</th><th class="diff3-th diff3-b">B안</th>`;
   h+=`</tr></thead><tbody>`;
   ROWS.forEach((rl,ri)=>{
@@ -1916,7 +1916,6 @@ function openAdjModal(){
     const isChanged=a.changed||b.changed;
     h+=`<tr class="${isChanged?'diff3-highlight':''}">`;
     h+=`<td class="diff3-time">${rl}</td>`;
-    h+=`<td class="diff3-cell diff3-before-cell">${esc(before.txt)}<br><span class="diff3-sub">${esc(before.sub||'')}</span></td>`;
     const aCls=!a.txt?(before.txt?' diff3-cancelled':' diff3-empty'):a.changed?' diff3-changed':' diff3-unchanged';
     const bCls=!b.txt?(before.txt?' diff3-cancelled':' diff3-empty'):b.changed?' diff3-changed':' diff3-unchanged';
     h+=`<td class="diff3-cell diff3-a-cell${aCls}">${!a.txt&&before.txt?'<span style="text-decoration:line-through;opacity:.5">'+esc(before.txt)+'</span>':esc(a.txt)}${a.txt?'<br><span class="diff3-sub">'+esc(a.sub||'')+'</span>':''}</td>`;
