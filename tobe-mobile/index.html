@@ -727,10 +727,16 @@ button:active::after,
 .adj-opt-desc{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px}
 .adj-opt-pro{font-size:11px;color:var(--keep)}
 .adj-opt-con{font-size:11px;color:var(--warn)}
-.adj-pick{text-align:left;font-family:var(--sans);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s}
-.adj-pick:hover{border-color:var(--accent);background:var(--accent-bg)}
-.adj-pick:active{transform:scale(.96);background:var(--accent-bg)}
-.adj-pick.rec{border:2px solid var(--accent)}
+.adj-pick{text-align:left;font-family:var(--sans);background:var(--surface);border:2px solid var(--line);border-radius:var(--radius-sm);padding:14px 12px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:border-color .15s,background .15s,transform .1s;opacity:.6}
+.adj-pick:hover{border-color:var(--muted)}
+.adj-pick:active{transform:scale(.96)}
+.adj-pick.rec{border-color:var(--accent);opacity:1}
+.adj-pick.selected{border-color:var(--accent);background:var(--accent-bg);opacity:1}
+.adj-pick:not(.selected){opacity:.5}
+.adj-pick.selected+.adj-pick:not(.selected),.adj-pick:not(.selected):has(+.adj-pick.selected){opacity:.5}
+.adj-confirm{width:100%;font-family:var(--sans);font-size:14px;font-weight:700;color:#fff;background:var(--accent);border:none;border-radius:var(--radius-sm);padding:14px;margin-top:12px;cursor:pointer;min-height:44px;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.adj-confirm:disabled{opacity:.3;cursor:default}
+.adj-confirm:not(:disabled):active{opacity:.8}
 .adj-rec-badge{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:600;background:var(--accent);color:#fff;border-radius:9px;padding:1px 7px;margin-left:4px;vertical-align:middle}
 .adj-rec-reason{font-size:10px;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);line-height:1.5}
 
@@ -1991,18 +1997,19 @@ function openAdjModal(){
     h+=`</tr>`;
   });
   h+=`</tbody></table></div>`;
-  // A안/B안 선택 카드 (헤더+장단점+버튼 통합)
-  h+=`<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">`;
+  // A안/B안 선택 카드
+  h+=`<div id="adjPicks" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">`;
   [adjA,adjB].forEach((adj,i)=>{
     const isRec=adj.rec;
-    h+=`<button class="adj-pick${isRec?' rec':''}" onclick="closeAdjModal();chooseAdjust(${i})">`;
-    h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">${i===0?'A':'B'}안 선택${isRec?'<span class="adj-rec-badge">추천</span>':''}</div>`;
+    h+=`<div class="adj-pick${isRec?' rec selected':''}" onclick="selectAdj(${i})" data-adj="${i}">`;
+    h+=`<div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:6px">${i===0?'A':'B'}안${isRec?'<span class="adj-rec-badge">추천</span>':''}</div>`;
     h+=`<div style="font-size:11px;color:#1a5c2e;margin-bottom:2px">+ ${esc(adj.pro)}</div>`;
     h+=`<div style="font-size:11px;color:#9e3630">- ${esc(adj.con)}</div>`;
     if(isRec)h+=`<div class="adj-rec-reason">3시간 지연 후 바로 카페로 가면 체력 소모가 커요. 카페는 2~3일차에 다시 잡을 수 있어서 첫날은 가볍게 쉬는 게 나아요.</div>`;
-    h+=`</button>`;
+    h+=`</div>`;
   });
   h+=`</div>`;
+  h+=`<button class="adj-confirm" id="adjConfirm" onclick="confirmAdj()">이 안으로 결정</button>`;
 
   document.getElementById('adjBody').innerHTML=h;
   document.getElementById('adjBackdrop').classList.add('open');
@@ -2028,6 +2035,17 @@ function applyDelay(){
   S.grid[6][0]={t:'act',txt:'Ani Cafe',sub:'예약 조정 필요',key:'d1eve',broken:true,detail:'원래 17:00 예약이 도착 지연으로 불가. 늦은 타임으로 변경하거나 취소해야 해요.'};
   S.grid[7][0]={t:'act',txt:'저녁',sub:'시간 조정 필요',changed:true,detail:'저녁 시간이 전체적으로 밀림.'};
   mobNotify('left');
+}
+let _selectedAdj=0; // 기본 A안(추천) 선택
+function selectAdj(i){
+  _selectedAdj=i;
+  document.querySelectorAll('#adjPicks .adj-pick').forEach((el,idx)=>{
+    el.classList.toggle('selected',idx===i);
+  });
+}
+function confirmAdj(){
+  closeAdjModal();
+  chooseAdjust(_selectedAdj);
 }
 function reopenAdjust(){
   S.adjustChosen=false;
