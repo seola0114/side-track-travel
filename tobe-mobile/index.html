@@ -37,6 +37,7 @@ html,body{height:100%}
 body{font-family:var(--sans);background:var(--paper);color:var(--ink);font-size:14px;line-height:1.6;-webkit-font-smoothing:antialiased;display:flex;justify-content:center;height:100dvh;overflow:hidden}
 ::selection{background:#ccdbe8;color:var(--ink)}
 svg{stroke-linecap:round;stroke-linejoin:round}
+svg:not([width]):not(.ico){max-width:24px;max-height:24px}
 .app{display:flex;flex-direction:column;height:100dvh;flex:1;min-width:0;position:relative;max-width:430px;width:100%}
 @media(min-width:500px){body{background:#e8e6e0;align-items:center}.app{border-radius:20px;overflow:hidden;height:min(932px,calc(100dvh - 40px));box-shadow:0 8px 40px rgba(0,0,0,.12),0 0 0 1px rgba(0,0,0,.06);background:var(--paper);flex:none}}
 
