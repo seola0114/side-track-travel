@@ -130,6 +130,10 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:9px;colo
 .cell.broken .bdg{color:var(--warn);border-color:var(--warn-line)}
 .cell.changed{background:var(--accent-bg);border:1px solid var(--accent);color:var(--accent-deep)}
 @keyframes cellFlash{0%{box-shadow:0 0 0 0 rgba(31,30,29,.3)}50%{box-shadow:0 0 0 6px rgba(31,30,29,.08)}100%{box-shadow:none}}
+@keyframes ctaPulse{0%,100%{box-shadow:0 0 0 0 rgba(31,30,29,.2)}50%{box-shadow:0 0 0 6px rgba(31,30,29,.06)}}
+.cta-pulse{animation:ctaPulse 2s ease-in-out infinite}
+@keyframes confirmPop{0%{transform:scale(.9);opacity:0}50%{transform:scale(1.05)}100%{transform:scale(1);opacity:1}}
+.confirm-pop{animation:confirmPop .35s cubic-bezier(.2,.8,.2,1) both}
 .cell.changed.flash{animation:cellFlash .6s ease-out}
 .cell.changed .bdg{color:var(--accent);border-color:var(--accent)}
 .cell.changed .csub{color:var(--accent-deep)}
@@ -162,8 +166,8 @@ table.grid td.tm .tmlbl{display:block;font-family:var(--sans);font-size:9px;colo
 /* ---- middle: conversation ---- */
 .thread{flex:1;overflow-y:auto;padding:24px 16px 8px;display:flex;flex-direction:column;gap:20px}
 .thread::-webkit-scrollbar{width:8px}.thread::-webkit-scrollbar-thumb{background:var(--line);border-radius:var(--radius-xs);border:2px solid var(--paper)}
-.msg{display:flex;flex-direction:column;gap:4px;max-width:94%;animation:rise .32s ease both}
-@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg{display:flex;flex-direction:column;gap:4px;max-width:94%;animation:rise .4s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
 .msg.user{align-self:flex-end;align-items:flex-end}
 .who{display:none}
 .bubble{padding:2px 0;font-size:15px;line-height:1.65}
@@ -699,7 +703,7 @@ button:active::after,
 /* ---- adjust modal ---- */
 .adj-backdrop{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.15);display:none}
 .adj-backdrop.open{display:block}
-.adj-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:510;background:var(--surface);transform:translateY(100%);transition:transform .32s var(--ease);display:flex;flex-direction:column;overflow:hidden;pointer-events:none;max-width:430px;margin:0 auto}
+.adj-modal{position:fixed;top:0;right:0;bottom:0;left:0;z-index:510;background:var(--surface);transform:translateY(100%);transition:transform .38s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;overflow:hidden;pointer-events:none;max-width:430px;margin:0 auto}
 .adj-modal.open{pointer-events:auto;transform:translateY(0)}
 @media(min-width:769px){.adj-modal{inset:auto;top:50%;left:50%;transform:translate(-50%,-50%) scale(.96);width:430px;max-height:85vh;border-radius:var(--radius-lg);border:1px solid var(--line);opacity:0;transition:transform .22s var(--ease),opacity .22s var(--ease)}.adj-modal.open{transform:translate(-50%,-50%) scale(1);opacity:1}}
 .adj-head{display:flex;align-items:center;justify-content:space-between;height:48px;padding:0 16px;border-bottom:1px solid var(--line);flex:none}
@@ -772,8 +776,8 @@ button:active::after,
 .qs-opt:active{background:var(--accent-bg);transform:scale(.98)}
 .qs-opt:active .qs-num{background:var(--accent);color:#fff;transform:scale(1.1)}
 .qs-opt .qs-num{width:28px;height:28px;border-radius:50%;background:var(--line);color:var(--muted);display:grid;place-items:center;font-size:12px;font-weight:600;flex:none;transition:all .18s cubic-bezier(.4,0,.2,1)}
-.qs-opt.selected .qs-num{background:var(--accent);color:#fff;transform:scale(1.1)}
-.qs-opt.selected{background:var(--accent-bg)}
+.qs-opt.selected .qs-num{background:var(--accent);color:#fff;transform:scale(1.15);transition:transform .2s cubic-bezier(.2,.8,.2,1),background .15s}
+.qs-opt.selected{background:var(--accent-bg);transform:scale(1.01);transition:transform .2s cubic-bezier(.2,.8,.2,1),background .15s}
 .qs-opt .qs-txt{font-size:14px;color:var(--ink);transition:.14s}
 .qs-opt.selected .qs-txt{color:var(--accent-deep);font-weight:600}
 
@@ -1448,7 +1452,7 @@ function streamLastMessage(){
           extra+=`</div>`;
         }
         if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
-          extra+=`<div style="margin-top:10px"><button onclick="openAdjModal()" style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--accent-deep);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:20px;padding:8px 16px;cursor:pointer">A안 / B안 비교하기</button></div>`;
+          extra+=`<div style="margin-top:10px"><button class="cta-pulse" onclick="openAdjModal()" style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--accent-deep);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:20px;padding:8px 16px;min-height:44px;cursor:pointer">A안 / B안 비교하기</button></div>`;
         }
         if(extra)el.insertAdjacentHTML('beforeend',extra);
       }
@@ -1491,21 +1495,29 @@ function renderMid(){
         });
         h+=`</div>`;
       }
-      if(m.adjust&&S.mode==='side'&&!S.adjustChosen){
-        h+=`<div style="font-size:13px;color:var(--muted);margin-top:10px">위 일정표에서 A안 또는 B안 헤더를 눌러 결정해주세요.</div>`;
+      if(m.adjust&&!S.adjustChosen){
+        h+=`<div style="margin-top:10px"><button class="cta-pulse" onclick="openAdjModal()" style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--accent-deep);background:var(--accent-bg);border:1px solid var(--accent-line);border-radius:20px;padding:8px 16px;min-height:44px;cursor:pointer">A안 / B안 비교하기</button></div>`;
       }
       h+=`</div></div>`;
     }
   });
   h+=`<div class="suggest" id="suggest"></div>`;
-  t.innerHTML=h;t.scrollTop=t.scrollHeight;
+  t.innerHTML=h;t.scrollTo({top:t.scrollHeight,behavior:'smooth'});
   // start streaming if needed
   if(document.querySelector('.bubble.streaming'))streamLastMessage();
-  // prefill input if last message has prefill text
+  // prefill input with typing animation
   const lastMsg=S.msgs[S.msgs.length-1];
   if(lastMsg&&lastMsg.prefill&&lastMsg.role==='assistant'){
     const inp=document.getElementById('mainIn');
-    if(inp){inp.value=lastMsg.prefill;autoGrow(inp);inp.focus();}
+    if(inp){
+      inp.value='';inp.focus();
+      const txt=lastMsg.prefill;
+      let ci=0;
+      const typeTimer=setInterval(()=>{
+        ci++;inp.value=txt.slice(0,ci);autoGrow(inp);
+        if(ci>=txt.length)clearInterval(typeTimer);
+      },40);
+    }
   }
 }
 
@@ -2028,7 +2040,7 @@ function chooseAdjust(ai){
   S.folded.push({id:'d1eve',topic:null,title:'Day 1 저녁 조정',seed:'항공편 지연 대응',
     msgs:[{role:'user',text:'첫날 저녁 어떻게 조정하지?'},{role:'assistant',text:'두 안을 비교해 '+a.h+'로 결정했어요. '+a.tl}]});
   S.adjustChosen=true;
-  S.msgs.push({role:'assistant',text:SCRIPT.adjustDone(a.h),diffCard:[{day:'Day 1',was:a.was,now:a.now}]});
+  S.msgs.push({role:'assistant',text:SCRIPT.adjustDone(a.h),diffCard:[{day:'Day 1',was:a.was,now:a.now}],_stream:true});
   meterStop();
   S.phase='editable';
   if(S.step<7)S.step=7;
